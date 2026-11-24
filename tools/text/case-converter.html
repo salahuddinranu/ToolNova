@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Case Converter — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:700px;padding:3rem 1rem;">
+  <h1>Case Converter</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Change your text to UPPERCASE, lowercase, Title Case, or Sentence case.</p>
+  <textarea id="text" style="width:100%;height:200px;padding:1rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);margin-bottom:1rem;" placeholder="Type or paste text here..."></textarea>
+  <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+    <button class="btn btn-primary" onclick="convert('upper')">UPPERCASE</button>
+    <button class="btn btn-primary" onclick="convert('lower')">lowercase</button>
+    <button class="btn btn-primary" onclick="convert('title')">Title Case</button>
+    <button class="btn btn-primary" onclick="convert('sentence')">Sentence case</button>
+    <button class="btn btn-secondary" onclick="document.getElementById('text').value=''">Clear</button>
+  </div>
+</main>
+<script>
+  function convert(type) {
+    const el = document.getElementById('text');
+    let txt = el.value;
+    if(type === 'upper') el.value = txt.toUpperCase();
+    if(type === 'lower') el.value = txt.toLowerCase();
+    if(type === 'title') el.value = txt.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+    if(type === 'sentence') el.value = txt.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, c => c.toUpperCase());
+  }
+</script>
+</body></html>
