@@ -62,7 +62,7 @@ const TOOLS = [
   { id: 'random-number-generator', name: 'Random Number', category: 'security', description: 'Generate random numbers.', icon: '🎲', tags: ['random'], type: 'client', status: 'ready' },
   { id: 'hash-generator', name: 'Hash Generator', category: 'security', description: 'Generate SHA hashes.', icon: '#️⃣', tags: ['sha256'], type: 'client', status: 'ready' },
   { id: 'coin-flip', name: 'Coin Flip', category: 'security', description: 'Flip a virtual coin.', icon: '🪙', tags: ['random'], type: 'client', status: 'ready' },
-  { id: 'qr-code-generator', name: 'QR Code Generator', category: 'security', description: 'Generate QR codes.', icon: '📱', tags: ['qr'], type: 'client', status: 'coming-soon' },
+  { id: 'qr-code-generator', name: 'QR Code Generator', category: 'security', description: 'Generate QR codes.', icon: '📱', tags: ['qr'], type: 'client', status: 'ready' },
   { id: 'random-string-generator', name: 'Random String', category: 'security', description: 'Generate random strings.', icon: '🔤', tags: ['random'], type: 'client', status: 'coming-soon' },
 
   // AI TOOLS
