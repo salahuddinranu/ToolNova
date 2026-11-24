@@ -48,7 +48,7 @@ const TOOLS = [
   { id: 'hash-generator', name: 'Hash Generator', category: 'security', description: 'Generate SHA hashes.', icon: '#️⃣', tags: ['sha256'], type: 'client', status: 'coming-soon' },
 
   // ================= AI TOOLS =================
-  { id: 'ai-summarizer', name: 'AI Summarizer', category: 'ai', description: 'Summarize long text.', icon: '📄', tags: ['ai'], type: 'ai', status: 'ready' },
+  { id: 'summarizer', name: 'AI Summarizer', category: 'ai', description: 'Summarize long text.', icon: '📄', tags: ['ai'], type: 'ai', status: 'ready' },
   { id: 'ai-email-writer', name: 'AI Email Writer', category: 'ai', description: 'Draft emails with AI.', icon: '✉️', tags: ['ai'], type: 'ai', status: 'coming-soon' },
   { id: 'ai-rewriter', name: 'AI Rewriter', category: 'ai', description: 'Rewrite paragraphs.', icon: '🔄', tags: ['ai'], type: 'ai', status: 'coming-soon' }
 ];
