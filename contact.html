@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <script src="/assets/js/theme.js"></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:600px;padding:4rem 1rem;">
+  <h1 style="font-size:2.5rem;margin-bottom:1rem;">Contact Us</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Have a suggestion, found a bug, or want a new tool? Let us know!</p>
+  
+  <form style="display:flex;flex-direction:column;gap:1rem;">
+    <input type="text" placeholder="Your Name" style="padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
+    <input type="email" placeholder="Your Email" style="padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
+    <textarea placeholder="Your Message" rows="5" style="padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);"></textarea>
+    <button type="button" class="btn btn-primary" onclick="alert('Form processing is not connected to a backend yet. Please email us at support@toolnova.com')">Send Message</button>
+  </form>
+</main>
+<footer class="site-footer"><div class="container"><div class="footer-bottom" style="border:none;"><span>© <span id="year"></span> ToolNova.</span></div></div></footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
