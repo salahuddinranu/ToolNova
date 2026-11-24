@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Percentage Calculator — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:600px;padding:3rem 1rem;">
+  <h1>Percentage Calculator</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Simple calculator to find percentages.</p>
+  
+  <div style="background:var(--color-bg-secondary);padding:1.5rem;border-radius:12px;margin-bottom:1rem;border:1px solid var(--color-border);">
+    <p style="margin-bottom:0.5rem;">What is <input type="number" id="p1" style="width:80px;padding:0.3rem;border-radius:4px;border:1px solid var(--color-border);"> % of <input type="number" id="n1" style="width:100px;padding:0.3rem;border-radius:4px;border:1px solid var(--color-border);"> ?</p>
+    <button class="btn btn-primary" onclick="calc1()">Calculate</button>
+    <p style="margin-top:0.5rem;font-weight:bold;font-size:1.2rem;color:var(--color-primary);" id="res1"></p>
+  </div>
+
+  <div style="background:var(--color-bg-secondary);padding:1.5rem;border-radius:12px;border:1px solid var(--color-border);">
+    <p style="margin-bottom:0.5rem;"><input type="number" id="n2" style="width:100px;padding:0.3rem;border-radius:4px;border:1px solid var(--color-border);"> is what % of <input type="number" id="n3" style="width:100px;padding:0.3rem;border-radius:4px;border:1px solid var(--color-border);"> ?</p>
+    <button class="btn btn-primary" onclick="calc2()">Calculate</button>
+    <p style="margin-top:0.5rem;font-weight:bold;font-size:1.2rem;color:var(--color-primary);" id="res2"></p>
+  </div>
+</main>
+<script>
+  function calc1() {
+    const p = parseFloat(document.getElementById('p1').value);
+    const n = parseFloat(document.getElementById('n1').value);
+    if(isNaN(p) || isNaN(n)) return alert('Please enter valid numbers');
+    document.getElementById('res1').textContent = 'Result: ' + ((p / 100) * n);
+  }
+  function calc2() {
+    const n1 = parseFloat(document.getElementById('n2').value);
+    const n2 = parseFloat(document.getElementById('n3').value);
+    if(isNaN(n1) || isNaN(n2) || n2 === 0) return alert('Please enter valid numbers');
+    document.getElementById('res2').textContent = 'Result: ' + ((n1 / n2) * 100).toFixed(2) + ' %';
+  }
+</script>
+</body></html>
