@@ -14,7 +14,7 @@ const TOOLS = [
   { id: 'split-pdf', name: 'Split PDF', category: 'pdf', description: 'Split a PDF into multiple files.', icon: '✂️', tags: ['divide'], type: 'client', status: 'coming-soon' },
   { id: 'compress-pdf', name: 'Compress PDF', category: 'pdf', description: 'Reduce PDF file size.', icon: '🗜️', tags: ['shrink'], type: 'client', status: 'coming-soon' },
   { id: 'rotate-pdf', name: 'Rotate PDF', category: 'pdf', description: 'Rotate PDF pages.', icon: '🔄', tags: ['turn'], type: 'client', status: 'coming-soon' },
-  { id: 'images-to-pdf', name: 'Images to PDF', category: 'pdf', description: 'Convert images to PDF.', icon: '🖼️', tags: ['jpg', 'png'], type: 'client', status: 'coming-soon' },
+  { id: 'images-to-pdf', name: 'Images to PDF', category: 'pdf', description: 'Convert images to PDF.', icon: '🖼️', tags: ['jpg', 'png'], type: 'client', status: 'ready' },
   { id: 'pdf-to-images', name: 'PDF to Images', category: 'pdf', description: 'Extract PDF pages as images.', icon: '📸', tags: ['convert'], type: 'client', status: 'coming-soon' },
   { id: 'extract-pdf-pages', name: 'Extract PDF Pages', category: 'pdf', description: 'Extract specific pages from PDF.', icon: '📑', tags: ['pages'], type: 'client', status: 'coming-soon' },
   { id: 'delete-pdf-pages', name: 'Delete PDF Pages', category: 'pdf', description: 'Remove pages from a PDF.', icon: '🗑️', tags: ['remove'], type: 'client', status: 'coming-soon' },
