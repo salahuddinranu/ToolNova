@@ -6,21 +6,76 @@
   <title>Contact Us — ToolNova</title>
   <link rel="stylesheet" href="/assets/css/style.css" />
   <script src="/assets/js/theme.js"></script>
+  <style>
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-form input, .contact-form textarea, .contact-form select { padding: 0.8rem; border-radius: 8px; border: 1px solid var(--color-border); background: var(--color-bg); color: var(--color-text); font-family: inherit; }
+    .direct-email { background: var(--color-bg-secondary); padding: 1rem; border-radius: 8px; text-align: center; margin-bottom: 2rem; font-weight: 600; border: 1px solid var(--color-border); }
+  </style>
 </head>
 <body>
-<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<header class="site-header">
+  <div class="container">
+    <nav class="nav">
+      <a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/all-tools.html">All Tools</a></li>
+        <li><a href="/about.html">About</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button>
+      </div>
+    </nav>
+  </div>
+</header>
 <main class="container" style="max-width:600px;padding:4rem 1rem;">
   <h1 style="font-size:2.5rem;margin-bottom:1rem;">Contact Us</h1>
-  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Have a suggestion, found a bug, or want a new tool? Let us know!</p>
+  <p style="color:var(--color-text-secondary);margin-bottom:1.5rem;">Have a suggestion, found a bug, or want to request a new tool? We'd love to hear from you.</p>
   
-  <form style="display:flex;flex-direction:column;gap:1rem;">
-    <input type="text" placeholder="Your Name" style="padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
-    <input type="email" placeholder="Your Email" style="padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
-    <textarea placeholder="Your Message" rows="5" style="padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);"></textarea>
-    <button type="button" class="btn btn-primary" onclick="alert('Form processing is not connected to a backend yet. Please email us at support@toolnova.com')">Send Message</button>
+  <div class="direct-email">
+    📧 Direct Email: <a href="mailto:salahuddinranu@gmail.com">salahuddinranu@gmail.com</a>
+  </div>
+
+  <form class="contact-form" id="contact-form">
+    <input type="text" id="name" placeholder="Your Name" required>
+    <input type="email" id="email" placeholder="Your Email" required>
+    
+    <select id="subject">
+      <option value="Feedback">Feedback / Suggestion</option>
+      <option value="Bug Report">Report a Bug</option>
+      <option value="Tool Request">Request a New Tool</option>
+      <option value="Partnership">Partnership / Business</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <textarea id="message" placeholder="Your Message" rows="5" required></textarea>
+    
+    <button type="submit" class="btn btn-primary">Send Message via Email</button>
   </form>
 </main>
-<footer class="site-footer"><div class="container"><div class="footer-bottom" style="border:none;"><span>© <span id="year"></span> ToolNova.</span></div></div></footer>
-<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom" style="border:none;"><span>© <span id="year"></span> ToolNova.</span></div>
+  </div>
+</footer>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  
+  // Form submit logic: Yeh user ki email app khol dega
+  document.getElementById('contact-form').addEventListener('submit', function(e) {
+    e.preventDefault(); // Page reload hone se rokein
+    
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const subject = document.getElementById('subject').value;
+    const message = document.getElementById('message').value;
+    
+    // Email ka format tayyar karein
+    const mailtoLink = `mailto:salahuddinranu@gmail.com?subject=${encodeURIComponent('ToolNova: ' + subject)}&body=${encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\nMessage:\n' + message)}`;
+    
+    // User ki email app kholain
+    window.location.href = mailtoLink;
+  });
+</script>
 </body>
 </html>
