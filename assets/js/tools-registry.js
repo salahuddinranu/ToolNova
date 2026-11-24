@@ -20,7 +20,7 @@ const TOOLS = [
   { id: 'delete-pdf-pages', name: 'Delete PDF Pages', category: 'pdf', description: 'Remove pages from a PDF.', icon: '🗑️', tags: ['remove'], type: 'client', status: 'coming-soon' },
   
   // IMAGE TOOLS
-  { id: 'image-compressor', name: 'Image Compressor', category: 'image', description: 'Compress images without losing quality.', icon: '🗜️', tags: ['shrink', 'optimize'], type: 'client', status: 'coming-soon' },
+  { id: 'image-compressor', name: 'Image Compressor', category: 'image', description: 'Compress images without losing quality.', icon: '🗜️', tags: ['shrink', 'optimize'], type: 'client', status: 'ready' },
   { id: 'image-resizer', name: 'Image Resizer', category: 'image', description: 'Resize images to exact dimensions.', icon: '📐', tags: ['scale', 'dimensions'], type: 'client', status: 'coming-soon' },
   { id: 'image-cropper', name: 'Image Cropper', category: 'image', description: 'Crop images easily.', icon: '✂️', tags: ['trim'], type: 'client', status: 'coming-soon' },
   { id: 'image-format-converter', name: 'Image Converter', category: 'image', description: 'Convert JPG, PNG, WebP.', icon: '🔄', tags: ['jpg', 'png', 'webp'], type: 'client', status: 'coming-soon' },
