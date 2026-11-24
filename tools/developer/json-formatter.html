@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JSON Formatter & Validator — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <script src="/assets/js/theme.js"></script>
+  <style>
+    .tool-page { max-width: 900px; margin: 0 auto; padding: 3rem 1rem; }
+    .split-view { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+    @media (max-width: 768px) { .split-view { grid-template-columns: 1fr; } }
+    .code-area { width: 100%; min-height: 350px; padding: 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-bg-secondary); color: var(--color-text); font-family: var(--font-mono); font-size: 0.9rem; resize: vertical; }
+    .btn-group { display: flex; gap: 0.5rem; margin-top: 1rem; }
+    .error-msg { color: var(--color-error); background: #fee2e2; padding: 0.75rem; border-radius: var(--radius-sm); display: none; margin-top: 1rem; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <nav class="nav">
+      <a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/all-tools.html">All Tools</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="tool-page">
+  <nav style="font-size:0.85rem;color:var(--color-text-muted);margin-bottom:1rem;">
+    <a href="/">Home</a> / <a href="/all-tools.html?category=developer">Developer Tools</a> / JSON Formatter
+  </nav>
+
+  <h1 style="font-size:2rem;margin-bottom:0.5rem;">JSON Formatter & Validator</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Paste your JSON, format it beautifully, and validate syntax instantly.</p>
+
+  <div class="split-view">
+    <div>
+      <label style="font-weight:600;font-size:0.9rem;display:block;margin-bottom:0.5rem;">Input JSON</label>
+      <textarea id="json-input" class="code-area" placeholder='{"name":"ToolNova","type":"tools"}'></textarea>
+    </div>
+    <div>
+      <label style="font-weight:600;font-size:0.9rem;display:block;margin-bottom:0.5rem;">Formatted Output</label>
+      <textarea id="json-output" class="code-area" readonly placeholder="Formatted JSON will appear here..."></textarea>
+    </div>
+  </div>
+
+  <div id="error-msg" class="error-msg"></div>
+
+  <div class="btn-group">
+    <button id="btn-format" class="btn btn-primary">Format & Validate</button>
+    <button id="btn-clear" class="btn btn-secondary">Clear</button>
+  </div>
+</main>
+
+<script>
+  const input = document.getElementById('json-input');
+  const output = document.getElementById('json-output');
+  const errorMsg = document.getElementById('error-msg');
+
+  document.getElementById('btn-format').addEventListener('click', () => {
+    const raw = input.value.trim();
+    if (!raw) {
+      errorMsg.style.display = 'block';
+      errorMsg.textContent = 'Please enter some JSON text first.';
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(raw);
+      output.value = JSON.stringify(parsed, null, 2);
+      errorMsg.style.display = 'none';
+      output.style.color = 'var(--color-text)';
+    } catch (e) {
+      errorMsg.style.display = 'block';
+      errorMsg.textContent = '❌ Invalid JSON: ' + e.message;
+      output.value = '';
+    }
+  });
+
+  document.getElementById('btn-clear').addEventListener('click', () => {
+    input.value = '';
+    output.value = '';
+    errorMsg.style.display = 'none';
+  });
+</script>
+</body>
+</html>
