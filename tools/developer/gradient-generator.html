@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSS Gradient Generator — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:800px;padding:3rem 1rem;">
+  <h1>CSS Gradient Generator</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Create beautiful gradients and copy the CSS code.</p>
+  
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;">
+    <div>
+      <div style="margin-bottom:1rem;">
+        <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Color 1</label>
+        <input type="color" id="color1" value="#6366f1" style="width:100%;height:50px;border:none;border-radius:8px;cursor:pointer;">
+      </div>
+      <div style="margin-bottom:1rem;">
+        <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Color 2</label>
+        <input type="color" id="color2" value="#06b6d4" style="width:100%;height:50px;border:none;border-radius:8px;cursor:pointer;">
+      </div>
+      <div style="margin-bottom:1.5rem;">
+        <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Direction</label>
+        <select id="direction" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
+          <option value="to right">Left to Right →</option>
+          <option value="to bottom">Top to Bottom ↓</option>
+          <option value="to bottom right">Diagonal ↘</option>
+          <option value="135deg">Angle (135deg)</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">CSS Code</label>
+        <textarea id="css-output" readonly style="width:100%;height:80px;padding:1rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg-secondary);color:var(--color-text);font-family:monospace;"></textarea>
+        <button class="btn btn-primary" style="width:100%;margin-top:0.5rem;" onclick="copyCSS()">Copy CSS</button>
+      </div>
+    </div>
+    
+    <div>
+      <div id="preview" style="width:100%;height:100%;min-height:300px;border-radius:12px;border:1px solid var(--color-border);box-shadow:var(--shadow-md);"></div>
+    </div>
+  </div>
+</main>
+<script>
+  const c1 = document.getElementById('color1');
+  const c2 = document.getElementById('color2');
+  const dir = document.getElementById('direction');
+  const preview = document.getElementById('preview');
+  const output = document.getElementById('css-output');
+
+  function update() {
+    const css = `background: linear-gradient(${dir.value}, ${c1.value}, ${c2.value});`;
+    preview.style.background = `linear-gradient(${dir.value}, ${c1.value}, ${c2.value})`;
+    output.value = css;
+  }
+
+  c1.addEventListener('input', update);
+  c2.addEventListener('input', update);
+  dir.addEventListener('change', update);
+  
+  function copyCSS() {
+    output.select(); document.execCommand('copy');
+    alert('CSS copied to clipboard!');
+  }
+  
+  update(); // Initial render
+</script>
+</body></html>
