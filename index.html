@@ -53,6 +53,7 @@
         <li><a href="/all-tools.html?category=developer">Developer Tools</a></li>
         <li><a href="/about.html">About</a></li>
         <li><a href="/contact.html">Contact</a></li>
+        <li><a href="/pro.html">Pro</a></li>
       </ul>
 
       <div class="nav-actions">
@@ -77,6 +78,7 @@
       <a href="/all-tools.html?category=developer">Developer Tools</a>
       <a href="/about.html">About</a>
       <a href="/contact.html">Contact</a>
+      <a href="/pro.html">Pro</a>
     </div>
   </div>
 </header>
@@ -299,7 +301,7 @@
 
     // Populate popular tools (first 8 ready/coming-soon tools)
     const popGrid = document.getElementById('popular-grid');
-   const popularIds = ['image-compressor', 'images-to-pdf', 'word-counter', 'json-formatter', 'password-generator', 'split-pdf', 'merge-pdf', 'qr-code-generator'];
+  const popularIds = ['merge-pdf', 'images-to-pdf', 'image-compressor', 'word-counter', 'json-formatter', 'password-generator', 'qr-code-generator', 'ai-summarizer'];
     if (popGrid) {
       popGrid.innerHTML = popularIds.map(function (id) {
         const t = window.ToolNova.getToolById(id);
