@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Base64 Decoder — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:700px;padding:3rem 1rem;">
+  <h1>Base64 Decoder</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Decode Base64 encoded text back to plain text.</p>
+  <textarea id="text" style="width:100%;height:150px;padding:1rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);margin-bottom:1rem;" placeholder="Enter Base64 string..."></textarea>
+  <div style="display:flex;gap:0.5rem;">
+    <button class="btn btn-primary" onclick="decode()">Decode to Text</button>
+    <button class="btn btn-secondary" onclick="document.getElementById('text').value=''">Clear</button>
+  </div>
+</main>
+<script>
+  function decode() {
+    const t = document.getElementById('text');
+    try { t.value = decodeURIComponent(escape(atob(t.value))); } catch(e) { alert("Invalid Base64 string."); }
+  }
+</script>
+</body></html>
