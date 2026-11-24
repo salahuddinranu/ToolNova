@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Merge PDF — Free Online PDF Combiner | ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <script src="/assets/js/theme.js"></script>
+  <style>
+    .tool-page { max-width: 800px; margin: 0 auto; padding: 3rem 1rem; }
+    .drop-zone { border: 2px dashed var(--color-border); border-radius: var(--radius-lg); padding: 3rem 1rem; text-align: center; background: var(--color-bg-secondary); cursor: pointer; transition: all 0.2s; margin-bottom: 1.5rem; }
+    .drop-zone:hover, .drop-zone.dragover { border-color: var(--color-primary); background: var(--color-primary-light); }
+    .drop-zone input[type="file"] { display: none; }
+    .file-list { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .file-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius-md); }
+    .file-item span { font-weight: 500; word-break: break-all; font-size: 0.9rem; }
+    .remove-btn { color: var(--color-error); background: none; border: none; cursor: pointer; font-weight: bold; font-size: 1.2rem; }
+    .action-area { text-align: center; display: none; }
+    .status-msg { display: none; text-align: center; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1rem; font-weight: 600; }
+    .status-success { background: #d1fae5; color: #065f46; }
+    .status-error { background: #fee2e2; color: #991b1b; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <nav class="nav">
+      <a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/all-tools.html">All Tools</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="tool-page">
+  <nav style="font-size:0.85rem;color:var(--color-text-muted);margin-bottom:1rem;">
+    <a href="/">Home</a> / <a href="/all-tools.html?category=pdf">PDF Tools</a> / Merge PDF
+  </nav>
+
+  <h1 style="font-size:2rem;margin-bottom:0.5rem;">Merge PDF</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Combine multiple PDF files into one document. All processing happens locally in your browser.</p>
+
+  <div class="drop-zone" id="drop-zone">
+    <input type="file" id="file-input" accept="application/pdf" multiple />
+    <div style="font-size:2.5rem;margin-bottom:1rem;">📑</div>
+    <h3>Click to select or drag & drop PDF files</h3>
+    <p style="color:var(--color-text-muted);font-size:0.9rem;margin-top:0.5rem;">Select two or more PDF files to merge</p>
+  </div>
+
+  <div class="file-list" id="file-list"></div>
+
+  <div id="status-msg" class="status-msg"></div>
+
+  <div class="action-area" id="action-area">
+    <button id="merge-btn" class="btn btn-primary" style="font-size:1.1rem;padding:0.8rem 2rem;">Merge PDFs</button>
+  </div>
+</main>
+
+<!-- PDF-lib library for PDF processing -->
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script>
+  const dropZone = document.getElementById('drop-zone');
+  const fileInput = document.getElementById('file-input');
+  const fileList = document.getElementById('file-list');
+  const actionArea = document.getElementById('action-area');
+  const mergeBtn = document.getElementById('merge-btn');
+  const statusMsg = document.getElementById('status-msg');
+
+  let selectedFiles = [];
+
+  // UI Events
+  dropZone.addEventListener('click', () => fileInput.click());
+  dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+  
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    handleFiles(e.dataTransfer.files);
+  });
+  
+  fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+  function handleFiles(files) {
+    if (!files.length) return;
+    
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (file.type !== 'application/pdf') {
+        alert('Skipped non-PDF file: ' + file.name);
+        continue;
+      }
+      selectedFiles.push(file);
+    }
+    renderFileList();
+  }
+
+  function renderFileList() {
+    fileList.innerHTML = '';
+    if (selectedFiles.length === 0) {
+      actionArea.style.display = 'none';
+      return;
+    }
+
+    selectedFiles.forEach((file, index) => {
+      const div = document.createElement('div');
+      div.className = 'file-item';
+      div.innerHTML = `
+        <span>📄 ${file.name}</span>
+        <button class="remove-btn" onclick="removeFile(${index})" title="Remove">✕</button>
+      `;
+      fileList.appendChild(div);
+    });
+
+    actionArea.style.display = 'block';
+  }
+
+  window.removeFile = function(index) {
+    selectedFiles.splice(index, 1);
+    renderFileList();
+  };
+
+  // Merge PDFs
+  mergeBtn.addEventListener('click', async () => {
+    if (selectedFiles.length < 2) {
+      alert('Please select at least 2 PDF files to merge.');
+      return;
+    }
+
+    mergeBtn.textContent = 'Merging PDFs... Please wait.';
+    mergeBtn.disabled = true;
+    statusMsg.style.display = 'none';
+
+    try {
+      const { PDFDocument } = PDFLib;
+      const mergedPdf = await PDFDocument.create();
+
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        const arrayBuffer = await readFileAsArrayBuffer(file);
+        const pdf = await PDFDocument.load(arrayBuffer);
+        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+        copiedPages.forEach((page) => mergedPdf.addPage(page));
+      }
+
+      const mergedPdfBytes = await mergedPdf.save();
+      const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+      
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'ToolNova-Merged.pdf';
+      a.click();
+      URL.revokeObjectURL(url);
+
+      statusMsg.style.display = 'block';
+      statusMsg.className = 'status-msg status-success';
+      statusMsg.textContent = '✅ PDFs merged and downloaded successfully!';
+
+    } catch (error) {
+      console.error(error);
+      statusMsg.style.display = 'block';
+      statusMsg.className = 'status-msg status-error';
+      statusMsg.textContent = '❌ Error merging PDFs. Some files may be encrypted or corrupted.';
+    } finally {
+      mergeBtn.textContent = 'Merge PDFs';
+      mergeBtn.disabled = false;
+    }
+  });
+
+  function readFileAsArrayBuffer(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsArrayBuffer(file);
+    });
+  }
+</script>
+</body>
+</html>
