@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UUID Generator — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:600px;padding:3rem 1rem;">
+  <h1>UUID Generator</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Generate unique v4 UUIDs instantly.</p>
+  
+  <div style="background:var(--color-bg-secondary);padding:1.5rem;border-radius:12px;border:1px solid var(--color-border);text-align:center;">
+    <input type="text" id="uuid-output" readonly style="width:100%;padding:1rem;font-size:1.2rem;font-family:monospace;border:1px solid var(--color-border);border-radius:8px;background:var(--color-bg);color:var(--color-text);text-align:center;margin-bottom:1rem;">
+    <div style="display:flex;gap:0.5rem;">
+      <button class="btn btn-primary" style="flex:1;" onclick="generate()">Generate New</button>
+      <button class="btn btn-secondary" style="flex:1;" onclick="copyUUID()">Copy</button>
+    </div>
+  </div>
+</main>
+<script>
+  function generate() {
+    // Modern crypto API for UUID v4
+    const uuid = crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+    document.getElementById('uuid-output').value = uuid;
+  }
+  function copyUUID() {
+    const el = document.getElementById('uuid-output');
+    el.select(); document.execCommand('copy');
+    alert('UUID copied to clipboard!');
+  }
+  generate(); // Generate on load
+</script>
+</body></html>
