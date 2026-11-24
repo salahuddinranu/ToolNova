@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Age Calculator — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <script src="/assets/js/theme.js"></script>
+  <script src="/assets/js/app.js" defer></script>
+  <script src="/assets/js/icons.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+
+<main class="container" style="max-width:600px;padding:3rem 1rem;">
+  <h1 style="font-size:2rem;margin-bottom:0.5rem;">Age Calculator</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Find out your exact age in years, months, and days.</p>
+
+  <div style="background:var(--color-card); padding:2rem; border-radius:12px; border:1px solid var(--color-border);">
+    <label style="font-weight:bold; margin-bottom:0.5rem; display:block;">Select your Date of Birth:</label>
+    <input type="date" id="dob" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);margin-bottom:1.5rem;">
+    
+    <button class="btn btn-primary" onclick="calculateAge()" style="width:100%;">Calculate Age</button>
+
+    <div id="result" style="display:none; margin-top:2rem; text-align:center; background:var(--color-bg-secondary); padding:1.5rem; border-radius:8px;">
+      <p style="font-size:1.1rem; margin-bottom:0.5rem;">You are</p>
+      <div style="font-size:2.5rem; font-weight:800; color:var(--color-primary);" id="age-years">0</div>
+      <p style="font-size:1.1rem; margin-bottom:1rem;">Years Old</p>
+      
+      <div style="display:flex; justify-content:space-around; border-top:1px solid var(--color-border); padding-top:1rem;">
+        <div><strong id="age-months">0</strong><br><small style="color:var(--color-text-muted);">Months</small></div>
+        <div><strong id="age-days">0</strong><br><small style="color:var(--color-text-muted);">Days</small></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  function calculateAge() {
+    const dobInput = document.getElementById('dob').value;
+    if(!dobInput) {
+      alert("Please select your date of birth.");
+      return;
+    }
+
+    const dob = new Date(dobInput);
+    const today = new Date();
+
+    if (dob > today) {
+      alert("Date of birth cannot be in the future.");
+      return;
+    }
+
+    let years = today.getFullYear() - dob.getFullYear();
+    let months = today.getMonth() - dob.getMonth();
+    let days = today.getDate() - dob.getDate();
+
+    if (days < 0) {
+      months--;
+      // Get days in the previous month
+      const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+      days += prevMonth.getDate();
+    }
+
+    if (months < 0) {
+      years--;
+      months += 12;
+    }
+
+    document.getElementById('age-years').textContent = years;
+    document.getElementById('age-months').textContent = months;
+    document.getElementById('age-days').textContent = days;
+    document.getElementById('result').style.display = 'block';
+  }
+</script>
+</body></html>
