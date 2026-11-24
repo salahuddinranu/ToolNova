@@ -11,7 +11,7 @@ const CATEGORIES = [
 const TOOLS = [
   // ================= PDF TOOLS =================
   { id: 'merge-pdf', name: 'Merge PDF', category: 'pdf', description: 'Combine multiple PDF files into one.', icon: '🔗', tags: ['combine'], type: 'client', status: 'ready' },
-  { id: 'split-pdf', name: 'Split PDF', category: 'pdf', description: 'Split a PDF into multiple files.', icon: '✂️', tags: ['divide'], type: 'client', status: 'coming-soon' },
+  { id: 'split-pdf', name: 'Split PDF', category: 'pdf', description: 'Split a PDF into multiple files.', icon: '✂️', tags: ['divide'], type: 'client', status: 'ready' },
   { id: 'compress-pdf', name: 'Compress PDF', category: 'pdf', description: 'Reduce PDF file size.', icon: '🗜️', tags: ['shrink'], type: 'client', status: 'coming-soon' },
   { id: 'rotate-pdf', name: 'Rotate PDF', category: 'pdf', description: 'Rotate PDF pages.', icon: '🔄', tags: ['turn'], type: 'client', status: 'coming-soon' },
   { id: 'images-to-pdf', name: 'Images to PDF', category: 'pdf', description: 'Convert images to PDF.', icon: '🖼️', tags: ['jpg', 'png'], type: 'client', status: 'ready' }, // ✅ Ready
@@ -19,7 +19,7 @@ const TOOLS = [
   
   // ================= IMAGE TOOLS =================
   { id: 'image-compressor', name: 'Image Compressor', category: 'image', description: 'Compress images without losing quality.', icon: '🗜️', tags: ['shrink'], type: 'client', status: 'ready' }, // ✅ Ready
-  { id: 'image-resizer', name: 'Image Resizer', category: 'image', description: 'Resize images to exact dimensions.', icon: '📐', tags: ['scale'], type: 'client', status: 'coming-soon' },
+  { id: 'image-resizer', name: 'Image Resizer', category: 'image', description: 'Resize images to exact dimensions.', icon: '📐', tags: ['scale'], type: 'client', status: 'ready' },
   { id: 'image-cropper', name: 'Image Cropper', category: 'image', description: 'Crop images easily.', icon: '✂️', tags: ['trim'], type: 'client', status: 'coming-soon' },
   { id: 'image-format-converter', name: 'Image Converter', category: 'image', description: 'Convert JPG, PNG, WebP.', icon: '🔄', tags: ['jpg', 'png'], type: 'client', status: 'coming-soon' },
   { id: 'favicon-generator', name: 'Favicon Generator', category: 'image', description: 'Generate favicons for websites.', icon: '⭐', tags: ['icon'], type: 'client', status: 'coming-soon' },
@@ -38,7 +38,7 @@ const TOOLS = [
 
   // ================= CALCULATORS =================
   { id: 'percentage-calculator', name: 'Percentage Calculator', category: 'calculator', description: 'Calculate percentages.', icon: '%', tags: ['percent'], type: 'client', status: 'ready' }, // ✅ Ready
-  { id: 'age-calculator', name: 'Age Calculator', category: 'calculator', description: 'Calculate exact age.', icon: '🎂', tags: ['birthday'], type: 'client', status: 'coming-soon' },
+  { id: 'age-calculator', name: 'Age Calculator', category: 'calculator', description: 'Calculate exact age.', icon: '🎂', tags: ['birthday'], type: 'client', status: 'ready' },
   { id: 'tip-calculator', name: 'Tip Calculator', category: 'calculator', description: 'Calculate tip and split bill.', icon: '💰', tags: ['bill'], type: 'client', status: 'coming-soon' },
 
   // ================= SECURITY =================
