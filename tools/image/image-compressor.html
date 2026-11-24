@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Compressor — Free Online Tool | ToolNova</title>
+  <meta name="description" content="Compress JPG, PNG and WebP images online for free. No upload to server — 100% private browser processing." />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <script src="/assets/js/theme.js"></script>
+  <style>
+    .tool-page { max-width: 800px; margin: 0 auto; padding: 3rem 1rem; }
+    .drop-zone { border: 2px dashed var(--color-border); border-radius: var(--radius-lg); padding: 3rem 1rem; text-align: center; background: var(--color-bg-secondary); cursor: pointer; transition: all 0.2s; }
+    .drop-zone:hover, .drop-zone.dragover { border-color: var(--color-primary); background: var(--color-primary-light); }
+    .drop-zone input[type="file"] { display: none; }
+    .result-box { margin-top: 2rem; display: none; text-align: center; background: var(--color-card); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border); }
+    .img-preview { max-width: 100%; max-height: 300px; border-radius: var(--radius-md); margin-bottom: 1rem; }
+    .progress-bar { width: 100%; height: 8px; background: var(--color-bg-tertiary); border-radius: 4px; overflow: hidden; margin: 1rem 0; display: none; }
+    .progress-fill { height: 100%; background: var(--color-primary); width: 0%; transition: width 0.3s; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <nav class="nav">
+      <a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/all-tools.html">All Tools</a></li>
+        <li><a href="/about.html">About</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="tool-page">
+  <nav style="font-size:0.85rem;color:var(--color-text-muted);margin-bottom:1rem;">
+    <a href="/">Home</a> / <a href="/all-tools.html?category=image">Image Tools</a> / Image Compressor
+  </nav>
+
+  <h1 style="font-size:2rem;margin-bottom:0.5rem;">Image Compressor</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Compress your images directly in your browser. Your files are never uploaded to any server.</p>
+
+  <div class="drop-zone" id="drop-zone">
+    <input type="file" id="file-input" accept="image/jpeg, image/png, image/webp" />
+    <div style="font-size:2.5rem;margin-bottom:1rem;">📸</div>
+    <h3>Click to select or drag & drop an image</h3>
+    <p style="color:var(--color-text-muted);font-size:0.9rem;margin-top:0.5rem;">Supports JPG, PNG, WebP</p>
+  </div>
+
+  <div class="progress-bar" id="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+
+  <div class="result-box" id="result-box">
+    <h3 style="color:var(--color-success);margin-bottom:1rem;">✅ Compression Complete!</h3>
+    <img id="result-image" class="img-preview" />
+    <div style="display:flex;justify-content:center;gap:2rem;margin:1rem 0;font-size:0.9rem;">
+      <div><span style="color:var(--color-text-muted);">Original:</span> <strong id="orig-size"></strong></div>
+      <div><span style="color:var(--color-text-muted);">Compressed:</span> <strong id="new-size"></strong></div>
+      <div><span style="color:var(--color-text-muted);">Saved:</span> <strong id="saved-percent" style="color:var(--color-success);"></strong></div>
+    </div>
+    <a id="download-btn" class="btn btn-primary" download="compressed.jpg">Download Compressed Image</a>
+    <br><br>
+    <button class="btn btn-ghost" onclick="window.location.reload()">Compress Another Image</button>
+  </div>
+</main>
+
+<script>
+  const dropZone = document.getElementById('drop-zone');
+  const fileInput = document.getElementById('file-input');
+  const resultBox = document.getElementById('result-box');
+  const progressBar = document.getElementById('progress-bar');
+  const progressFill = document.getElementById('progress-fill');
+
+  // File input click
+  dropZone.addEventListener('click', () => fileInput.click());
+
+  // Drag and drop
+  dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+  });
+
+  fileInput.addEventListener('change', (e) => {
+    if (e.target.files.length) handleFile(e.target.files[0]);
+  });
+
+  function handleFile(file) {
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file (JPG, PNG, WebP).');
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File is too large. Please select an image under 10MB.');
+      return;
+    }
+
+    dropZone.style.display = 'none';
+    progressBar.style.display = 'block';
+    progressFill.style.width = '30%';
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        progressFill.style.width = '70%';
+        setTimeout(() => compressImage(img, file), 100); // UI effect
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function compressImage(img, originalFile) {
+    const canvas = document.createElement('canvas');
+    let width = img.width;
+    let height = img.height;
+
+    // Max width 1920px (Full HD) taake image chhoti ho jaye
+    const MAX_WIDTH = 1920;
+    if (width > MAX_WIDTH) {
+      height = Math.round((height * MAX_WIDTH) / width);
+      width = MAX_WIDTH;
+    }
+
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, width, height);
+
+    // Compress to JPEG with 70% quality
+    canvas.toBlob((blob) => {
+      progressFill.style.width = '100%';
+      setTimeout(() => {
+        progressBar.style.display = 'none';
+        showResult(blob, img.src, originalFile);
+      }, 300);
+    }, 'image/jpeg', 0.7);
+  }
+
+  function formatSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1048576).toFixed(2) + ' MB';
+  }
+
+  function showResult(blob, previewUrl, originalFile) {
+    resultBox.style.display = 'block';
+    document.getElementById('result-image').src = previewUrl;
+    document.getElementById('orig-size').textContent = formatSize(originalFile.size);
+    document.getElementById('new-size').textContent = formatSize(blob.size);
+    
+    let saved = ((originalFile.size - blob.size) / originalFile.size) * 100;
+    document.getElementById('saved-percent').textContent = saved.toFixed(0) + '%';
+    
+    const downloadBtn = document.getElementById('download-btn');
+    const url = URL.createObjectURL(blob);
+    downloadBtn.href = url;
+    downloadBtn.download = 'compressed_' + originalFile.name.replace(/\.[^/.]+$/, "") + '.jpg';
+  }
+</script>
+</body>
+</html>
