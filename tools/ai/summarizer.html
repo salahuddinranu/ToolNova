@@ -59,11 +59,16 @@
       output.textContent = data.summary;
       resultArea.style.display = 'block';
     } catch (error) {
-      alert("Error: " + error.message);
-    } finally {
-      btn.textContent = "✨ Summarize with AI";
-      btn.disabled = false;
-    }
+  // Alert ki jagah result area mein error dikhayein
+  output.textContent = "❌ " + error.message;
+  output.style.color = "var(--color-error)";
+  resultArea.style.display = 'block';
+  // Result ka heading change karein
+  resultArea.querySelector('h3').textContent = "Error";
+} finally {
+  btn.textContent = "✨ Summarize with AI";
+  btn.disabled = false;
+}
   });
 </script>
 </body></html>
