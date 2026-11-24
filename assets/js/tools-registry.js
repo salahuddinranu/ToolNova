@@ -6,7 +6,7 @@ const CATEGORIES = [
   { id: 'developer', name: 'Developer Tools', icon: '💻' },
   { id: 'calculator', name: 'Calculators', icon: '🧮' },
   { id: 'security', name: 'Security Tools', icon: '🔐' }
-];
+]; 
 
 const TOOLS = [
   // ================= PDF TOOLS =================
