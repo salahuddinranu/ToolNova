@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ToolNova Pro — Premium Tools & No Ads</title>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <script src="/assets/js/theme.js"></script>
+  <script src="/assets/js/app.js" defer></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <nav class="nav">
+      <a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/all-tools.html">All Tools</a></li>
+        <li><a href="/pro.html" class="active">Pro</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" style="padding: 5rem 0 3rem;">
+    <div class="container">
+      <span class="hero-badge">🚀 Upgrade Your Experience</span>
+      <h1>Go <span class="gradient">Pro</span>. Work Faster.</h1>
+      <p class="lead">Unlock premium AI models, batch processing, larger file limits, and an ad-free experience.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container" style="max-width: 900px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+        
+        <!-- Free Plan -->
+        <div class="tool-card" style="padding: 2.5rem; text-align: center;">
+          <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Free</h3>
+          <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">For everyday tasks</p>
+          <div style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem;">$0<span style="font-size: 1rem; color: var(--color-text-muted); font-weight: 400;">/mo</span></div>
+          <ul style="text-align: left; margin-bottom: 2rem; list-style: none; display: flex; flex-direction: column; gap: 0.8rem; font-size: 0.95rem;">
+            <li>✅ Access to all basic tools</li>
+            <li>✅ Process 5 files at a time</li>
+            <li>✅ 10MB file size limit</li>
+            <li>❌ Ad-supported</li>
+            <li>❌ Standard AI models</li>
+          </ul>
+          <a href="/all-tools.html" class="btn btn-secondary" style="width: 100%;">Start Using Free</a>
+        </div>
+
+        <!-- Pro Plan -->
+        <div class="tool-card" style="padding: 2.5rem; text-align: center; border: 2px solid var(--color-primary); box-shadow: var(--shadow-glow);">
+          <div class="badge badge-pro" style="margin-bottom: 1rem;">Most Popular</div>
+          <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Pro</h3>
+          <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">For power users</p>
+          <div style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; color: var(--color-primary);">$5<span style="font-size: 1rem; color: var(--color-text-muted); font-weight: 400;">/mo</span></div>
+          <ul style="text-align: left; margin-bottom: 2rem; list-style: none; display: flex; flex-direction: column; gap: 0.8rem; font-size: 0.95rem;">
+            <li>✅ Everything in Free</li>
+            <li>✅ No Ads</li>
+            <li>✅ Process 50+ files at a time</li>
+            <li>✅ 100MB file size limit</li>
+            <li>✅ Advanced AI models (GPT-4, Llama-3)</li>
+            <li>✅ Priority support</li>
+          </ul>
+          <button class="btn btn-primary" style="width: 100%;" onclick="alert('Payment gateway is not connected yet. Coming soon!')">Upgrade to Pro</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom" style="border: none;">
+      <span>© <span id="year"></span> ToolNova. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
