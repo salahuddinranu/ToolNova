@@ -283,12 +283,12 @@
 
     // Populate popular tools (first 8 ready/coming-soon tools)
     const popGrid = document.getElementById('popular-grid');
-    const popularIds = ['image-compressor','image-resizer','merge-pdf','split-pdf','json-formatter','password-generator','word-counter','qr-code-generator'];
+   const popularIds = ['image-compressor', 'images-to-pdf', 'word-counter', 'json-formatter', 'password-generator', 'split-pdf', 'merge-pdf', 'qr-code-generator'];
     if (popGrid) {
       popGrid.innerHTML = popularIds.map(function (id) {
         const t = window.ToolNova.getToolById(id);
         if (!t) return '';
-        const href = t.status === 'ready' ? '/tools/' + t.category + '/' + t.id + '.html' : '#';
+        const href = t.status === 'ready' ? '/tools/' + t.category + '/' + t.id + '.html' : '/all-tools.html';
         const badge = t.status === 'ready'
           ? '<span class="badge badge-free">Ready</span>'
           : '<span class="badge badge-pro">Coming Soon</span>';
