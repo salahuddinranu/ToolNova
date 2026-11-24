@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Images to PDF Converter — Free & Private | ToolNova</title>
+  <meta name="description" content="Convert JPG, PNG, and WebP images into a single PDF document. 100% free, works in your browser without uploading." />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <script src="/assets/js/theme.js"></script>
+  <style>
+    .tool-page { max-width: 800px; margin: 0 auto; padding: 3rem 1rem; }
+    .drop-zone { border: 2px dashed var(--color-border); border-radius: var(--radius-lg); padding: 3rem 1rem; text-align: center; background: var(--color-bg-secondary); cursor: pointer; transition: all 0.2s; margin-bottom: 1.5rem; }
+    .drop-zone:hover, .drop-zone.dragover { border-color: var(--color-primary); background: var(--color-primary-light); }
+    .drop-zone input[type="file"] { display: none; }
+    .file-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .file-item { position: relative; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--color-border); background: var(--color-bg-tertiary); }
+    .file-item img { width: 100%; height: 100px; object-fit: cover; }
+    .file-item .remove-btn { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; display: grid; place-items: center; font-size: 12px; }
+    .file-item .remove-btn:hover { background: var(--color-error); }
+    .action-area { text-align: center; display: none; }
+    .status-msg { display: none; text-align: center; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1rem; font-weight: 600; }
+    .status-success { background: #d1fae5; color: #065f46; }
+    .status-error { background: #fee2e2; color: #991b1b; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <nav class="nav">
+      <a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/all-tools.html">All Tools</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="tool-page">
+  <nav style="font-size:0.85rem;color:var(--color-text-muted);margin-bottom:1rem;">
+    <a href="/">Home</a> / <a href="/all-tools.html?category=pdf">PDF Tools</a> / Images to PDF
+  </nav>
+
+  <h1 style="font-size:2rem;margin-bottom:0.5rem;">Images to PDF</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Convert JPG, PNG, or WebP images into a single PDF document. Drag to reorder, then click convert.</p>
+
+  <div class="drop-zone" id="drop-zone">
+    <input type="file" id="file-input" accept="image/jpeg, image/png, image/webp" multiple />
+    <div style="font-size:2.5rem;margin-bottom:1rem;">🖼️</div>
+    <h3>Click to select or drag & drop images</h3>
+    <p style="color:var(--color-text-muted);font-size:0.9rem;margin-top:0.5rem;">Supports multiple images at once (Max 20MB total)</p>
+  </div>
+
+  <div class="file-list" id="file-list"></div>
+
+  <div id="status-msg" class="status-msg"></div>
+
+  <div class="action-area" id="action-area">
+    <button id="convert-btn" class="btn btn-primary" style="font-size:1.1rem;padding:0.8rem 2rem;">Convert to PDF</button>
+  </div>
+</main>
+
+<!-- Hum jsPDF library use kar rahe hain PDF banane ke liye -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  const dropZone = document.getElementById('drop-zone');
+  const fileInput = document.getElementById('file-input');
+  const fileList = document.getElementById('file-list');
+  const actionArea = document.getElementById('action-area');
+  const convertBtn = document.getElementById('convert-btn');
+  const statusMsg = document.getElementById('status-msg');
+
+  let selectedFiles = [];
+
+  // UI Events
+  dropZone.addEventListener('click', () => fileInput.click());
+  dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+  
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    handleFiles(e.dataTransfer.files);
+  });
+  
+  fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+  function handleFiles(files) {
+    if (!files.length) return;
+    
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (!file.type.startsWith('image/')) {
+        alert('Skipped non-image file: ' + file.name);
+        continue;
+      }
+      selectedFiles.push(file);
+    }
+    renderFileList();
+  }
+
+  function renderFileList() {
+    fileList.innerHTML = '';
+    if (selectedFiles.length === 0) {
+      actionArea.style.display = 'none';
+      return;
+    }
+
+    selectedFiles.forEach((file, index) => {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const div = document.createElement('div');
+        div.className = 'file-item';
+        div.innerHTML = `
+          <img src="${e.target.result}" alt="preview" />
+          <button class="remove-btn" onclick="removeFile(${index})" title="Remove">✕</button>
+        `;
+        fileList.appendChild(div);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    actionArea.style.display = 'block';
+  }
+
+  // Global function taake remove button kaam kar sake
+  window.removeFile = function(index) {
+    selectedFiles.splice(index, 1);
+    renderFileList();
+  };
+
+  // Convert to PDF
+  convertBtn.addEventListener('click', async () => {
+    if (selectedFiles.length === 0) return;
+
+    convertBtn.textContent = 'Processing... Please wait.';
+    convertBtn.disabled = true;
+    statusMsg.style.display = 'none';
+
+    try {
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        const imgData = await readFileAsDataURL(file);
+        
+        // Image dimensions calculate karein taake A4 par fit ho
+        const imgProps = pdf.getImageProperties(imgData);
+        const ratio = Math.min((pageWidth - 20) / imgProps.width, (pageHeight - 20) / imgProps.height);
+        const newWidth = imgProps.width * ratio;
+        const newHeight = imgProps.height * ratio;
+
+        // Center alignment
+        const x = (pageWidth - newWidth) / 2;
+        const y = (pageHeight - newHeight) / 2;
+
+        if (i > 0) pdf.addPage();
+        
+        // PDF mein image daalein (JPG for speed, PNG for transparency)
+        const format = file.type === 'image/png' ? 'PNG' : 'JPEG';
+        pdf.addImage(imgData, format, x, y, newWidth, newHeight);
+      }
+
+      pdf.save('ToolNova-Images-to-PDF.pdf');
+      
+      statusMsg.style.display = 'block';
+      statusMsg.className = 'status-msg status-success';
+      statusMsg.textContent = '✅ PDF generated and downloaded successfully!';
+
+    } catch (error) {
+      console.error(error);
+      statusMsg.style.display = 'block';
+      statusMsg.className = 'status-msg status-error';
+      statusMsg.textContent = '❌ Error creating PDF. Please try smaller images.';
+    } finally {
+      convertBtn.textContent = 'Convert to PDF';
+      convertBtn.disabled = false;
+    }
+  });
+
+  function readFileAsDataURL(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+</script>
+</body>
+</html>
