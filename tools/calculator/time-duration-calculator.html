@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Time Duration Calculator — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:600px;padding:3rem 1rem;">
+  <h1>Time Duration Calculator</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Calculate the difference between two times.</p>
+
+  <div style="background:var(--color-bg-secondary);padding:2rem;border-radius:12px;border:1px solid var(--color-border);">
+    <div style="display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+      <div style="flex:1;min-width:200px;">
+        <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Start Time</label>
+        <input type="time" id="start-time" value="09:00" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
+      </div>
+      <div style="flex:1;min-width:200px;">
+        <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">End Time</label>
+        <input type="time" id="end-time" value="17:30" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
+      </div>
+    </div>
+
+    <button class="btn btn-primary" style="width:100%;" onclick="calculate()">Calculate Duration</button>
+
+    <div id="result" style="display:none;margin-top:2rem;text-align:center;padding-top:1.5rem;border-top:1px solid var(--color-border);">
+      <p style="font-size:1rem;color:var(--color-text-muted);">Total Duration</p>
+      <div style="font-size:2.5rem;font-weight:800;color:var(--color-primary);" id="duration">0h 0m</div>
+      <p style="font-size:0.9rem;color:var(--color-text-secondary);" id="minutes-total"></p>
+    </div>
+  </div>
+</main>
+<script>
+  function calculate() {
+    const startVal = document.getElementById('start-time').value;
+    const endVal = document.getElementById('end-time').value;
+
+    if(!startVal || !endVal) return alert("Please select both times.");
+
+    const [startH, startM] = startVal.split(':').map(Number);
+    const [endH, endM] = endVal.split(':').map(Number);
+
+    let startTotalMins = startH * 60 + startM;
+    let endTotalMins = endH * 60 + endM;
+
+    // Agar end time start time se chhota hai, matlab raat ka waqt hai (next day)
+    if (endTotalMins < startTotalMins) {
+      endTotalMins += 24 * 60;
+    }
+
+    const diffMins = endTotalMins - startTotalMins;
+    const hours = Math.floor(diffMins / 60);
+    const mins = diffMins % 60;
+
+    document.getElementById('duration').textContent = `${hours}h ${mins}m`;
+    document.getElementById('minutes-total').textContent = `(${diffMins} minutes total)`;
+    document.getElementById('result').style.display = 'block';
+  }
+</script>
+</body></html>
