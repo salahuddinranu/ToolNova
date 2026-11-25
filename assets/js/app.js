@@ -219,3 +219,40 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 });
+// ================= FLOATING HELP BUTTON =================
+document.addEventListener('DOMContentLoaded', function() {
+  // Check if button already exists
+  if (document.getElementById('help-btn')) return;
+
+  const helpBtn = document.createElement('button');
+  helpBtn.id = 'help-btn';
+  helpBtn.innerHTML = '❓';
+  helpBtn.style.cssText = `
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: white;
+    font-size: 1.5rem;
+    border: none;
+    box-shadow: var(--shadow-lg);
+    cursor: pointer;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+  `;
+  
+  helpBtn.onmouseover = () => { helpBtn.style.transform = 'scale(1.1)'; helpBtn.style.boxShadow = 'var(--shadow-glow)'; };
+  helpBtn.onmouseout = () => { helpBtn.style.transform = 'scale(1)'; helpBtn.style.boxShadow = 'var(--shadow-lg)'; };
+  
+  helpBtn.onclick = () => {
+    alert("How to use ToolNova:\n\n1. Browse tools by category or use the search bar.\n2. Upload or paste your file/text.\n3. Click 'Process' or 'Download'.\n4. Most tools run entirely in your browser — your files never leave your device!");
+  };
+
+  document.body.appendChild(helpBtn);
+});
