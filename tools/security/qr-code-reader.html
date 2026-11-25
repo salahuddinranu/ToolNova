@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR Code Reader — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:600px;padding:3rem 1rem; text-align:center;">
+  <h1>QR Code Reader</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Scan a QR code using your camera or upload an image.</p>
+
+  <div id="reader" style="width:100%; max-width:400px; margin:0 auto 1rem auto; border-radius:12px; overflow:hidden;"></div>
+  
+  <button class="btn btn-primary" id="start-btn" onclick="startScanner()">Start Camera Scanner</button>
+  <button class="btn btn-secondary" id="stop-btn" onclick="stopScanner()" style="display:none;">Stop Scanner</button>
+
+  <div id="result" style="margin-top:2rem; font-weight:bold; color:var(--color-primary); word-break:break-all;"></div>
+</main>
+<script>
+  let html5QrCode;
+
+  function startScanner() {
+    document.getElementById('start-btn').style.display = 'none';
+    document.getElementById('stop-btn').style.display = 'inline-block';
+    document.getElementById('result').textContent = '';
+
+    html5QrCode = new Html5Qrcode("reader");
+    html5QrCode.start(
+      { facingMode: "environment" },
+      { fps: 10, qrbox: { width: 250, height: 250 } },
+      (decodedText) => {
+        document.getElementById('result').innerHTML = `<a href="${decodedText}" target="_blank">${decodedText}</a>`;
+        stopScanner();
+      },
+      (errorMessage) => { /* ignore errors */ }
+    ).catch((err) => {
+      alert("Camera access denied or not available.");
+      stopScanner();
+    });
+  }
+
+  function stopScanner() {
+    if(html5QrCode) {
+      html5QrCode.stop().then(() => {
+        document.getElementById('start-btn').style.display = 'inline-block';
+        document.getElementById('stop-btn').style.display = 'none';
+      });
+    }
+  }
+</script>
+</body></html>
