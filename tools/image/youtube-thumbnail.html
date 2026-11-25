@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YouTube Thumbnail Grabber — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:700px;padding:3rem 1rem;">
+  <h1>YouTube Thumbnail Grabber</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Download the thumbnail image from any YouTube video.</p>
+
+  <div style="display:flex; gap:0.5rem; margin-bottom:2rem;">
+    <input type="text" id="url-input" placeholder="Paste YouTube video URL here..." style="flex:1; padding:1rem; border-radius:8px; border:1px solid var(--color-border); background:var(--color-bg); color:var(--color-text);">
+    <button class="btn btn-primary" onclick="getThumbnail()">Get Thumbnail</button>
+  </div>
+
+  <div id="result-area" style="display:none; text-align:center; background:var(--color-bg-secondary); padding:2rem; border-radius:12px; border:1px solid var(--color-border);">
+    <img id="thumb-img" style="max-width:100%; border-radius:8px; margin-bottom:1rem; border:1px solid var(--color-border);" />
+    <br>
+    <a id="download-btn" class="btn btn-primary" download="thumbnail.jpg">Download Thumbnail</a>
+  </div>
+  
+  <div id="error-msg" style="color:var(--color-error); text-align:center; margin-top:1rem; font-weight:bold;"></div>
+</main>
+<script>
+  function getThumbnail() {
+    const url = document.getElementById('url-input').value.trim();
+    const resultArea = document.getElementById('result-area');
+    const errorMsg = document.getElementById('error-msg');
+    const thumbImg = document.getElementById('thumb-img');
+    const downloadBtn = document.getElementById('download-btn');
+
+    errorMsg.textContent = '';
+    resultArea.style.display = 'none';
+
+    // Extract Video ID from URL
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+
+    if (!match || match[2].length !== 11) {
+      errorMsg.textContent = "Invalid YouTube URL. Please check the link.";
+      return;
+    }
+
+    const videoId = match[2];
+    // Max resolution thumbnail URL
+    const thumbUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+
+    // Check if maxresdefault exists, otherwise fallback to hqdefault
+    const img = new Image();
+    img.onload = function() {
+      thumbImg.src = thumbUrl;
+      downloadBtn.href = thumbUrl;
+      resultArea.style.display = 'block';
+    };
+    img.onerror = function() {
+      // Fallback to high quality (480x360)
+      const fallbackUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+      thumbImg.src = fallbackUrl;
+      downloadBtn.href = fallbackUrl;
+      resultArea.style.display = 'block';
+    };
+    img.src = thumbUrl;
+  }
+</script>
+</body></html>
