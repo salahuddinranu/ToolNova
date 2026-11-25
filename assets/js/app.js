@@ -361,3 +361,66 @@ document.addEventListener('DOMContentLoaded', function() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 });
+// ================= AUTO TOOL INSTRUCTIONS & FAQ =================
+document.addEventListener('DOMContentLoaded', function() {
+  const path = window.location.pathname;
+  
+  // Agar yeh tool page hai
+  if (path.includes('/tools/')) {
+    const main = document.querySelector('main');
+    const parts = path.split('/');
+    const toolId = parts[parts.length - 1].replace('.html', '');
+    
+    if (main && window.ToolNova) {
+      const tool = window.ToolNova.getToolById(toolId);
+      
+      if (tool) {
+        // Container banayein
+        const infoSection = document.createElement('div');
+        infoSection.style.cssText = 'margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--color-border); max-width: 800px; margin-left: auto; margin-right: auto;';
+        
+        infoSection.innerHTML = `
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;" class="tool-info-grid">
+            
+            <!-- How to Use -->
+            <div style="background: var(--color-bg-secondary); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border);">
+              <h3 style="font-size: 1.2rem; margin-bottom: 1rem; color: var(--color-text);">How to Use ${tool.name}</h3>
+              <ol style="margin-left: 1.2rem; color: var(--color-text-secondary); font-size: 0.95rem; line-height: 1.8;">
+                <li>Upload your file or enter text in the input area.</li>
+                <li>Configure any settings if available.</li>
+                <li>Click the process/generate button.</li>
+                <li>Download your result instantly.</li>
+              </ol>
+            </div>
+
+            <!-- Why Use This Tool -->
+            <div style="background: var(--color-bg-secondary); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border);">
+              <h3 style="font-size: 1.2rem; margin-bottom: 1rem; color: var(--color-text);">Why Use Our ${tool.name}?</h3>
+              <ul style="margin-left: 1.2rem; color: var(--color-text-secondary); font-size: 0.95rem; line-height: 1.8; list-style-type: disc;">
+                <li><strong>100% Free:</strong> No hidden charges or limits.</li>
+                <li><strong>Privacy First:</strong> Most processing happens in your browser.</li>
+                <li><strong>Fast & Easy:</strong> Works instantly on any device.</li>
+                <li><strong>No Signup:</strong> Start using it right away.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Tool FAQ -->
+          <div style="margin-top: 2rem;">
+            <h3 style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--color-text);">Frequently Asked Questions</h3>
+            <details style="padding: 1rem; background: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius-md); margin-bottom: 0.5rem; cursor: pointer;">
+              <summary style="font-weight: 600;">Is this ${tool.name} really free?</summary>
+              <p style="margin-top: 0.5rem; color: var(--color-text-secondary); font-size: 0.95rem;">Yes, all our tools are completely free to use without any registration.</p>
+            </details>
+            <details style="padding: 1rem; background: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius-md); cursor: pointer;">
+              <summary style="font-weight: 600;">Are my files safe?</summary>
+              <p style="margin-top: 0.5rem; color: var(--color-text-secondary); font-size: 0.95rem;">Absolutely. Your files are processed securely and are never stored on our servers permanently.</p>
+            </details>
+          </div>
+        `;
+        
+        main.appendChild(infoSection);
+      }
+    }
+  }
+});
