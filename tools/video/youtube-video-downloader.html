@@ -77,9 +77,59 @@
       });
   }
 
-  function downloadVideo() {
-    // Yahan backend call hoga (Cobalt) jo file download karega
-    alert("Download will start once the backend is connected. (This requires a Cobalt server setup.)");
+   async function downloadVideo() {
+    const url = document.getElementById('yt-url').value.trim();
+    const format = document.getElementById('format').value;
+    const quality = document.getElementById('quality').value;
+    
+    // ⚠️ YAHAN APNA RAILWAY URL DAALEIN ⚠️
+    const COBALT_API = "cobalt-production-0566dc45.up.railway.app/";
+
+    if (!url) return alert("Please paste a YouTube URL first.");
+
+    const btn = document.querySelector('button[onclick="downloadVideo()"]');
+    const originalText = btn.textContent;
+    btn.textContent = "⏳ Processing... Please wait.";
+    btn.disabled = true;
+
+    try {
+      const response = await fetch(COBALT_API, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          url: url,
+          videoQuality: format === 'mp4' ? quality : undefined,
+          audioFormat: format === 'mp3' ? 'mp3' : undefined,
+          downloadMode: format === 'mp3' ? 'audio' : 'auto'
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.status === 'error') {
+        throw new Error(data.text || "Could not process this video.");
+      }
+
+      // Cobalt direct link ya tunnel return karta hai
+      if (data.url) {
+        // Direct download start karein
+        window.location.href = data.url;
+      } else if (data.picker && data.picker.length > 0) {
+        // Agar multiple options hain to pehla download karein
+        window.location.href = data.picker[0].url;
+      } else {
+        throw new Error("No download link returned from server.");
+      }
+
+    } catch (error) {
+      alert("Download failed: " + error.message + "\n\nNote: YouTube often blocks cloud servers. If this keeps failing, a residential proxy is required.");
+    } finally {
+      btn.textContent = originalText;
+      btn.disabled = false;
+    }
   }
 </script>
 </body></html>
