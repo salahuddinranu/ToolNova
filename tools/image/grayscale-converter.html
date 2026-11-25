@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grayscale Converter — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+  <style>
+    .drop-zone { border: 2px dashed var(--color-border); border-radius: var(--radius-lg); padding: 3rem 1rem; text-align: center; background: var(--color-bg-secondary); cursor: pointer; margin-bottom: 1.5rem; }
+    .drop-zone input { display: none; }
+    .preview-box { display: none; text-align: center; margin-top: 1.5rem; background: var(--color-card); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--color-border); }
+    .img-preview { max-width: 100%; max-height: 300px; border-radius: 8px; margin-bottom: 1rem; border: 1px solid var(--color-border); }
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:800px;padding:3rem 1rem;">
+  <h1>Grayscale Image Converter</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Convert your color images into beautiful black and white.</p>
+
+  <div class="drop-zone" onclick="document.getElementById('file-input').click()">
+    <input type="file" id="file-input" accept="image/*">
+    <div style="font-size:2.5rem;margin-bottom:1rem;">⬛ ⬜</div>
+    <h3>Click to select an image</h3>
+  </div>
+
+  <div class="preview-box" id="preview-box">
+    <img id="preview-img" class="img-preview">
+    <div style="display:flex; gap:1rem; justify-content:center;">
+      <a id="download-btn" class="btn btn-primary" download="grayscale.jpg">Download Grayscale Image</a>
+      <button class="btn btn-secondary" onclick="window.location.reload()">Try Another</button>
+    </div>
+  </div>
+</main>
+<script>
+  document.getElementById('file-input').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if(!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        
+        // Draw image
+        ctx.drawImage(img, 0, 0);
+        
+        // Get pixel data
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+        
+        // Loop through pixels and convert to grayscale
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          
+          // Standard grayscale luminance formula
+          const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+          
+          data[i] = gray;     // Red
+          data[i + 1] = gray; // Green
+          data[i + 2] = gray; // Blue
+        }
+        
+        // Put modified pixels back
+        ctx.putImageData(imageData, 0, 0);
+        
+        const finalUrl = canvas.toDataURL('image/jpeg', 0.9);
+        document.getElementById('preview-img').src = finalUrl;
+        document.getElementById('download-btn').href = finalUrl;
+        
+        document.querySelector('.drop-zone').style.display = 'none';
+        document.getElementById('preview-box').style.display = 'block';
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+</script>
+</body></html>
