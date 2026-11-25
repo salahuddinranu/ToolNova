@@ -202,3 +202,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 });
+// ================= ADSENSE PLACEHOLDER ON TOOL PAGES =================
+document.addEventListener('DOMContentLoaded', function() {
+  const path = window.location.pathname;
+  
+  // Agar yeh tool page hai
+  if (path.includes('/tools/')) {
+    const main = document.querySelector('main');
+    if (main) {
+      const adContainer = document.createElement('div');
+      adContainer.style.cssText = 'margin: 3rem auto; max-width: 800px; min-height: 90px; background: var(--color-bg-tertiary); border: 1px dashed var(--color-border); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: var(--color-text-muted); font-size: 0.8rem;';
+      adContainer.textContent = 'Advertisement Space (Google AdSense)';
+      
+      // Main ke aakhir mein add karein (Related tools ke baad ya pehle)
+      main.appendChild(adContainer);
+    }
+  }
+});
