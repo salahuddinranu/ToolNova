@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hash Generator — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:800px;padding:3rem 1rem;">
+  <h1>Hash Generator</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Generate secure cryptographic hashes (SHA-1, SHA-256, SHA-512).</p>
+
+  <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Enter Text</label>
+  <textarea id="input" style="width:100%;height:100px;padding:1rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);margin-bottom:1rem;" placeholder="Type text to hash..."></textarea>
+  
+  <button class="btn btn-primary" onclick="generateHash()" style="width:100%; margin-bottom:2rem;">Generate Hashes</button>
+
+  <div id="results" style="display:none;">
+    <div style="margin-bottom:1rem;">
+      <label style="font-weight:bold;font-size:0.9rem;">SHA-256</label>
+      <div style="display:flex; gap:0.5rem;">
+        <input type="text" id="sha256" readonly style="flex:1;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg-secondary);color:var(--color-text);font-family:monospace;">
+        <button class="btn btn-secondary" onclick="copyHash('sha256')">Copy</button>
+      </div>
+    </div>
+    <div>
+      <label style="font-weight:bold;font-size:0.9rem;">SHA-1</label>
+      <div style="display:flex; gap:0.5rem;">
+        <input type="text" id="sha1" readonly style="flex:1;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg-secondary);color:var(--color-text);font-family:monospace;">
+        <button class="btn btn-secondary" onclick="copyHash('sha1')">Copy</button>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+  async function generateHash() {
+    const text = document.getElementById('input').value;
+    if(!text) return alert('Please enter some text.');
+
+    const msgBuffer = new TextEncoder().encode(text);
+
+    // SHA-256
+    const hashBuffer256 = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray256 = Array.from(new Uint8Array(hashBuffer256));
+    const hashHex256 = hashArray256.map(b => b.toString(16).padStart(2, '0')).join('');
+    document.getElementById('sha256').value = hashHex256;
+
+    // SHA-1
+    const hashBuffer1 = await crypto.subtle.digest('SHA-1', msgBuffer);
+    const hashArray1 = Array.from(new Uint8Array(hashBuffer1));
+    const hashHex1 = hashArray1.map(b => b.toString(16).padStart(2, '0')).join('');
+    document.getElementById('sha1').value = hashHex1;
+
+    document.getElementById('results').style.display = 'block';
+  }
+
+  function copyHash(id) {
+    const el = document.getElementById(id);
+    el.select(); document.execCommand('copy');
+    alert('Hash copied!');
+  }
+</script>
+</body></html>
