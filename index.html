@@ -241,6 +241,16 @@
         </ul>
       </div>
     </div>
+        <div style="border-top:1px solid var(--color-border); padding-top:2rem; margin-top:2rem; margin-bottom:2rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+      <div>
+        <h4 style="font-size:1.1rem; margin-bottom:0.25rem;">Subscribe to our Newsletter</h4>
+        <p style="font-size:0.9rem; color:var(--color-text-secondary);">Get updates on new tools and features.</p>
+      </div>
+      <form style="display:flex; gap:0.5rem; flex:1; max-width:400px;" onsubmit="event.preventDefault(); alert('Subscribed successfully!'); this.reset();">
+        <input type="email" placeholder="Enter your email" required style="flex:1; padding:0.75rem 1rem; border-radius:var(--radius-md); border:1px solid var(--color-border); background:var(--color-bg); color:var(--color-text);">
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+      </form>
+    </div>
     <div class="footer-bottom">
       <span>© <span id="year"></span> ToolNova. All rights reserved.</span>
       <span>Made with ❤️ for the web</span>
