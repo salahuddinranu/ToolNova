@@ -7,6 +7,14 @@
   <script src="/assets/js/theme.js"></script>
   <script src="/assets/js/app.js" defer></script>
   <script src="/assets/js/icons.js" defer></script>
+  <style>
+    .drop-zone { border: 2px dashed var(--color-border); border-radius: var(--radius-lg); padding: 3rem 1rem; text-align: center; background: var(--color-bg-secondary); cursor: pointer; transition: all 0.2s; margin-bottom: 1.5rem; }
+    .drop-zone:hover, .drop-zone.dragover { border-color: var(--color-primary); background: var(--color-primary-light); }
+    .drop-zone input[type="file"] { display: none; }
+    .preview-box { margin-bottom: 1.5rem; text-align: center; display: none; background: var(--color-bg-tertiary); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); }
+    .img-preview { max-width: 100%; max-height: 250px; border-radius: var(--radius-sm); object-fit: contain; }
+    .info-text { font-size: 0.9rem; color: var(--color-text-secondary); margin-top: 0.5rem; font-weight: 600; }
+  </style>
 </head>
 <body>
 <header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
@@ -15,60 +23,102 @@
   <h1 style="font-size:2rem;margin-bottom:0.5rem;">Image Resizer</h1>
   <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Resize your images to exact dimensions perfectly in your browser.</p>
 
-  <div style="border:2px dashed var(--color-border);padding:3rem 1rem;text-align:center;border-radius:12px;background:var(--color-bg-secondary);margin-bottom:1.5rem;cursor:pointer;" id="drop-zone" onclick="document.getElementById('file-input').click()">
-    <input type="file" id="file-input" accept="image/*" style="display:none;">
-    <div style="font-size:2rem;margin-bottom:1rem;">🖼️</div>
-    <h3>Click to select an image</h3>
+  <div class="drop-zone" id="drop-zone">
+    <input type="file" id="file-input" accept="image/*">
+    <div style="font-size:2.5rem;margin-bottom:1rem;">🖼️</div>
+    <h3>Click to select or drag & drop an image</h3>
   </div>
 
+  <!-- Image Preview Area -->
+  <div class="preview-box" id="preview-box">
+    <img id="preview-img" class="img-preview" />
+    <div class="info-text" id="preview-info"></div>
+  </div>
+
+  <!-- Controls Area -->
   <div id="controls" style="display:none; background:var(--color-card); padding:1.5rem; border-radius:12px; border:1px solid var(--color-border);">
-    <div style="display:flex; gap:1rem; margin-bottom:1rem;">
-      <div style="flex:1;">
-        <label style="font-size:0.9rem;font-weight:bold;">Width (px)</label>
-        <input type="number" id="width" style="width:100%;padding:0.5rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
+    <div style="display:flex; gap:1rem; margin-bottom:1rem; flex-wrap:wrap;">
+      <div style="flex:1; min-width:150px;">
+        <label style="font-size:0.9rem;font-weight:bold; display:block; margin-bottom:0.5rem;">New Width (px)</label>
+        <input type="number" id="width" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
       </div>
-      <div style="flex:1;">
-        <label style="font-size:0.9rem;font-weight:bold;">Height (px)</label>
-        <input type="number" id="height" style="width:100%;padding:0.5rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
+      <div style="flex:1; min-width:150px;">
+        <label style="font-size:0.9rem;font-weight:bold; display:block; margin-bottom:0.5rem;">New Height (px)</label>
+        <input type="number" id="height" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
       </div>
     </div>
-    <label style="display:block; margin-bottom:1rem;"><input type="checkbox" id="keep-ratio" checked> Maintain Aspect Ratio</label>
-    <button class="btn btn-primary" onclick="resizeImage()" style="width:100%;">Resize & Download</button>
+    
+    <label style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1.5rem; font-weight:600; cursor:pointer;">
+      <input type="checkbox" id="keep-ratio" checked style="width:18px; height:18px;"> Maintain Aspect Ratio
+    </label>
+    
+    <button class="btn btn-primary" onclick="resizeImage()" style="width:100%; font-size:1.1rem; padding:0.8rem;">Resize & Download Image</button>
   </div>
 </main>
 
 <script>
   let originalImage = null;
+  let originalFileName = "image";
+  
+  const dropZone = document.getElementById('drop-zone');
   const fileInput = document.getElementById('file-input');
+  const previewBox = document.getElementById('preview-box');
+  const previewImg = document.getElementById('preview-img');
+  const previewInfo = document.getElementById('preview-info');
   const controls = document.getElementById('controls');
   const wInput = document.getElementById('width');
   const hInput = document.getElementById('height');
   const ratioCheck = document.getElementById('keep-ratio');
 
+  // Drag and Drop Events
+  dropZone.addEventListener('click', () => fileInput.click());
+  dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+  });
+
   fileInput.addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if(!file) return;
+    if(e.target.files.length) handleFile(e.target.files[0]);
+  });
+
+  function handleFile(file) {
+    if(!file.type.startsWith('image/')) return alert("Please select an image file.");
+    
+    originalFileName = file.name.replace(/\.[^/.]+$/, ""); // Remove extension
     
     const reader = new FileReader();
     reader.onload = function(event) {
       originalImage = new Image();
       originalImage.onload = function() {
+        // Set inputs
         wInput.value = originalImage.width;
         hInput.value = originalImage.height;
+        
+        // Show Preview
+        previewImg.src = originalImage.src;
+        previewInfo.textContent = `Original: ${originalImage.width} x ${originalImage.height} pixels`;
+        
+        // Show UI
+        dropZone.style.display = 'none';
+        previewBox.style.display = 'block';
         controls.style.display = 'block';
       };
       originalImage.src = event.target.result;
     };
     reader.readAsDataURL(file);
-  });
+  }
 
-  // Auto-calculate height/width for aspect ratio
+  // Aspect ratio logic
   wInput.addEventListener('input', function() {
     if(ratioCheck.checked && originalImage) {
       const ratio = originalImage.height / originalImage.width;
       hInput.value = Math.round(wInput.value * ratio);
     }
   });
+  
   hInput.addEventListener('input', function() {
     if(ratioCheck.checked && originalImage) {
       const ratio = originalImage.width / originalImage.height;
@@ -78,9 +128,15 @@
 
   function resizeImage() {
     if(!originalImage) return;
+    
     const w = parseInt(wInput.value);
     const h = parseInt(hInput.value);
     
+    if(!w || !h || w <= 0 || h <= 0) {
+      return alert("Please enter valid width and height.");
+    }
+    
+    // Canvas setup
     const canvas = document.createElement('canvas');
     canvas.width = w;
     canvas.height = h;
@@ -89,6 +145,10 @@
     // High quality resizing
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
+    
+    // Draw image with white background (for transparent PNGs)
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, w, h);
     ctx.drawImage(originalImage, 0, 0, w, h);
     
     // Convert to blob and download
@@ -96,10 +156,10 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'resized-image.jpg';
+      a.download = originalFileName + `_${w}x${h}.jpg`;
       a.click();
       URL.revokeObjectURL(url);
-    }, 'image/jpeg', 0.9);
+    }, 'image/jpeg', 0.95); // High quality JPEG
   }
 </script>
 </body></html>
