@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HTML Entity Converter — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:700px;padding:3rem 1rem;">
+  <h1>HTML Entity Converter</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Encode special characters to HTML entities, or decode them back.</p>
+
+  <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Input</label>
+  <textarea id="input" style="width:100%;height:150px;padding:1rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);margin-bottom:1rem;" placeholder="<h1>Hello & Welcome</h1>"></textarea>
+  
+  <div style="display:flex;gap:0.5rem;margin-bottom:1.5rem;">
+    <button class="btn btn-primary" onclick="encode()" style="flex:1;">Encode Entities</button>
+    <button class="btn btn-primary" onclick="decode()" style="flex:1;">Decode Entities</button>
+  </div>
+
+  <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Result</label>
+  <textarea id="output" style="width:100%;height:150px;padding:1rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg-secondary);color:var(--color-text);font-family:monospace;" readonly></textarea>
+</main>
+<script>
+  function encode() {
+    const input = document.getElementById('input').value;
+    // Basic replacement for common HTML chars
+    let encoded = input
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+    document.getElementById('output').value = encoded;
+  }
+
+  function decode() {
+    const input = document.getElementById('input').value;
+    // Create a temporary DOM element to decode entities
+    const txt = document.createElement("textarea");
+    txt.innerHTML = input;
+    document.getElementById('output').value = txt.value;
+  }
+</script>
+</body></html>
