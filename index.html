@@ -309,6 +309,17 @@
 <!-- Scripts -->
 <script src="/assets/js/tools-registry.js"></script>
 <script src="/assets/js/app.js"></script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then(registration => {
+        console.log('SW registered: ', registration);
+      }).catch(registrationError => {
+        console.log('SW registration failed: ', registrationError);
+      });
+    });
+  }
+</script>
 <script src="/assets/js/icons.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
