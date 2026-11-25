@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tip Calculator — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:600px;padding:3rem 1rem;">
+  <h1>Tip Calculator</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Calculate the tip amount and split the bill easily.</p>
+
+  <div style="background:var(--color-bg-secondary);padding:2rem;border-radius:12px;border:1px solid var(--color-border);">
+    <div style="margin-bottom:1rem;">
+      <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Bill Amount ($)</label>
+      <input type="number" id="bill" placeholder="100" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
+    </div>
+    <div style="display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+      <div style="flex:1;min-width:150px;">
+        <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Tip (%)</label>
+        <input type="number" id="tip" placeholder="15" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
+      </div>
+      <div style="flex:1;min-width:150px;">
+        <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Split (People)</label>
+        <input type="number" id="split" placeholder="1" value="1" min="1" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
+      </div>
+    </div>
+
+    <button class="btn btn-primary" style="width:100%;" onclick="calculateTip()">Calculate</button>
+
+    <div id="result" style="display:none;margin-top:2rem;text-align:center;padding-top:1.5rem;border-top:1px solid var(--color-border);">
+      <p style="font-size:1rem;color:var(--color-text-muted);">Each person pays</p>
+      <div style="font-size:3rem;font-weight:800;color:var(--color-primary);" id="per-person">$0.00</div>
+      <p style="font-size:0.9rem;color:var(--color-text-secondary);" id="details"></p>
+    </div>
+  </div>
+</main>
+<script>
+  function calculateTip() {
+    const bill = parseFloat(document.getElementById('bill').value);
+    const tipPercent = parseFloat(document.getElementById('tip').value);
+    const split = parseInt(document.getElementById('split').value) || 1;
+
+    if(isNaN(bill) || bill <= 0) return alert("Please enter a valid bill amount.");
+    if(isNaN(tipPercent) || tipPercent < 0) return alert("Please enter a valid tip percentage.");
+
+    const tipAmount = bill * (tipPercent / 100);
+    const total = bill + tipAmount;
+    const perPerson = total / split;
+
+    document.getElementById('per-person').textContent = '$' + perPerson.toFixed(2);
+    document.getElementById('details').textContent = `Total: $${total.toFixed(2)} (Bill: $${bill.toFixed(2)} + Tip: $${tipAmount.toFixed(2)})`;
+    document.getElementById('result').style.display = 'block';
+  }
+</script>
+</body></html>
