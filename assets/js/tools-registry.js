@@ -35,6 +35,7 @@ const TOOLS = [
   { id: 'lorem-ipsum-generator', name: 'Lorem Ipsum', category: 'text', description: 'Generate placeholder text.', icon: '📝', tags: ['dummy'], type: 'client', status: 'ready' },
   { id: 'text-repeater', name: 'Text Repeater', category: 'text', description: 'Repeat any text multiple times.', icon: '🔁', tags: ['repeat'], type: 'client', status: 'ready' },
 { id: 'text-to-morse', name: 'Text to Morse', category: 'text', description: 'Convert text to Morse code.', icon: '📡', tags: ['morse'], type: 'client', status: 'ready' },
+{ id: 'html-entity-converter', name: 'HTML Entity Converter', category: 'text', description: 'Encode/decode HTML entities.', icon: '🏷️', tags: ['html'], type: 'client', status: 'ready' },
   // ================= DEVELOPER TOOLS =================
   { id: 'json-formatter', name: 'JSON Formatter', category: 'developer', description: 'Format and beautify JSON.', icon: '{ }', tags: ['json'], type: 'client', status: 'ready' },
   { id: 'base64-encoder', name: 'Base64 Encoder', category: 'developer', description: 'Encode text to Base64.', icon: '🔐', tags: ['encode'], type: 'client', status: 'ready' },
@@ -58,11 +59,12 @@ const TOOLS = [
   { id: 'time-duration-calculator', name: 'Time Duration Calculator', category: 'calculator', description: 'Calculate time difference.', icon: '⏳', tags: ['time'], type: 'client', status: 'ready' },
   { id: 'cgpa-calculator', name: 'CGPA Calculator', category: 'calculator', description: 'Calculate your GPA/CGPA.', icon: '🎓', tags: ['gpa'], type: 'client', status: 'ready' },
 { id: 'compound-interest-calculator', name: 'Compound Interest', category: 'calculator', description: 'Calculate compound interest.', icon: '📈', tags: ['finance'], type: 'client', status: 'ready' },
+  { id: 'loan-calculator', name: 'Loan Payment Estimator', category: 'calculator', description: 'Calculate loan payments.', icon: '🏦', tags: ['loan'], type: 'client', status: 'ready' },
   // ================= SECURITY =================
   { id: 'password-generator', name: 'Password Generator', category: 'security', description: 'Generate strong passwords.', icon: '🔑', tags: ['secure'], type: 'client', status: 'ready' },
   { id: 'random-number-generator', name: 'Random Number', category: 'security', description: 'Generate random numbers.', icon: '🎲', tags: ['random'], type: 'client', status: 'ready' },
   { id: 'qr-code-generator', name: 'QR Code Generator', category: 'security', description: 'Generate QR codes.', icon: '📱', tags: ['qr'], type: 'client', status: 'ready' },
-
+{ id: 'dice-roller', name: 'Dice Roller', category: 'security', description: 'Roll virtual dice.', icon: '🎲', tags: ['dice', 'game'], type: 'client', status: 'ready' },
   // ================= AI TOOLS =================
   { id: 'ai-summarizer', name: 'AI Summarizer', category: 'ai', description: 'Summarize long text.', icon: '📄', tags: ['ai'], type: 'ai', status: 'ready' }
 ];
