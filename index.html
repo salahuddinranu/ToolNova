@@ -87,8 +87,10 @@
         <a class="tag" href="/all-tools.html?q=qr">QR Code</a>
       </div>
 
-      <div class="hero-actions" style="animation: fadeInUp 0.6s ease 0.3s both;">
+      <div class="hero-actions" style="animation: fadeInUp 0.6s ease 0.3s both; display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
         <a href="/all-tools.html" class="btn btn-primary" style="font-size:1.1rem; padding:0.8rem 2rem;">Explore All Tools</a>
+        <a href="/all-tools.html?category=pdf" class="btn btn-secondary" style="font-size:1.1rem; padding:0.8rem 2rem;">📄 PDF Tools</a>
+        <a href="/all-tools.html?category=image" class="btn btn-secondary" style="font-size:1.1rem; padding:0.8rem 2rem;">🖼️ Image Tools</a>
       </div>
 
       <!-- Trust Badges -->
@@ -111,6 +113,7 @@
       </div>
     </div>
   </section>
+
   <!-- RECENTLY USED TOOLS -->
   <section class="section" id="recent-tools-section" style="display:none; padding-bottom:0;">
     <div class="container">
@@ -120,6 +123,7 @@
       <div class="tool-grid" id="recent-grid"></div>
     </div>
   </section>
+
   <!-- POPULAR TOOLS -->
   <section class="section">
     <div class="container">
@@ -203,7 +207,7 @@
 
 <footer class="site-footer">
   <div class="container">
-    <div class="footer-grid">
+    <div class="footer-grid" style="grid-template-columns: 2fr 1fr 1fr 1fr 1fr;">
       <div class="footer-col">
         <a href="/" class="logo" style="margin-bottom:1rem;">
           <span class="logo-mark">T</span>
@@ -214,13 +218,19 @@
         </p>
       </div>
       <div class="footer-col">
-        <h4>Product</h4>
+        <h4>Popular</h4>
         <ul>
-          <li><a href="/all-tools.html">All Tools</a></li>
+          <li><a href="/tools/pdf/merge-pdf.html">Merge PDF</a></li>
+          <li><a href="/tools/image/image-compressor.html">Image Compressor</a></li>
+          <li><a href="/tools/ai/ai-summarizer.html">AI Summarizer</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <ul>
           <li><a href="/all-tools.html?category=pdf">PDF Tools</a></li>
           <li><a href="/all-tools.html?category=image">Image Tools</a></li>
           <li><a href="/all-tools.html?category=ai">AI Tools</a></li>
-          <li><a href="/pro.html" style="color:var(--color-primary); font-weight:bold;">⭐ Go Pro</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -228,20 +238,21 @@
         <ul>
           <li><a href="/about.html">About Us</a></li>
           <li><a href="/contact.html">Contact</a></li>
-          <li><a href="/privacy.html">Privacy Policy</a></li>
-          <li><a href="/terms.html">Terms of Service</a></li>
+          <li><a href="/pro.html">Go Pro</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h4>Legal</h4>
+        <h4>Support</h4>
         <ul>
-          <li><a href="/disclaimer.html">Disclaimer</a></li>
-          <li><a href="/cookies.html">Cookie Policy</a></li>
-          <li><a href="/sitemap.xml">Sitemap</a></li>
+          <li><a href="/privacy.html">Privacy</a></li>
+          <li><a href="/terms.html">Terms</a></li>
+          <li><a href="/contact.html">Help</a></li>
         </ul>
       </div>
     </div>
-        <div style="border-top:1px solid var(--color-border); padding-top:2rem; margin-top:2rem; margin-bottom:2rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+    
+    <!-- Newsletter -->
+    <div style="border-top:1px solid var(--color-border); padding-top:2rem; margin-top:2rem; margin-bottom:2rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
       <div>
         <h4 style="font-size:1.1rem; margin-bottom:0.25rem;">Subscribe to our Newsletter</h4>
         <p style="font-size:0.9rem; color:var(--color-text-secondary);">Get updates on new tools and features.</p>
@@ -251,38 +262,15 @@
         <button type="submit" class="btn btn-primary">Subscribe</button>
       </form>
     </div>
+
     <div class="footer-bottom">
       <span>© <span id="year"></span> ToolNova. All rights reserved.</span>
       <span>Made with ❤️ for the web</span>
     </div>
   </div>
 </footer>
-// Recent Tools Loader
-document.addEventListener('DOMContentLoaded', function() {
-  const recentSection = document.getElementById('recent-tools-section');
-  const recentGrid = document.getElementById('recent-grid');
-  
-  if(recentSection && recentGrid && window.ToolNova) {
-    // LocalStorage se recent tools nikaalein
-    let recentIds = JSON.parse(localStorage.getItem('toolnova_recent') || '[]');
-    
-    if(recentIds.length > 0) {
-      recentSection.style.display = 'block';
-      
-      recentGrid.innerHTML = recentIds.slice(0, 4).map(id => {
-        const t = window.ToolNova.getToolById(id);
-        if(!t) return '';
-        return `
-          <a class="tool-card" href="/tools/${t.category}/${t.id}.html">
-            <div class="tool-icon">${t.icon}</div>
-            <h3>${t.name}</h3>
-            <p>${t.description}</p>
-          </a>
-        `;
-      }).join('');
-    }
-  }
-});
+
+<!-- Scripts -->
 <script src="/assets/js/tools-registry.js"></script>
 <script src="/assets/js/app.js"></script>
 <script src="/assets/js/icons.js"></script>
@@ -291,7 +279,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const yearEl = document.getElementById('year');
     if(yearEl) yearEl.textContent = new Date().getFullYear();
 
-    // Render Categories
+    // 1. Render Categories
     const catGrid = document.getElementById('category-grid');
     if(catGrid && window.ToolNova) {
       const counts = window.ToolNova.getCategoryCounts();
@@ -304,10 +292,9 @@ document.addEventListener('DOMContentLoaded', function() {
       `).join('');
     }
 
-    // Render Popular Tools
+    // 2. Render Popular Tools
     const popGrid = document.getElementById('popular-grid');
     if(popGrid && window.ToolNova) {
-      // Filhal 8 tools show kar rahe hain
       const popularIds = ['merge-pdf', 'images-to-pdf', 'image-compressor', 'word-counter', 'json-formatter', 'password-generator', 'qr-code-generator', 'ai-summarizer'];
       popGrid.innerHTML = popularIds.map(id => {
         const t = window.ToolNova.getToolById(id);
@@ -323,11 +310,38 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
       }).join('');
     }
+
+    // 3. Load Recent Tools (Local Storage)
+    const recentSection = document.getElementById('recent-tools-section');
+    const recentGrid = document.getElementById('recent-grid');
+    
+    if(recentSection && recentGrid && window.ToolNova) {
+      let recentIds = JSON.parse(localStorage.getItem('toolnova_recent') || '[]');
+      
+      if(recentIds.length > 0) {
+        recentSection.style.display = 'block';
+        recentGrid.innerHTML = recentIds.slice(0, 4).map(id => {
+          const t = window.ToolNova.getToolById(id);
+          if(!t) return '';
+          return `
+            <a class="tool-card" href="/tools/${t.category}/${t.id}.html">
+              <div class="tool-icon">${t.icon}</div>
+              <h3>${t.name}</h3>
+              <p>${t.description}</p>
+            </a>
+          `;
+        }).join('');
+      }
+    }
   });
 </script>
 <style>
+  @media (max-width: 900px) {
+    .footer-grid { grid-template-columns: 1fr 1fr !important; }
+  }
   @media (max-width: 768px) {
     .faq-grid { grid-template-columns: 1fr !important; }
+    .footer-grid { grid-template-columns: 1fr !important; }
   }
 </style>
 </body>
