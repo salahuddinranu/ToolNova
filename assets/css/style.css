@@ -150,3 +150,20 @@ input, textarea, select { font-family: inherit; font-size: 1rem; }
   font-size: 1.2rem;
   letter-spacing: -1px;
 }
+/* ================= NAYA OFFICIAL LOGO ================= */
+.logo-mark { display: none !important; } /* Purana Gemini/T logo chhupa dein */
+
+.logo::before {
+  content: '';
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+  border-radius: 8px;
+  /* Gradient Background */
+  background: linear-gradient(135deg, #6366f1, #06b6d4);
+  /* TN icon as SVG in background */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath d='M14 16H26M20 16V32M28 32V16L36 32V16' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  vertical-align: middle;
+}
