@@ -55,7 +55,7 @@ const TOOLS = [
   { id: 'tip-calculator', name: 'Tip Calculator', category: 'calculator', description: 'Calculate tip and split bill.', icon: '💰', tags: ['bill'], type: 'client', status: 'ready' },
   { id: 'time-duration-calculator', name: 'Time Duration Calculator', category: 'calculator', description: 'Calculate time difference.', icon: '⏳', tags: ['time'], type: 'client', status: 'ready' },
   { id: 'cgpa-calculator', name: 'CGPA Calculator', category: 'calculator', description: 'Calculate your GPA/CGPA.', icon: '🎓', tags: ['gpa'], type: 'client', status: 'ready' },
-
+{ id: 'compound-interest-calculator', name: 'Compound Interest', category: 'calculator', description: 'Calculate compound interest.', icon: '📈', tags: ['finance'], type: 'client', status: 'ready' },
   // ================= SECURITY =================
   { id: 'password-generator', name: 'Password Generator', category: 'security', description: 'Generate strong passwords.', icon: '🔑', tags: ['secure'], type: 'client', status: 'ready' },
   { id: 'random-number-generator', name: 'Random Number', category: 'security', description: 'Generate random numbers.', icon: '🎲', tags: ['random'], type: 'client', status: 'ready' },
