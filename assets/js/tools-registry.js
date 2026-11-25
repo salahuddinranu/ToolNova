@@ -15,8 +15,9 @@ const TOOLS = [
   { id: 'compress-pdf', name: 'Compress PDF', category: 'pdf', description: 'Reduce PDF file size.', icon: '🗜️', tags: ['shrink'], type: 'client', status: 'coming-soon' },
   { id: 'rotate-pdf', name: 'Rotate PDF', category: 'pdf', description: 'Rotate PDF pages.', icon: '🔄', tags: ['turn'], type: 'client', status: 'coming-soon' },
   { id: 'images-to-pdf', name: 'Images to PDF', category: 'pdf', description: 'Convert images to PDF.', icon: '🖼️', tags: ['jpg', 'png'], type: 'client', status: 'ready' }, // ✅ Ready
-  { id: 'pdf-to-images', name: 'PDF to Images', category: 'pdf', description: 'Extract PDF pages as images.', icon: '📸', tags: ['convert'], type: 'client', status: 'coming-soon' },
-  
+  { id: 'pdf-to-images', name: 'PDF to Images', category: 'pdf', description: 'Extract PDF pages as images.', icon: '📸', tags: ['convert'], type: 'client', status: 'ready' },
+  { id: 'extract-pdf-images', name: 'Extract PDF Images', category: 'pdf', description: 'Extract images from inside a PDF.', icon: '🖼️', tags: ['extract'], type: 'client', status: 'ready' },
+{ id: 'pdf-page-counter', name: 'PDF Page Counter', category: 'pdf', description: 'Count pages in a PDF.', icon: '🔢', tags: ['pages'], type: 'client', status: 'ready' },
   // ================= IMAGE TOOLS =================
   { id: 'image-compressor', name: 'Image Compressor', category: 'image', description: 'Compress images without losing quality.', icon: '🗜️', tags: ['shrink'], type: 'client', status: 'ready' }, // ✅ Ready
   { id: 'image-resizer', name: 'Image Resizer', category: 'image', description: 'Resize images to exact dimensions.', icon: '📐', tags: ['scale'], type: 'client', status: 'ready' },
