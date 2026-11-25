@@ -42,7 +42,7 @@
     </div>
 
     <button class="btn btn-primary" style="width:100%; font-size:1.1rem; padding:1rem;" onclick="downloadVideo()">⬇️ Download Now</button>
-    <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:1rem; text-align:center;">Note: Direct download requires a backend server. Coming soon!</p>
+    <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:1rem; text-align:center;">Note: If YouTube blocks the cloud server, try using a VPN or wait a few minutes.</p>
   </div>
 
   <div id="error" style="color:var(--color-error); text-align:center; margin-top:1rem; font-weight:bold;"></div>
@@ -77,13 +77,13 @@
       });
   }
 
-   async function downloadVideo() {
+  async function downloadVideo() {
     const url = document.getElementById('yt-url').value.trim();
     const format = document.getElementById('format').value;
     const quality = document.getElementById('quality').value;
     
-    // ⚠️ YAHAN APNA RAILWAY URL DAALEIN ⚠️
-    const COBALT_API = "cobalt-production-0566dc45.up.railway.app/";
+    // ✅ SAHI URL (https:// ke sath)
+    const COBALT_API = "https://cobalt-production-0566dc45.up.railway.app/";
 
     if (!url) return alert("Please paste a YouTube URL first.");
 
@@ -101,31 +101,42 @@
         },
         body: JSON.stringify({
           url: url,
-          videoQuality: format === 'mp4' ? quality : undefined,
-          audioFormat: format === 'mp3' ? 'mp3' : undefined,
+          videoQuality: format === 'mp4' ? quality : '1080', 
+          audioFormat: format === 'mp3' ? 'mp3' : 'best',
           downloadMode: format === 'mp3' ? 'audio' : 'auto'
         })
       });
 
-      const data = await response.json();
+      // Check if response is empty or not OK
+      if (!response.ok) {
+        throw new Error(`Server responded with status ${response.status}. YouTube might be blocking the request.`);
+      }
 
-      if (data.status === 'error') {
+      const text = await response.text();
+      if (!text) {
+        throw new Error("Server returned an empty response. YouTube block is likely.");
+      }
+
+      const data = JSON.parse(text);
+
+      if (data.status === 'error' || data.status === 'error.api.link.invalid') {
         throw new Error(data.text || "Could not process this video.");
       }
 
-      // Cobalt direct link ya tunnel return karta hai
+      // Handle Cobalt's response formats
       if (data.url) {
-        // Direct download start karein
         window.location.href = data.url;
       } else if (data.picker && data.picker.length > 0) {
-        // Agar multiple options hain to pehla download karein
         window.location.href = data.picker[0].url;
+      } else if (data.status === 'tunnel' || data.status === 'redirect') {
+        // Kuch instances tunnel ya redirect return karte hain
+        window.location.href = COBALT_API + "tunnel?url=" + encodeURIComponent(data.url);
       } else {
         throw new Error("No download link returned from server.");
       }
 
     } catch (error) {
-      alert("Download failed: " + error.message + "\n\nNote: YouTube often blocks cloud servers. If this keeps failing, a residential proxy is required.");
+      alert("Download failed: " + error.message + "\n\nNote: YouTube often blocks free cloud servers like Railway. A residential proxy is needed for 100% reliability.");
     } finally {
       btn.textContent = originalText;
       btn.disabled = false;
