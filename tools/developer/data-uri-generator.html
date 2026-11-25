@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data URI Generator — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+  <style>
+    .drop-zone { border: 2px dashed var(--color-border); border-radius: var(--radius-lg); padding: 3rem 1rem; text-align: center; background: var(--color-bg-secondary); cursor: pointer; margin-bottom: 1.5rem; }
+    .drop-zone:hover { border-color: var(--color-primary); }
+    .drop-zone input { display: none; }
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:800px;padding:3rem 1rem;">
+  <h1>Data URI Generator</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Convert any small file (image, pdf, doc) into a Base64 Data URI link.</p>
+
+  <div class="drop-zone" onclick="document.getElementById('file-input').click()">
+    <input type="file" id="file-input">
+    <div style="font-size:2.5rem;margin-bottom:1rem;">📁 ➡️ 🔗</div>
+    <h3>Click to select a file</h3>
+    <p style="font-size:0.85rem;color:var(--color-text-muted);margin-top:0.5rem;">Max size: 2MB (for browser performance)</p>
+  </div>
+
+  <div id="result-area" style="display:none;">
+    <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Data URI (Link)</label>
+    <textarea id="output" style="width:100%;height:150px;padding:1rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg-secondary);color:var(--color-text);font-family:monospace;font-size:0.8rem;margin-bottom:1rem;" readonly></textarea>
+    
+    <div style="display:flex;gap:0.5rem;">
+      <button class="btn btn-primary" onclick="copyURI()" style="flex:1;">Copy Link</button>
+      <a id="download-btn" class="btn btn-secondary" download style="flex:1;">Download Test</a>
+    </div>
+  </div>
+</main>
+<script>
+  document.getElementById('file-input').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if(!file) return;
+
+    if(file.size > 2 * 1024 * 1024) {
+      alert("File is too large. Please select a file under 2MB.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const dataUri = event.target.result;
+      document.getElementById('output').value = dataUri;
+      document.getElementById('download-btn').href = dataUri;
+      document.getElementById('download-btn').download = file.name;
+      document.getElementById('result-area').style.display = 'block';
+      document.querySelector('.drop-zone').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  function copyURI() {
+    const el = document.getElementById('output');
+    el.select(); document.execCommand('copy');
+    alert('Data URI copied to clipboard!');
+  }
+</script>
+</body></html>
