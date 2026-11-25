@@ -42,17 +42,19 @@
 })();
 
 
-// 2. Automatic Custom Logo Replacer (The "Nova N" Design)
+// 2. Automatic Custom Logo Replacer (The "TN" Monogram)
 window.addEventListener('DOMContentLoaded', function () {
   const logoLinks = document.querySelectorAll('.logo');
   
-  // Yeh ToolNova ka naya, professional aur unique logo hai
+  // Yeh ToolNova ka bilkul naya aur unique logo hai (T + N)
   const newLogoSVG = `
-    <svg class="logo-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:36px;height:36px;">
-      <rect width="48" height="48" rx="10" fill="url(#tnGrad)"/>
-      <path d="M12 16H36" stroke="white" stroke-width="4" stroke-linecap="round"/>
-      <path d="M24 16V34" stroke="white" stroke-width="4" stroke-linecap="round"/>
-      <path d="M12 34L24 22L36 34" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <svg class="logo-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:36px;height:36px; transition: transform 0.3s ease;">
+      <rect width="48" height="48" rx="12" fill="url(#tnGrad)"/>
+      <!-- Letter T -->
+      <path d="M14 16H26" stroke="white" stroke-width="4" stroke-linecap="round"/>
+      <path d="M20 16V32" stroke="white" stroke-width="4" stroke-linecap="round"/>
+      <!-- Letter N (Right side) -->
+      <path d="M28 32V16L36 32V16" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
       <defs>
         <linearGradient id="tnGrad" x1="0" y1="0" x2="48" y2="48">
           <stop stop-color="#6366f1"/>
@@ -64,16 +66,16 @@ window.addEventListener('DOMContentLoaded', function () {
   `;
 
   logoLinks.forEach(function (link) {
-    // Agar naya logo pehle se nahi laga hua, to lagayein
+    // Check if new logo is not already applied
     if (!link.querySelector('.logo-icon')) {
         const oldIcon = link.querySelector('.logo-mark');
-        if (oldIcon) oldIcon.style.display = 'none'; // Purana 'T' chhupa dein
+        if (oldIcon) oldIcon.style.display = 'none'; // Hide old 'T'
         
-        // Naya logo text ke pehle add karein
+        // Insert new SVG logo
         link.insertAdjacentHTML('afterbegin', newLogoSVG);
     }
     
-    // Hover effect (rotate on mouse enter)
+    // Hover animation
     link.addEventListener('mouseenter', function() {
         const svg = link.querySelector('svg');
         if(svg) svg.style.transform = 'rotate(10deg) scale(1.05)';
