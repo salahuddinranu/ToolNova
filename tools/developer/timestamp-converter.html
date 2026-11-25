@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Timestamp Converter — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:800px;padding:3rem 1rem;">
+  <h1>Timestamp Converter</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Convert Unix timestamps to human-readable dates and vice versa.</p>
+
+  <div style="background:var(--color-bg-secondary); padding:1.5rem; border-radius:12px; border:1px solid var(--color-border); margin-bottom:1.5rem;">
+    <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Unix Timestamp (Seconds)</label>
+    <div style="display:flex; gap:0.5rem;">
+      <input type="number" id="timestamp-input" placeholder="e.g. 1700000000" style="flex:1;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);" oninput="tsToDate()">
+      <button class="btn btn-secondary" onclick="document.getElementById('timestamp-input').value = Math.floor(Date.now()/1000); tsToDate();">Now</button>
+    </div>
+    <div id="date-output" style="margin-top:1rem; font-weight:bold; color:var(--color-primary); font-size:1.1rem;"></div>
+  </div>
+
+  <div style="background:var(--color-bg-secondary); padding:1.5rem; border-radius:12px; border:1px solid var(--color-border);">
+    <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Date to Timestamp</label>
+    <input type="datetime-local" id="date-input" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);" oninput="dateToTs()">
+    <div id="ts-output" style="margin-top:1rem; font-weight:bold; color:var(--color-primary); font-size:1.1rem;"></div>
+  </div>
+</main>
+<script>
+  function tsToDate() {
+    const val = document.getElementById('timestamp-input').value;
+    const out = document.getElementById('date-output');
+    if(!val || isNaN(val)) { out.textContent = ''; return; }
+
+    const date = new Date(val * 1000);
+    out.textContent = date.toString();
+  }
+
+  function dateToTs() {
+    const val = document.getElementById('date-input').value;
+    const out = document.getElementById('ts-output');
+    if(!val) { out.textContent = ''; return; }
+
+    const date = new Date(val);
+    const ts = Math.floor(date.getTime() / 1000);
+    out.textContent = `Timestamp: ${ts}`;
+  }
+</script>
+</body></html>
