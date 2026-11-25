@@ -14,7 +14,10 @@
     .result-box { margin-top: 2rem; display: none; text-align: center; background: var(--color-card); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border); }
     .img-preview { max-width: 100%; max-height: 300px; border-radius: var(--radius-md); margin-bottom: 1rem; box-shadow: var(--shadow-md); }
     .control-group { margin-bottom: 1rem; background: var(--color-bg-secondary); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); }
-    .control-group input { width: 100%; padding: 0.75rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-bg); color: var(--color-text); margin-top: 0.5rem; }
+    .control-group input, .control-group select { width: 100%; padding: 0.75rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-bg); color: var(--color-text); margin-top: 0.5rem; }
+    .alert-box { display: none; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1rem; font-weight: 600; text-align: center; }
+    .alert-info { background: #e0f2fe; color: #0369a1; }
+    .alert-warning { background: #fef3c7; color: #92400e; }
   </style>
 </head>
 <body>
@@ -35,10 +38,6 @@
 </header>
 
 <main class="container" style="max-width:800px;padding:3rem 1rem;">
-  <nav style="font-size:0.85rem;color:var(--color-text-muted);margin-bottom:1rem;">
-    <a href="/">Home</a> / <a href="/all-tools.html?category=image">Image Tools</a> / Image Compressor
-  </nav>
-
   <h1 style="font-size:2rem;margin-bottom:0.5rem;">Image Compressor</h1>
   <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Compress your images to a specific size (KB/MB) perfectly in your browser.</p>
 
@@ -48,12 +47,16 @@
     <h3>Click to select or drag & drop an image</h3>
   </div>
 
+  <!-- Alert Messages -->
+  <div id="alert-info" class="alert-box alert-info"></div>
+  <div id="alert-warning" class="alert-box alert-warning"></div>
+
   <div id="settings-area" style="display:none;">
     <div class="control-group">
       <label style="font-weight:600;">Target Size (Optional)</label>
       <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
-        <input type="number" id="target-size" placeholder="e.g. 100" style="flex:2;">
-        <select id="target-unit" style="flex:1; padding:0.75rem; border:1px solid var(--color-border); border-radius:var(--radius-sm); background:var(--color-bg); color:var(--color-text);">
+        <input type="number" id="target-size" placeholder="e.g. 100" style="flex:2;" min="1">
+        <select id="target-unit" style="flex:1;">
           <option value="KB">KB</option>
           <option value="MB">MB</option>
         </select>
@@ -67,11 +70,12 @@
   <div class="result-box" id="result-box">
     <h3 style="color:var(--color-success);margin-bottom:1rem;">✅ Compression Complete!</h3>
     <img id="result-image" class="img-preview" />
-    <div style="display:flex;justify-content:center;gap:2rem;margin:1rem 0;font-size:0.9rem;">
+    <div style="display:flex;justify-content:center;gap:2rem;margin:1rem 0;font-size:0.9rem;flex-wrap:wrap;">
       <div><span style="color:var(--color-text-muted);">Original:</span> <strong id="orig-size"></strong></div>
       <div><span style="color:var(--color-text-muted);">Compressed:</span> <strong id="new-size" style="color:var(--color-primary);"></strong></div>
       <div><span style="color:var(--color-text-muted);">Saved:</span> <strong id="saved-percent" style="color:var(--color-success);"></strong></div>
     </div>
+    <p id="save-details" style="font-size:0.9rem; color:var(--color-text-secondary); margin-bottom:1rem;"></p>
     <a id="download-btn" class="btn btn-primary" download="compressed.jpg">Download Compressed Image</a>
     <br><br>
     <button class="btn btn-ghost" onclick="window.location.reload()">Compress Another Image</button>
@@ -84,6 +88,8 @@
   const settingsArea = document.getElementById('settings-area');
   const resultBox = document.getElementById('result-box');
   const compressBtn = document.getElementById('compress-btn');
+  const alertInfo = document.getElementById('alert-info');
+  const alertWarning = document.getElementById('alert-warning');
 
   let originalImage = null;
   let originalFile = null;
@@ -102,12 +108,20 @@
     if (!file.type.startsWith('image/')) return alert('Please select an image file.');
     originalFile = file;
     
+    // Reset alerts
+    alertInfo.style.display = 'none';
+    alertWarning.style.display = 'none';
+
     const reader = new FileReader();
     reader.onload = (e) => {
       originalImage = new Image();
       originalImage.onload = () => {
         dropZone.style.display = 'none';
         settingsArea.style.display = 'block';
+        
+        // Show info about current size
+        alertInfo.textContent = `Your image is ${formatSize(file.size)}.`;
+        alertInfo.style.display = 'block';
       };
       originalImage.src = e.target.result;
     };
@@ -123,7 +137,10 @@
   compressBtn.addEventListener('click', async () => {
     if (!originalImage) return;
     
-    compressBtn.textContent = 'Compressing... Please wait';
+    // Hide previous alerts
+    alertInfo.style.display = 'none';
+    alertWarning.style.display = 'none';
+    compressBtn.textContent = 'Processing... Please wait';
     compressBtn.disabled = true;
 
     const targetSizeInput = document.getElementById('target-size').value;
@@ -134,6 +151,28 @@
       targetBytes = parseFloat(targetSizeInput);
       if (targetUnit === 'MB') targetBytes *= 1024 * 1024;
       else targetBytes *= 1024;
+    }
+
+    // Check if image is already smaller than target
+    if (targetBytes > 0 && originalFile.size <= targetBytes) {
+      alertWarning.textContent = `Your image is already ${formatSize(originalFile.size)}, which is smaller than your target (${targetSizeInput} ${targetUnit}). No compression needed!`;
+      alertWarning.style.display = 'block';
+      
+      // Show result without compression
+      resultBox.style.display = 'block';
+      document.getElementById('result-image').src = originalImage.src;
+      document.getElementById('orig-size').textContent = formatSize(originalFile.size);
+      document.getElementById('new-size').textContent = formatSize(originalFile.size);
+      document.getElementById('saved-percent').textContent = '0%';
+      document.getElementById('save-details').textContent = 'Image was not compressed because it was already within the target size.';
+      
+      const downloadBtn = document.getElementById('download-btn');
+      downloadBtn.href = originalImage.src;
+      downloadBtn.download = originalFile.name;
+      
+      compressBtn.textContent = 'Compress Image';
+      compressBtn.disabled = false;
+      return;
     }
 
     // Canvas setup
@@ -155,12 +194,12 @@
 
     let blob = null;
 
-    if (targetBytes) {
+    if (targetBytes > 0) {
       // Smart Compression Loop
       let quality = 0.9;
       let attempts = 0;
       
-      while (attempts < 10) {
+      while (attempts < 15) {
         blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
         
         if (blob.size <= targetBytes) {
@@ -168,10 +207,9 @@
         }
         
         quality -= 0.1; // Reduce quality
-        attempts++;
         
         // If quality is too low, reduce dimensions
-        if (quality < 0.1) {
+        if (quality < 0.2) {
            width = Math.round(width * 0.8);
            height = Math.round(height * 0.8);
            canvas.width = width;
@@ -179,6 +217,7 @@
            ctx.drawImage(originalImage, 0, 0, width, height);
            quality = 0.7; // Reset quality
         }
+        attempts++;
       }
     } else {
       // Standard compression (70%)
@@ -191,8 +230,18 @@
     document.getElementById('orig-size').textContent = formatSize(originalFile.size);
     document.getElementById('new-size').textContent = formatSize(blob.size);
     
-    let saved = ((originalFile.size - blob.size) / originalFile.size) * 100;
-    document.getElementById('saved-percent').textContent = saved > 0 ? saved.toFixed(0) + '%' : '0%';
+    let savedBytes = originalFile.size - blob.size;
+    let savedPercent = (savedBytes / originalFile.size) * 100;
+    
+    if (savedBytes <= 0) {
+        alertWarning.textContent = "Could not compress further without losing too much quality. Here is the best result.";
+        alertWarning.style.display = 'block';
+        document.getElementById('saved-percent').textContent = '0%';
+        document.getElementById('save-details').textContent = '';
+    } else {
+        document.getElementById('saved-percent').textContent = savedPercent.toFixed(1) + '%';
+        document.getElementById('save-details').textContent = `You saved ${formatSize(savedBytes)} of space!`;
+    }
     
     const downloadBtn = document.getElementById('download-btn');
     downloadBtn.href = url;
