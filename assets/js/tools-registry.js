@@ -56,6 +56,7 @@ const TOOLS = [
   // ================= CALCULATORS =================
   { id: 'percentage-calculator', name: 'Percentage Calculator', category: 'calculator', description: 'Calculate percentages.', icon: '%', tags: ['percent'], type: 'client', status: 'ready' },
  { id: 'average-calculator', name: 'Average Calculator', category: 'calculator', description: 'Calculate the mean of numbers.', icon: '📊', tags: ['average', 'mean'], type: 'client', status: 'ready' },
+  { id: 'decimal-to-binary', name: 'Decimal to Binary', category: 'calculator', description: 'Convert decimal to binary.', icon: '💻', tags: ['binary', 'decimal'], type: 'client', status: 'ready' },
   { id: 'age-calculator', name: 'Age Calculator', category: 'calculator', description: 'Calculate exact age.', icon: '🎂', tags: ['birthday'], type: 'client', status: 'ready' },
   { id: 'discount-calculator', name: 'Discount Calculator', category: 'calculator', description: 'Calculate discounts.', icon: '🏷️', tags: ['sale'], type: 'client', status: 'ready' },
   { id: 'tip-calculator', name: 'Tip Calculator', category: 'calculator', description: 'Calculate tip and split bill.', icon: '💰', tags: ['bill'], type: 'client', status: 'ready' },
@@ -65,6 +66,8 @@ const TOOLS = [
   { id: 'loan-calculator', name: 'Loan Payment Estimator', category: 'calculator', description: 'Calculate loan payments.', icon: '🏦', tags: ['loan'], type: 'client', status: 'ready' },
   // ================= SECURITY =================
   { id: 'password-generator', name: 'Password Generator', category: 'security', description: 'Generate strong passwords.', icon: '🔑', tags: ['secure'], type: 'client', status: 'ready' },
+ { id: 'hash-generator', name: 'Hash Generator', category: 'security', description: 'Generate SHA hashes.', icon: '#️⃣', tags: ['sha256'], type: 'client', status: 'ready' },
+{ id: 'random-name-generator', name: 'Random Name Generator', category: 'security', description: 'Generate random names.', icon: '👤', tags: ['name'], type: 'client', status: 'ready' },
   { id: 'random-number-generator', name: 'Random Number', category: 'security', description: 'Generate random numbers.', icon: '🎲', tags: ['random'], type: 'client', status: 'ready' },
   { id: 'qr-code-generator', name: 'QR Code Generator', category: 'security', description: 'Generate QR codes.', icon: '📱', tags: ['qr'], type: 'client', status: 'ready' },
 { id: 'dice-roller', name: 'Dice Roller', category: 'security', description: 'Roll virtual dice.', icon: '🎲', tags: ['dice', 'game'], type: 'client', status: 'ready' },
