@@ -3,38 +3,59 @@
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>YouTube Video Downloader — ToolNova</title>
-  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <script src="/assets/js/theme.js"></script>
+  <script src="/assets/js/app.js" defer></script>
+  <script src="/assets/js/icons.js" defer></script>
 </head>
 <body>
 <header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
-<main class="container" style="max-width:700px;padding:3rem 1rem;">
+<main class="container" style="max-width:800px;padding:3rem 1rem;">
   <h1>YouTube Video Downloader</h1>
-  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Paste a YouTube video link to get download options (MP4, MP3).</p>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Paste a YouTube link, choose your format and quality, then download.</p>
 
-  <div style="display:flex; gap:0.5rem; margin-bottom:2rem;">
+  <div style="display:flex; gap:0.5rem; margin-bottom:1.5rem;">
     <input type="text" id="yt-url" placeholder="Paste YouTube video URL here..." style="flex:1; padding:1rem; border-radius:8px; border:1px solid var(--color-border); background:var(--color-bg); color:var(--color-text);">
-    <button class="btn btn-primary" onclick="getVideoInfo()">Get Links</button>
+    <button class="btn btn-primary" onclick="fetchVideo()">Get Video</button>
   </div>
 
-  <div id="result" style="display:none; background:var(--color-bg-secondary); padding:2rem; border-radius:12px; border:1px solid var(--color-border);">
-    <h3 style="margin-bottom:1rem;">Video Found:</h3>
-    <p id="video-title" style="font-weight:bold; margin-bottom:1rem;"></p>
-    <div id="download-links" style="display:flex; flex-direction:column; gap:0.5rem;"></div>
+  <div id="options-area" style="display:none; background:var(--color-bg-secondary); padding:1.5rem; border-radius:12px; border:1px solid var(--color-border);">
+    <h3 style="margin-bottom:1rem;" id="video-title">Video Title</h3>
+    
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.5rem;">
+      <div>
+        <label style="font-weight:bold; display:block; margin-bottom:0.5rem;">Format</label>
+        <select id="format" style="width:100%; padding:0.8rem; border-radius:8px; border:1px solid var(--color-border); background:var(--color-bg); color:var(--color-text);">
+          <option value="mp4">MP4 (Video)</option>
+          <option value="mp3">MP3 (Audio Only)</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-weight:bold; display:block; margin-bottom:0.5rem;">Quality</label>
+        <select id="quality" style="width:100%; padding:0.8rem; border-radius:8px; border:1px solid var(--color-border); background:var(--color-bg); color:var(--color-text);">
+          <option value="1080">1080p (Full HD)</option>
+          <option value="720">720p (HD)</option>
+          <option value="480">480p</option>
+          <option value="360">360p</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" style="width:100%; font-size:1.1rem; padding:1rem;" onclick="downloadVideo()">⬇️ Download Now</button>
+    <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:1rem; text-align:center;">Note: Direct download requires a backend server. Coming soon!</p>
   </div>
-  
+
   <div id="error" style="color:var(--color-error); text-align:center; margin-top:1rem; font-weight:bold;"></div>
 </main>
 <script>
-  function getVideoInfo() {
+  function fetchVideo() {
     const url = document.getElementById('yt-url').value.trim();
-    const result = document.getElementById('result');
     const error = document.getElementById('error');
-    const linksDiv = document.getElementById('download-links');
+    const optionsArea = document.getElementById('options-area');
     
     error.textContent = '';
-    result.style.display = 'none';
+    optionsArea.style.display = 'none';
 
-    // Extract Video ID
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     const match = url.match(regExp);
 
@@ -45,28 +66,20 @@
 
     const videoId = match[2];
     
-    // Fetch video title via noembed (free API)
     fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`)
       .then(res => res.json())
       .then(data => {
         document.getElementById('video-title').textContent = data.title || "Unknown Title";
-        
-        // Generate links (using third-party API for demo, in real scenario you need a backend)
-        const qualities = [
-          { label: 'MP4 (1080p)', url: `https://api.vevioz.com/api/button/mp4/${videoId}` },
-          { label: 'MP4 (720p)', url: `https://api.vevioz.com/api/button/mp4/${videoId}` },
-          { label: 'MP3 (Audio)', url: `https://api.vevioz.com/api/button/mp3/${videoId}` }
-        ];
-
-        linksDiv.innerHTML = qualities.map(q => `
-          <a href="${q.url}" target="_blank" class="btn btn-secondary" style="width:100%; text-align:center;">Download ${q.label}</a>
-        `).join('');
-        
-        result.style.display = 'block';
+        optionsArea.style.display = 'block';
       })
       .catch(() => {
         error.textContent = "Could not fetch video info. Please try again.";
       });
+  }
+
+  function downloadVideo() {
+    // Yahan backend call hoga (Cobalt) jo file download karega
+    alert("Download will start once the backend is connected. (This requires a Cobalt server setup.)");
   }
 </script>
 </body></html>
