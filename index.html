@@ -111,7 +111,15 @@
       </div>
     </div>
   </section>
-
+  <!-- RECENTLY USED TOOLS -->
+  <section class="section" id="recent-tools-section" style="display:none; padding-bottom:0;">
+    <div class="container">
+      <div class="section-header" style="text-align:left; margin-bottom:1.5rem;">
+        <h2 style="font-size:1.5rem;">Recently Used Tools</h2>
+      </div>
+      <div class="tool-grid" id="recent-grid"></div>
+    </div>
+  </section>
   <!-- POPULAR TOOLS -->
   <section class="section">
     <div class="container">
@@ -239,7 +247,32 @@
     </div>
   </div>
 </footer>
-
+// Recent Tools Loader
+document.addEventListener('DOMContentLoaded', function() {
+  const recentSection = document.getElementById('recent-tools-section');
+  const recentGrid = document.getElementById('recent-grid');
+  
+  if(recentSection && recentGrid && window.ToolNova) {
+    // LocalStorage se recent tools nikaalein
+    let recentIds = JSON.parse(localStorage.getItem('toolnova_recent') || '[]');
+    
+    if(recentIds.length > 0) {
+      recentSection.style.display = 'block';
+      
+      recentGrid.innerHTML = recentIds.slice(0, 4).map(id => {
+        const t = window.ToolNova.getToolById(id);
+        if(!t) return '';
+        return `
+          <a class="tool-card" href="/tools/${t.category}/${t.id}.html">
+            <div class="tool-icon">${t.icon}</div>
+            <h3>${t.name}</h3>
+            <p>${t.description}</p>
+          </a>
+        `;
+      }).join('');
+    }
+  }
+});
 <script src="/assets/js/tools-registry.js"></script>
 <script src="/assets/js/app.js"></script>
 <script src="/assets/js/icons.js"></script>
