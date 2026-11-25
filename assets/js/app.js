@@ -167,3 +167,38 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 });
+// ================= DYNAMIC SEO FOR TOOL PAGES =================
+document.addEventListener('DOMContentLoaded', function() {
+  const path = window.location.pathname;
+  
+  if (path.includes('/tools/') && window.ToolNova) {
+    const parts = path.split('/');
+    const toolId = parts[parts.length - 1].replace('.html', '');
+    const categoryId = parts[parts.length - 2];
+    const tool = window.ToolNova.getToolById(toolId);
+    const category = window.ToolNova.getCategoryById(categoryId);
+
+    if (tool && category) {
+      // 1. Set Page Title
+      document.title = `${tool.name} — Free Online Tool | ToolNova`;
+      
+      // 2. Set Meta Description
+      let metaDesc = document.querySelector('meta[name="description"]');
+      if (!metaDesc) {
+        metaDesc = document.createElement('meta');
+        metaDesc.name = "description";
+        document.head.appendChild(metaDesc);
+      }
+      metaDesc.content = `${tool.description} Free, fast, and 100% private. Try the best ${tool.name} online at ToolNova.`;
+      
+      // 3. Set Canonical URL
+      let canonical = document.querySelector('link[rel="canonical"]');
+      if (!canonical) {
+        canonical = document.createElement('link');
+        canonical.rel = "canonical";
+        document.head.appendChild(canonical);
+      }
+      canonical.href = window.location.origin + path;
+    }
+  }
+});
