@@ -112,7 +112,7 @@
     });
 
     // Tools render karne ka function
-    function renderTools() {
+        function renderTools() {
       grid.innerHTML = '';
       let filtered = window.ToolNova.TOOLS;
 
@@ -121,13 +121,15 @@
         filtered = filtered.filter(t => t.category === activeCategory);
       }
 
-      // Search filter
+      // Smart Search Filter (Search by name, description, tags, category)
       if (searchQuery) {
-        const q = searchQuery.toLowerCase();
+        const q = searchQuery.toLowerCase().trim();
         filtered = filtered.filter(t => 
           t.name.toLowerCase().includes(q) || 
           t.description.toLowerCase().includes(q) || 
-          t.tags.some(tag => tag.includes(q))
+          t.id.includes(q) ||
+          t.category.includes(q) ||
+          (t.tags && t.tags.some(tag => tag.toLowerCase().includes(q)))
         );
       }
 
@@ -135,7 +137,12 @@
       toolCount.textContent = filtered.length + ' tool(s) found';
 
       if (filtered.length === 0) {
-        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--color-text-muted);">No tools found. Try a different search.</div>';
+        grid.innerHTML = `
+          <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--color-text-muted);">
+            <div style="font-size:3rem;margin-bottom:1rem;">🔍</div>
+            <h3>No tools found for "${searchQuery}"</h3>
+            <p style="margin-top:0.5rem;font-size:0.9rem;">Try searching for "image", "pdf", "compress", or "calculator".</p>
+          </div>`;
         return;
       }
 
