@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Extract PDF Images — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+  <style>
+    .drop-zone { border: 2px dashed var(--color-border); border-radius: var(--radius-lg); padding: 3rem 1rem; text-align: center; background: var(--color-bg-secondary); cursor: pointer; margin-bottom: 1.5rem; }
+    .drop-zone:hover { border-color: var(--color-primary); }
+    .drop-zone input { display: none; }
+    .img-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+    .img-card { border: 1px solid var(--color-border); border-radius: 8px; overflow: hidden; text-align: center; background: var(--color-card); padding: 0.5rem; }
+    .img-card img { width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; }
+    .img-card a { font-size: 0.8rem; font-weight: bold; display: block; padding: 0.5rem; background: var(--color-bg-tertiary); border-radius: 4px; }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:900px;padding:3rem 1rem;">
+  <h1>Extract PDF Images</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Extract original embedded images from inside a PDF file.</p>
+
+  <div class="drop-zone" onclick="document.getElementById('pdf-input').click()">
+    <input type="file" id="pdf-input" accept="application/pdf">
+    <div style="font-size:2rem;margin-bottom:1rem;">📄 🔍 🖼️</div>
+    <h3>Click to select a PDF file</h3>
+  </div>
+  
+  <div id="loading" style="display:none;text-align:center;font-weight:bold;color:var(--color-primary);margin-bottom:1rem;">Scanning for images... Please wait.</div>
+  <div class="img-grid" id="img-grid"></div>
+</main>
+<script>
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+  document.getElementById('pdf-input').addEventListener('change', async function(e) {
+    const file = e.target.files[0];
+    if(!file) return;
+
+    const grid = document.getElementById('img-grid');
+    const loading = document.getElementById('loading');
+    grid.innerHTML = '';
+    loading.style.display = 'block';
+
+    const fileReader = new FileReader();
+    fileReader.onload = async function() {
+      const typedarray = new Uint8Array(this.result);
+      const pdf = await pdfjsLib.getDocument(typedarray).promise;
+      
+      let imgCount = 0;
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const ops = await page.getOperatorList();
+        
+        // Find image objects in PDF stream
+        for (let j = 0; j < ops.fnArray.length; j++) {
+          if (ops.fnArray[j] === pdfjsLib.OPS.paintImageXObject) {
+            const imgName = ops.argsArray[j][0];
+            try {
+              const img = await page.objs.get(imgName);
+              if (img) {
+                // Create canvas to convert raw image data to PNG
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                
+                // Handle different image formats
+                const imgData = ctx.createImageData(img.width, img.height);
+                imgData.data.set(img.data);
+                ctx.putImageData(imgData, 0, 0);
+                
+                const dataUrl = canvas.toDataURL('image/png');
+                imgCount++;
+                
+                const card = document.createElement('div');
+                card.className = 'img-card';
+                card.innerHTML = `<img src="${dataUrl}" /> <a href="${dataUrl}" download="extracted-image-${imgCount}.png">Download Image</a>`;
+                grid.appendChild(card);
+              }
+            } catch(err) {
+              console.log("Could not extract image", err);
+            }
+          }
+        }
+      }
+      
+      loading.style.display = 'none';
+      if(imgCount === 0) {
+        grid.innerHTML = '<p style="color:var(--color-text-muted);grid-column:1/-1;">No embeded images found in this PDF.</p>';
+      }
+    };
+    fileReader.readAsArrayBuffer(file);
+  });
+</script>
+</body></html>
