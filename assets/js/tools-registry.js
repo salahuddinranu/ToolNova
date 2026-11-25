@@ -34,7 +34,7 @@ const TOOLS = [
   { id: 'text-diff-checker', name: 'Text Diff Checker', category: 'text', description: 'Compare two texts.', icon: '⚖️', tags: ['diff'], type: 'client', status: 'ready' },
   { id: 'lorem-ipsum-generator', name: 'Lorem Ipsum', category: 'text', description: 'Generate placeholder text.', icon: '📝', tags: ['dummy'], type: 'client', status: 'ready' },
   { id: 'text-repeater', name: 'Text Repeater', category: 'text', description: 'Repeat any text multiple times.', icon: '🔁', tags: ['repeat'], type: 'client', status: 'ready' },
-
+{ id: 'text-to-morse', name: 'Text to Morse', category: 'text', description: 'Convert text to Morse code.', icon: '📡', tags: ['morse'], type: 'client', status: 'ready' },
   // ================= DEVELOPER TOOLS =================
   { id: 'json-formatter', name: 'JSON Formatter', category: 'developer', description: 'Format and beautify JSON.', icon: '{ }', tags: ['json'], type: 'client', status: 'ready' },
   { id: 'base64-encoder', name: 'Base64 Encoder', category: 'developer', description: 'Encode text to Base64.', icon: '🔐', tags: ['encode'], type: 'client', status: 'ready' },
@@ -44,7 +44,9 @@ const TOOLS = [
   { id: 'gradient-generator', name: 'Gradient Generator', category: 'developer', description: 'Create CSS gradients.', icon: '🎨', tags: ['css'], type: 'client', status: 'ready' },
  { id: 'color-converter', name: 'Color Converter', category: 'developer', description: 'Convert HEX, RGB, HSL colors.', icon: '🎨', tags: ['color'], type: 'client', status: 'ready' },
 { id: 'random-color-generator', name: 'Random Color Generator', category: 'security', description: 'Generate random colors.', icon: '🌈', tags: ['random', 'color'], type: 'client', status: 'ready' },
+ { id: 'random-string-generator', name: 'Random String Generator', category: 'security', description: 'Generate random strings.', icon: '🔤', tags: ['random'], type: 'client', status: 'ready' },
   { id: 'html-formatter', name: 'HTML Formatter', category: 'developer', description: 'Beautify HTML code.', icon: '🌐', tags: ['html'], type: 'client', status: 'ready' },
+{ id: 'word-density-analyzer', name: 'Word Density Analyzer', category: 'developer', description: 'Check keyword density.', icon: '📊', tags: ['seo'], type: 'client', status: 'ready' },
   { id: 'data-uri-generator', name: 'Data URI Generator', category: 'developer', description: 'Convert files to Base64 links.', icon: '🔗', tags: ['base64', 'uri'], type: 'client', status: 'ready' },
   { id: 'csv-to-json', name: 'CSV to JSON', category: 'developer', description: 'Convert CSV to JSON.', icon: '{ }', tags: ['csv', 'json'], type: 'client', status: 'ready' },
   { id: 'json-to-csv', name: 'JSON to CSV', category: 'developer', description: 'Convert JSON to CSV.', icon: '📊', tags: ['csv', 'json'], type: 'client', status: 'ready' },
