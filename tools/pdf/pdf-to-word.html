@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PDF to Word Converter — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+  <style>
+    .drop-zone { border: 2px dashed var(--color-border); border-radius: var(--radius-lg); padding: 3rem 1rem; text-align: center; background: var(--color-bg-secondary); cursor: pointer; margin-bottom: 1.5rem; }
+    .drop-zone input { display: none; }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.8.2/docx.min.js"></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:700px;padding:3rem 1rem;">
+  <h1>PDF to Word Converter</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Extract text from your PDF and download it as a Word (.docx) file.</p>
+
+  <div class="drop-zone" onclick="document.getElementById('pdf-input').click()">
+    <input type="file" id="pdf-input" accept="application/pdf">
+    <div style="font-size:2.5rem;margin-bottom:1rem;">📄 ➡️ 📝</div>
+    <h3>Click to select a PDF file</h3>
+    <p style="font-size:0.85rem;color:var(--color-text-muted);margin-top:0.5rem;">Only text-based PDFs are supported (not scanned images).</p>
+  </div>
+
+  <div id="loading" style="display:none;text-align:center;font-weight:bold;color:var(--color-primary);">Converting... Please wait.</div>
+  <div id="status" style="text-align:center;margin-top:1rem;font-weight:bold;"></div>
+</main>
+<script>
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+  document.getElementById('pdf-input').addEventListener('change', async function(e) {
+    const file = e.target.files[0];
+    if(!file) return;
+
+    const loading = document.getElementById('loading');
+    const status = document.getElementById('status');
+    loading.style.display = 'block';
+    status.textContent = '';
+
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+      
+      let fullText = "";
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const textContent = await page.getTextContent();
+        const pageText = textContent.items.map(item => item.str).join(' ');
+        fullText += pageText + "\n\n";
+      }
+
+      if(!fullText.trim()) {
+        throw new Error("No readable text found in PDF. It might be a scanned image.");
+      }
+
+      // Create Word Document using docx library
+      const { Document, Packer, Paragraph, TextRun } = docx;
+      
+      const doc = new Document({
+        sections: [{
+          properties: {},
+          children: [
+            new Paragraph({
+              children: [new TextRun(fullText)],
+            }),
+          ],
+        }],
+      });
+
+      const blob = await Packer.toBlob(doc);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'converted.docx';
+      a.click();
+      URL.revokeObjectURL(url);
+
+      status.textContent = '✅ Converted successfully! Download started.';
+      status.style.color = 'var(--color-success)';
+    } catch (error) {
+      status.textContent = '❌ Error: ' + error.message;
+      status.style.color = 'var(--color-error)';
+    } finally {
+      loading.style.display = 'none';
+    }
+  });
+</script>
+</body></html>
