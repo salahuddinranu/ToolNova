@@ -28,12 +28,14 @@ const TOOLS = [
   { id: 'word-counter', name: 'Word Counter', category: 'text', description: 'Count words, characters and sentences.', icon: '🔢', tags: ['count'], type: 'client', status: 'ready' }, // ✅ Ready
  { id: 'text-diff-checker', name: 'Text Diff Checker', category: 'text', description: 'Compare two texts.', icon: '⚖️', tags: ['diff', 'compare'], type: 'client', status: 'ready' },
   { id: 'case-converter', name: 'Case Converter', category: 'text', description: 'Convert text to UPPER, lower, Title.', icon: 'Aa', tags: ['uppercase'], type: 'client', status: 'ready' }, // ✅ Ready
-  { id: 'remove-extra-spaces', name: 'Remove Extra Spaces', category: 'text', description: 'Clean extra whitespace.', icon: '🧹', tags: ['clean'], type: 'client', status: 'coming-soon' },
+  { id: 'remove-extra-spaces', name: 'Remove Extra Spaces', category: 'text', description: 'Clean extra whitespace.', icon: '🧹', tags: ['clean'], type: 'client', status: 'ready' },
+  { id: 'reverse-text', name: 'Reverse Text', category: 'text', description: 'Reverse any text string.', icon: '🔁', tags: ['backwards'], type: 'client', status: 'ready' },
   { id: 'lorem-ipsum-generator', name: 'Lorem Ipsum', category: 'text', description: 'Generate placeholder text.', icon: '📝', tags: ['dummy'], type: 'client', status: 'ready' },
 
   // ================= DEVELOPER TOOLS =================
   { id: 'json-formatter', name: 'JSON Formatter', category: 'developer', description: 'Format and beautify JSON.', icon: '{ }', tags: ['json'], type: 'client', status: 'ready' }, // ✅ Ready
   { id: 'json-validator', name: 'JSON Validator', category: 'developer', description: 'Validate JSON syntax.', icon: '✅', tags: ['json'], type: 'client', status: 'coming-soon' },
+ { id: 'url-encoder', name: 'URL Encoder', category: 'developer', description: 'Encode URLs safely.', icon: '🔗', tags: ['url'], type: 'client', status: 'ready' },
   { id: 'base64-encoder', name: 'Base64 Encoder/Decoder', category: 'developer', description: 'Encode or decode Base64.', icon: '🔐', tags: ['encode', 'decode'], type: 'client', status: 'ready' }, // ✅ Ready
  { id: 'base64-decoder', name: 'Base64 Decoder', category: 'developer', description: 'Decode Base64 to text.', icon: '🔓', tags: ['decode'], type: 'client', status: 'ready' },
   { id: 'uuid-generator', name: 'UUID Generator', category: 'developer', description: 'Generate random UUIDs.', icon: '🆔', tags: ['guid'], type: 'client', status: 'ready' },
