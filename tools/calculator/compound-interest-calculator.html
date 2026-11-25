@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compound Interest Calculator — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:600px;padding:3rem 1rem;">
+  <h1>Compound Interest Calculator</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Calculate how your investments grow over time.</p>
+
+  <div style="background:var(--color-bg-secondary);padding:2rem;border-radius:12px;border:1px solid var(--color-border);">
+    <div style="margin-bottom:1rem;">
+      <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Principal Amount ($)</label>
+      <input type="number" id="principal" placeholder="1000" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
+    </div>
+    <div style="display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;">
+      <div style="flex:1;min-width:150px;">
+        <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Annual Rate (%)</label>
+        <input type="number" id="rate" placeholder="5" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
+      </div>
+      <div style="flex:1;min-width:150px;">
+        <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Time (Years)</label>
+        <input type="number" id="time" placeholder="10" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
+      </div>
+    </div>
+
+    <button class="btn btn-primary" style="width:100%;" onclick="calc()">Calculate Interest</button>
+
+    <div id="result" style="display:none;margin-top:2rem;text-align:center;padding-top:1.5rem;border-top:1px solid var(--color-border);">
+      <p style="font-size:1rem;color:var(--color-text-muted);">Total Amount</p>
+      <div style="font-size:2.5rem;font-weight:800;color:var(--color-primary);" id="total">$0.00</div>
+      <p style="font-size:1rem;color:var(--color-success);font-weight:bold;" id="interest">Interest Earned: $0.00</p>
+    </div>
+  </div>
+</main>
+<script>
+  function calc() {
+    const p = parseFloat(document.getElementById('principal').value);
+    const r = parseFloat(document.getElementById('rate').value) / 100;
+    const t = parseFloat(document.getElementById('time').value);
+
+    if(isNaN(p) || isNaN(r) || isNaN(t) || p <= 0 || t <= 0) {
+      return alert("Please enter valid positive numbers.");
+    }
+
+    // Compound Interest Formula: A = P(1 + r)^t (Assuming annual compound)
+    const totalAmount = p * Math.pow((1 + r), t);
+    const interestEarned = totalAmount - p;
+
+    document.getElementById('total').textContent = '$' + totalAmount.toFixed(2);
+    document.getElementById('interest').textContent = 'Interest Earned: $' + interestEarned.toFixed(2);
+    document.getElementById('result').style.display = 'block';
+  }
+</script>
+</body></html>
