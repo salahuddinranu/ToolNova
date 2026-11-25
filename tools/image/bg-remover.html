@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Background Remover — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <script src="/assets/js/theme.js"></script>
+  <script src="/assets/js/app.js" defer></script>
+  <script src="/assets/js/icons.js" defer></script>
+  <style>
+    .drop-zone { border: 2px dashed var(--color-border); border-radius: var(--radius-lg); padding: 3rem 1rem; text-align: center; background: var(--color-bg-secondary); cursor: pointer; margin-bottom: 1.5rem; }
+    .drop-zone:hover { border-color: var(--color-primary); }
+    .drop-zone input { display: none; }
+    .result-box { display: none; text-align: center; margin-top: 2rem; background: var(--color-card); padding: 2rem; border-radius: 12px; border: 1px solid var(--color-border); }
+    .img-preview { max-width: 100%; max-height: 400px; border-radius: 8px; margin-bottom: 1rem; background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%); background-size: 20px 20px; background-position: 0 0, 0 10px, 10px -10px, -10px 0px; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.0.5/dist/body-pix.min.js"></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:800px;padding:3rem 1rem;">
+  <h1>Background Remover</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Remove the background from your images automatically using AI. All processing happens in your browser.</p>
+
+  <div class="drop-zone" onclick="document.getElementById('file-input').click()">
+    <input type="file" id="file-input" accept="image/*">
+    <div style="font-size:2.5rem;margin-bottom:1rem;">✂️</div>
+    <h3>Click to select an image</h3>
+    <p style="font-size:0.85rem;color:var(--color-text-muted);margin-top:0.5rem;">Works best with people and animals</p>
+  </div>
+
+  <div id="loading" style="display:none;text-align:center;font-weight:bold;color:var(--color-primary);margin-bottom:1rem;">Loading AI model... This may take a minute.</div>
+
+  <div class="result-box" id="result-box">
+    <img id="result-image" class="img-preview" />
+    <div style="display:flex; gap:1rem; justify-content:center;">
+      <a id="download-btn" class="btn btn-primary" download="no-bg.png">Download PNG</a>
+      <button class="btn btn-secondary" onclick="window.location.reload()">Try Another</button>
+    </div>
+  </div>
+</main>
+<script>
+  let net = null;
+
+  document.getElementById('file-input').addEventListener('change', async function(e) {
+    const file = e.target.files[0];
+    if(!file) return;
+
+    const loading = document.getElementById('loading');
+    loading.style.display = 'block';
+    document.querySelector('.drop-zone').style.display = 'none';
+
+    // Load image
+    const img = new Image();
+    img.onload = async function() {
+      // Load model if not loaded
+      if(!net) {
+        net = await bodyPix.load();
+      }
+      
+      loading.textContent = "Removing background... Please wait.";
+      
+      // Segment person/body
+      const segmentation = await net.segmentPerson(img, {
+        internalResolution: 'medium',
+        segmentationThreshold: 0.7
+      });
+
+      // Create canvas
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      
+      // Draw original image
+      ctx.drawImage(img, 0, 0);
+      
+      // Get pixel data and apply mask
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imageData.data;
+      
+      for (let i = 0; i < data.length; i += 4) {
+        const pixelIndex = i / 4;
+        // If NOT body (background), make transparent
+        if (segmentation.data[pixelIndex] === 0) {
+          data[i + 3] = 0; // Alpha channel to 0
+        }
+      }
+      
+      ctx.putImageData(imageData, 0, 0);
+      
+      const finalUrl = canvas.toDataURL('image/png');
+      document.getElementById('result-image').src = finalUrl;
+      document.getElementById('download-btn').href = finalUrl;
+      
+      loading.style.display = 'none';
+      document.getElementById('result-box').style.display = 'block';
+    };
+    img.src = URL.createObjectURL(file);
+  });
+</script>
+</body></html>
