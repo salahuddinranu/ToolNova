@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PDF to Images — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+  <style>
+    .drop-zone { border: 2px dashed var(--color-border); border-radius: var(--radius-lg); padding: 3rem 1rem; text-align: center; background: var(--color-bg-secondary); cursor: pointer; margin-bottom: 1.5rem; }
+    .drop-zone:hover { border-color: var(--color-primary); }
+    .drop-zone input { display: none; }
+    .img-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+    .img-card { border: 1px solid var(--color-border); border-radius: 8px; overflow: hidden; text-align: center; background: var(--color-card); padding: 0.5rem; }
+    .img-card img { width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; }
+    .img-card a { font-size: 0.8rem; font-weight: bold; display: block; padding: 0.5rem; background: var(--color-bg-tertiary); border-radius: 4px; }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:900px;padding:3rem 1rem;">
+  <h1>PDF to Images</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Convert every page of your PDF into a high-quality JPG image.</p>
+
+  <div class="drop-zone" onclick="document.getElementById('pdf-input').click()">
+    <input type="file" id="pdf-input" accept="application/pdf">
+    <div style="font-size:2rem;margin-bottom:1rem;">📄 ➡️ 🖼️</div>
+    <h3>Click to select a PDF file</h3>
+  </div>
+  
+  <div id="loading" style="display:none;text-align:center;font-weight:bold;color:var(--color-primary);margin-bottom:1rem;">Converting pages... Please wait.</div>
+  <div class="img-grid" id="img-grid"></div>
+</main>
+<script>
+  // PDF.js Worker setup
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+  document.getElementById('pdf-input').addEventListener('change', async function(e) {
+    const file = e.target.files[0];
+    if(!file) return;
+
+    const grid = document.getElementById('img-grid');
+    const loading = document.getElementById('loading');
+    grid.innerHTML = '';
+    loading.style.display = 'block';
+
+    const fileReader = new FileReader();
+    fileReader.onload = async function() {
+      const typedarray = new Uint8Array(this.result);
+      const pdf = await pdfjsLib.getDocument(typedarray).promise;
+      
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const viewport = page.getViewport({ scale: 2.0 }); // 2.0 scale for high quality
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        await page.render({ canvasContext: context, viewport: viewport }).promise;
+        const imgUrl = canvas.toDataURL('image/jpeg', 0.9);
+
+        // UI mein image show karein
+        const card = document.createElement('div');
+        card.className = 'img-card';
+        card.innerHTML = `<img src="${imgUrl}" /> <a href="${imgUrl}" download="page-${i}.jpg">Download Page ${i}</a>`;
+        grid.appendChild(card);
+      }
+      loading.style.display = 'none';
+    };
+    fileReader.readAsArrayBuffer(file);
+  });
+</script>
+</body></html>
