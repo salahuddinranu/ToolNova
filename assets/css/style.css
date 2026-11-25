@@ -209,3 +209,26 @@ main { animation: pageFadeIn 0.4s ease-out forwards; }
 
 @media (max-width: 900px) { .nav-links { display: none; } .mobile-menu-btn { display: grid; } .footer-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 600px) { .section { padding: 3rem 0; } .hero { padding: 4rem 0 2rem; } .footer-grid { grid-template-columns: 1fr; } .footer-bottom { flex-direction: column; text-align: center; } }
+/* ================= MOBILE OPTIMIZATIONS ================= */
+@media (max-width: 768px) {
+  /* Hero section text chhota karein */
+  .hero h1 { font-size: 2rem; }
+  .hero p.lead { font-size: 1rem; padding: 0 1rem; }
+  
+  /* Buttons ko full width karein */
+  .hero-actions { flex-direction: column; width: 100%; padding: 0 1rem; }
+  .hero-actions .btn { width: 100%; }
+  
+  /* Search box ko adjust karein */
+  .search-box { padding: 0 1rem; }
+  
+  /* Tool cards ko single column karein */
+  .tool-grid, .category-grid { grid-template-columns: 1fr; }
+  
+  /* Footer ko center karein */
+  .footer-bottom { flex-direction: column; text-align: center; }
+  
+  /* Floating buttons ko thoda chhota karein */
+  #help-btn { width: 48px !important; height: 48px !important; bottom: 16px !important; right: 16px !important; }
+  #back-to-top-btn { width: 40px !important; height: 40px !important; bottom: 80px !important; right: 16px !important; }
+}
