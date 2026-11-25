@@ -98,3 +98,52 @@ window.addEventListener('DOMContentLoaded', function () {
     }
   }
 });
+// ================= LIVE SEARCH DROPDOWN =================
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('global-search');
+  const searchBox = document.getElementById('global-search-form');
+  
+  if (!searchInput || !searchBox) return;
+
+  // Create dropdown element
+  const dropdown = document.createElement('div');
+  dropdown.style.cssText = 'position:absolute; top:100%; left:0; right:0; background:var(--color-card); border:1px solid var(--color-border); border-radius:var(--radius-md); box-shadow:var(--shadow-lg); margin-top:0.5rem; max-height:300px; overflow-y:auto; z-index:100; display:none;';
+  searchBox.style.position = 'relative'; // Ensure relative positioning
+  searchBox.appendChild(dropdown);
+
+  searchInput.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    if (!query || !window.ToolNova) {
+      dropdown.style.display = 'none';
+      return;
+    }
+
+    // Filter tools
+    const results = window.ToolNova.TOOLS.filter(t => 
+      t.name.toLowerCase().includes(query) || 
+      t.tags.some(tag => tag.toLowerCase().includes(query))
+    ).slice(0, 5); // Max 5 results
+
+    if (results.length === 0) {
+      dropdown.innerHTML = '<div style="padding:1rem; color:var(--color-text-muted); text-align:center;">No tools found</div>';
+    } else {
+      dropdown.innerHTML = results.map(t => `
+        <a href="/tools/${t.category}/${t.id}.html" style="display:flex; align-items:center; gap:1rem; padding:0.8rem 1rem; border-bottom:1px solid var(--color-border); color:var(--color-text); text-decoration:none;">
+          <span style="font-size:1.2rem;">${t.icon}</span>
+          <div>
+            <div style="font-weight:600; font-size:0.95rem;">${t.name}</div>
+            <div style="font-size:0.8rem; color:var(--color-text-muted);">${t.category.toUpperCase()}</div>
+          </div>
+        </a>
+      `).join('');
+    }
+    dropdown.style.display = 'block';
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!searchBox.contains(e.target)) {
+      dropdown.style.display = 'none';
+    }
+  });
+});
