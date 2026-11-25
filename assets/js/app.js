@@ -256,3 +256,108 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.body.appendChild(helpBtn);
 });
+// ================= SMOOTH THEME TOGGLE =================
+document.addEventListener('DOMContentLoaded', function() {
+  const themeBtn = document.getElementById('theme-toggle');
+  if(themeBtn) {
+    themeBtn.addEventListener('click', function() {
+      // CSS transition add karein
+      document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+      setTimeout(() => {
+        document.body.style.transition = '';
+      }, 300);
+    });
+  }
+});
+// ================= TOAST NOTIFICATION SYSTEM =================
+window.showToast = function(message, type = 'success') {
+  // Agar pehle se toast mojood hai to usay hata dein
+  const existingToast = document.getElementById('toolnova-toast');
+  if(existingToast) existingToast.remove();
+
+  const toast = document.createElement('div');
+  toast.id = 'toolnova-toast';
+  
+  // Colors based on type
+  let bgColor = 'var(--color-success)';
+  let icon = '✅';
+  if(type === 'error') { bgColor = 'var(--color-error)'; icon = '❌'; }
+  if(type === 'info') { bgColor = 'var(--color-primary)'; icon = 'ℹ️'; }
+
+  toast.style.cssText = `
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: ${bgColor};
+    color: white;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    box-shadow: var(--shadow-lg);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    pointer-events: none;
+  `;
+
+  toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+  document.body.appendChild(toast);
+
+  // Animate In
+  setTimeout(() => {
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+  }, 10);
+
+  // Animate Out
+  setTimeout(() => {
+    toast.style.transform = 'translateX(-50%) translateY(100px)';
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+};
+// ================= BACK TO TOP BUTTON =================
+document.addEventListener('DOMContentLoaded', function() {
+  const backToTopBtn = document.createElement('button');
+  backToTopBtn.innerHTML = '↑';
+  backToTopBtn.style.cssText = `
+    position: fixed;
+    bottom: 90px;
+    right: 24px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    font-size: 1.5rem;
+    font-weight: bold;
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    z-index: 998;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+  `;
+
+  document.body.appendChild(backToTopBtn);
+
+  window.addEventListener('scroll', () => {
+    if(window.scrollY > 400) {
+      backToTopBtn.style.opacity = '1';
+      backToTopBtn.style.transform = 'translateY(0)';
+      backToTopBtn.style.pointerEvents = 'auto';
+    } else {
+      backToTopBtn.style.opacity = '0';
+      backToTopBtn.style.transform = 'translateY(20px)';
+      backToTopBtn.style.pointerEvents = 'none';
+    }
+  });
+
+  backToTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
