@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Random Name Generator — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:600px;padding:3rem 1rem;text-align:center;">
+  <h1>Random Name Generator</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Generate random names for games, stories, or testing.</p>
+
+  <div style="background:var(--color-bg-secondary); padding:2rem; border-radius:12px; border:1px solid var(--color-border);">
+    <div style="margin-bottom:1.5rem;">
+      <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Gender</label>
+      <select id="gender" style="width:100%; padding:0.8rem; border-radius:8px; border:1px solid var(--color-border); background:var(--color-bg); color:var(--color-text);">
+        <option value="any">Any</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+    </div>
+
+    <div id="name-display" style="font-size:2.5rem; font-weight:800; color:var(--color-primary); margin:2rem 0; min-height:3rem;">John Doe</div>
+
+    <button class="btn btn-primary" style="width:100%; font-size:1.1rem; padding:1rem;" onclick="generateName()">Generate Name</button>
+  </div>
+</main>
+<script>
+  const firstNamesMale = ["James", "John", "Robert", "Michael", "William", "David", "Richard", "Joseph", "Thomas", "Charles", "Ali", "Ahmed", "Omar", "Usman", "Hamza"];
+  const firstNamesFemale = ["Mary", "Patricia", "Jennifer", "Linda", "Elizabeth", "Barbara", "Susan", "Jessica", "Sarah", "Karen", "Ayesha", "Fatima", "Zainab", "Sara", "Hira"];
+  const lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez", "Khan", "Ahmed", "Ali", "Malik", "Sheikh"];
+
+  function getRandom(arr) {
+    const randomBuffer = new Uint32Array(1);
+    window.crypto.getRandomValues(randomBuffer);
+    return arr[randomBuffer[0] % arr.length];
+  }
+
+  function generateName() {
+    const gender = document.getElementById('gender').value;
+    let firstName;
+
+    if(gender === 'male') {
+      firstName = getRandom(firstNamesMale);
+    } else if(gender === 'female') {
+      firstName = getRandom(firstNamesFemale);
+    } else {
+      // Any
+      const allFirst = [...firstNamesMale, ...firstNamesFemale];
+      firstName = getRandom(allFirst);
+    }
+
+    const lastName = getRandom(lastNames);
+    document.getElementById('name-display').textContent = `${firstName} ${lastName}`;
+  }
+
+  generateName(); // Load default
+</script>
+</body></html>
