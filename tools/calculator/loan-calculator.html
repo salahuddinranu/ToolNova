@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loan Payment Estimator — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:600px;padding:3rem 1rem;">
+  <h1>Loan Payment Estimator</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Calculate your monthly loan payments easily.</p>
+
+  <div style="background:var(--color-bg-secondary);padding:2rem;border-radius:12px;border:1px solid var(--color-border);">
+    <div style="margin-bottom:1rem;">
+      <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Loan Amount ($)</label>
+      <input type="number" id="amount" placeholder="10000" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
+    </div>
+    <div style="display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+      <div style="flex:1;min-width:150px;">
+        <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Interest Rate (%)</label>
+        <input type="number" id="rate" placeholder="5.5" step="0.1" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
+      </div>
+      <div style="flex:1;min-width:150px;">
+        <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Loan Term (Years)</label>
+        <input type="number" id="term" placeholder="5" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
+      </div>
+    </div>
+
+    <button class="btn btn-primary" style="width:100%;" onclick="calcLoan()">Calculate Payment</button>
+
+    <div id="result" style="display:none;margin-top:2rem;text-align:center;padding-top:1.5rem;border-top:1px solid var(--color-border);">
+      <p style="font-size:1rem;color:var(--color-text-muted);">Monthly Payment</p>
+      <div style="font-size:3rem;font-weight:800;color:var(--color-primary);" id="monthly">$0.00</div>
+      <p style="font-size:0.9rem;color:var(--color-text-secondary);" id="total-payable">Total Payable: $0.00</p>
+    </div>
+  </div>
+</main>
+<script>
+  function calcLoan() {
+    const p = parseFloat(document.getElementById('amount').value);
+    const r = parseFloat(document.getElementById('rate').value) / 100 / 12; // Monthly rate
+    const n = parseFloat(document.getElementById('term').value) * 12; // Total months
+
+    if(isNaN(p) || isNaN(r) || isNaN(n) || p <= 0 || n <= 0) {
+      return alert("Please enter valid positive numbers.");
+    }
+
+    // EMI Formula: P * r * (1 + r)^n / ((1 + r)^n - 1)
+    let monthlyPayment;
+    if(r === 0) {
+      monthlyPayment = p / n;
+    } else {
+      monthlyPayment = (p * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+    }
+
+    const totalPayment = monthlyPayment * n;
+
+    document.getElementById('monthly').textContent = '$' + monthlyPayment.toFixed(2);
+    document.getElementById('total-payable').textContent = 'Total Payable: $' + totalPayment.toFixed(2);
+    document.getElementById('result').style.display = 'block';
+  }
+</script>
+</body></html>
