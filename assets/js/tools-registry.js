@@ -26,9 +26,10 @@ const TOOLS = [
 
   // ================= TEXT TOOLS =================
   { id: 'word-counter', name: 'Word Counter', category: 'text', description: 'Count words, characters and sentences.', icon: '🔢', tags: ['count'], type: 'client', status: 'ready' }, // ✅ Ready
+ { id: 'text-diff-checker', name: 'Text Diff Checker', category: 'text', description: 'Compare two texts.', icon: '⚖️', tags: ['diff', 'compare'], type: 'client', status: 'ready' },
   { id: 'case-converter', name: 'Case Converter', category: 'text', description: 'Convert text to UPPER, lower, Title.', icon: 'Aa', tags: ['uppercase'], type: 'client', status: 'ready' }, // ✅ Ready
   { id: 'remove-extra-spaces', name: 'Remove Extra Spaces', category: 'text', description: 'Clean extra whitespace.', icon: '🧹', tags: ['clean'], type: 'client', status: 'coming-soon' },
-  { id: 'lorem-ipsum-generator', name: 'Lorem Ipsum', category: 'text', description: 'Generate placeholder text.', icon: '📝', tags: ['dummy'], type: 'client', status: 'coming-soon' },
+  { id: 'lorem-ipsum-generator', name: 'Lorem Ipsum', category: 'text', description: 'Generate placeholder text.', icon: '📝', tags: ['dummy'], type: 'client', status: 'ready' },
 
   // ================= DEVELOPER TOOLS =================
   { id: 'json-formatter', name: 'JSON Formatter', category: 'developer', description: 'Format and beautify JSON.', icon: '{ }', tags: ['json'], type: 'client', status: 'ready' }, // ✅ Ready
@@ -41,6 +42,7 @@ const TOOLS = [
   // ================= CALCULATORS =================
   { id: 'percentage-calculator', name: 'Percentage Calculator', category: 'calculator', description: 'Calculate percentages.', icon: '%', tags: ['percent'], type: 'client', status: 'ready' }, // ✅ Ready
   { id: 'age-calculator', name: 'Age Calculator', category: 'calculator', description: 'Calculate exact age.', icon: '🎂', tags: ['birthday'], type: 'client', status: 'ready' },
+ { id: 'discount-calculator', name: 'Discount Calculator', category: 'calculator', description: 'Calculate discounted prices.', icon: '🏷️', tags: ['discount', 'sale'], type: 'client', status: 'ready' },
   { id: 'tip-calculator', name: 'Tip Calculator', category: 'calculator', description: 'Calculate tip and split bill.', icon: '💰', tags: ['bill'], type: 'client', status: 'coming-soon' },
 
   // ================= SECURITY =================
