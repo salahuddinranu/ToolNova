@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Text to Slug Converter — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:700px;padding:3rem 1rem;">
+  <h1>Text to Slug Converter</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Convert any text into a clean, SEO-friendly URL slug.</p>
+  
+  <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Enter your text (e.g., "10 Best Tools For 2024!")</label>
+  <input type="text" id="input-text" style="width:100%;padding:1rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);margin-bottom:1rem;" placeholder="Type here...">
+  
+  <button class="btn btn-primary" onclick="generateSlug()" style="width:100%;margin-bottom:1.5rem;">Generate Slug</button>
+
+  <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">URL Slug</label>
+  <div style="display:flex;gap:0.5rem;">
+    <input type="text" id="output-slug" style="flex:1;padding:1rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg-secondary);color:var(--color-text);" readonly placeholder="your-slug-here">
+    <button class="btn btn-secondary" onclick="copySlug()">Copy</button>
+  </div>
+</main>
+<script>
+  function generateSlug() {
+    let text = document.getElementById('input-text').value;
+    
+    // 1. Convert to lowercase
+    text = text.toLowerCase();
+    // 2. Replace non-alphanumeric (except space) with empty
+    text = text.replace(/[^a-z0-9\s-]/g, '');
+    // 3. Replace spaces with dashes
+    text = text.replace(/\s+/g, '-');
+    // 4. Remove multiple dashes
+    text = text.replace(/-+/g, '-');
+    // 5. Trim dashes from ends
+    text = text.replace(/^-+|-+$/g, '');
+    
+    document.getElementById('output-slug').value = text;
+  }
+  
+  function copySlug() {
+    const el = document.getElementById('output-slug');
+    if(!el.value) return;
+    el.select(); document.execCommand('copy');
+    alert('Slug copied!');
+  }
+</script>
+</body></html>
