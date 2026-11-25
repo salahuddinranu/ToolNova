@@ -22,7 +22,9 @@ const TOOLS = [
   { id: 'image-compressor', name: 'Image Compressor', category: 'image', description: 'Compress images to any size.', icon: '🗜️', tags: ['shrink'], type: 'client', status: 'ready' },
   { id: 'image-resizer', name: 'Image Resizer', category: 'image', description: 'Resize images to exact dimensions.', icon: '📐', tags: ['scale'], type: 'client', status: 'ready' },
   { id: 'image-cropper', name: 'Image Cropper', category: 'image', description: 'Crop images easily.', icon: '✂️', tags: ['trim'], type: 'client', status: 'coming-soon' },
-
+  { id: 'bg-remover', name: 'Background Remover', category: 'image', description: 'Remove background using AI.', icon: '✂️', tags: ['bg', 'remove'], type: 'client', status: 'ready' },
+  { id: 'image-flipper', name: 'Image Flipper', category: 'image', description: 'Flip images horizontally or vertically.', icon: '🔄', tags: ['flip', 'mirror'], type: 'client', status: 'ready' },
+  { id: 'grayscale-converter', name: 'Grayscale Converter', category: 'image', description: 'Convert image to black and white.', icon: '⬛', tags: ['b&w', 'grayscale'], type: 'client', status: 'ready' },
   // ================= TEXT TOOLS =================
   { id: 'word-counter', name: 'Word Counter', category: 'text', description: 'Count words, characters and sentences.', icon: '🔢', tags: ['count'], type: 'client', status: 'ready' },
   { id: 'case-converter', name: 'Case Converter', category: 'text', description: 'Convert text to UPPER, lower, Title.', icon: 'Aa', tags: ['uppercase'], type: 'client', status: 'ready' },
