@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Random String Generator — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:600px;padding:3rem 1rem;">
+  <h1>Random String Generator</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Generate random alphanumeric strings for IDs or tokens.</p>
+  
+  <div style="background:var(--color-bg-secondary); padding:1.5rem; border-radius:12px; border:1px solid var(--color-border);">
+    <div style="margin-bottom:1rem;">
+      <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">String Length</label>
+      <input type="number" id="length" value="16" min="1" max="100" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
+    </div>
+    <div style="margin-bottom:1.5rem;">
+      <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Options</label>
+      <div style="display:flex; flex-direction:column; gap:0.5rem;">
+        <label><input type="checkbox" id="uppercase" checked> Include Uppercase (A-Z)</label>
+        <label><input type="checkbox" id="lowercase" checked> Include Lowercase (a-z)</label>
+        <label><input type="checkbox" id="numbers" checked> Include Numbers (0-9)</label>
+        <label><input type="checkbox" id="symbols"> Include Symbols (!@#$)</label>
+      </div>
+    </div>
+    
+    <button class="btn btn-primary" style="width:100%;" onclick="generate()">Generate String</button>
+
+    <div style="margin-top:1.5rem;">
+      <input type="text" id="output" readonly style="width:100%; padding:1rem; font-size:1.2rem; font-family:monospace; border:1px solid var(--color-border); border-radius:8px; background:var(--color-bg); color:var(--color-primary); text-align:center; font-weight:bold;">
+    </div>
+    <button class="btn btn-secondary" style="width:100%; margin-top:0.5rem;" onclick="copyString()">Copy String</button>
+  </div>
+</main>
+<script>
+  function generate() {
+    const len = parseInt(document.getElementById('length').value);
+    if(len < 1 || len > 100) return alert("Length must be between 1 and 100.");
+    
+    const incUpper = document.getElementById('uppercase').checked;
+    const incLower = document.getElementById('lowercase').checked;
+    const incNum = document.getElementById('numbers').checked;
+    const incSym = document.getElementById('symbols').checked;
+
+    if(!incUpper && !incLower && !incNum && !incSym) {
+      return alert("Please select at least one option.");
+    }
+
+    const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const lower = "abcdefghijklmnopqrstuvwxyz";
+    const num = "0123456789";
+    const sym = "!@#$%^&*()_+~`|}{[]:;?><,./-=";
+
+    let chars = "";
+    if(incUpper) chars += upper;
+    if(incLower) chars += lower;
+    if(incNum) chars += num;
+    if(incSym) chars += sym;
+
+    let result = "";
+    const randomBuffer = new Uint32Array(len);
+    window.crypto.getRandomValues(randomBuffer);
+
+    for(let i=0; i<len; i++) {
+      result += chars[randomBuffer[i] % chars.length];
+    }
+
+    document.getElementById('output').value = result;
+  }
+
+  function copyString() {
+    const el = document.getElementById('output');
+    if(!el.value) return;
+    el.select(); document.execCommand('copy');
+    alert('String copied!');
+  }
+
+  generate(); // Generate on load
+</script>
+</body></html>
