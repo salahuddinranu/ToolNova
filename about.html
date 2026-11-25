@@ -1,24 +1,68 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About Us — ToolNova</title>
   <link rel="stylesheet" href="/assets/css/style.css" />
   <script src="/assets/js/theme.js"></script>
+  <script src="/assets/js/app.js" defer></script>
+  <script src="/assets/js/icons.js" defer></script>
 </head>
 <body>
 <header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
-<main class="container" style="max-width:800px;padding:4rem 1rem;">
-  <h1 style="font-size:2.5rem;margin-bottom:1rem;">About ToolNova</h1>
-  <p style="font-size:1.1rem;color:var(--color-text-secondary);line-height:1.8;margin-bottom:1rem;">
-    ToolNova was built with a simple mission: to provide a fast, private, and completely free set of online tools for everyday digital tasks.
-  </p>
-  <p style="color:var(--color-text-secondary);line-height:1.8;">
-    We believe that you shouldn't have to upload your private files to unknown servers just to compress an image or convert a PDF. That's why most of our tools run entirely in your browser using modern web technology. Your files never leave your device.
-  </p>
+
+<main>
+  <!-- Hero Section -->
+  <section class="hero" style="padding: 5rem 0 3rem;">
+    <div class="container" style="max-width: 800px;">
+      <span class="hero-badge">🚀 Our Mission</span>
+      <h1 style="font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 1rem;">We Build Tools That Respect <span class="gradient">Your Privacy</span></h1>
+      <p class="lead" style="margin-bottom: 0;">ToolNova was created because we were tired of uploading our private files to unknown servers just to resize an image or merge a PDF.</p>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section" style="padding-top: 2rem;">
+    <div class="container" style="max-width: 1000px;">
+      <div class="category-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+        
+        <div class="category-card" style="text-align: center;">
+          <div class="category-icon" style="margin: 0 auto 1rem auto;">🔒</div>
+          <h3>100% Private</h3>
+          <p>Most of our tools run entirely in your browser. Your files never leave your device and are never uploaded to a server.</p>
+        </div>
+
+        <div class="category-card" style="text-align: center;">
+          <div class="category-icon" style="margin: 0 auto 1rem auto;">⚡</div>
+          <h3>Blazing Fast</h3>
+          <p>Because processing happens locally, there's no waiting for uploads or downloads. Results are instant.</p>
+        </div>
+
+        <div class="category-card" style="text-align: center;">
+          <div class="category-icon" style="margin: 0 auto 1rem auto;">💸</div>
+          <h3>Free Forever</h3>
+          <p>We believe basic digital utilities should be accessible to everyone. No logins, no paywalls, no hidden fees.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- How it Works text -->
+  <section class="section" style="background: var(--color-bg-secondary); padding: 4rem 0;">
+    <div class="container" style="max-width: 800px; text-align: center;">
+      <h2 style="font-size: 2rem; margin-bottom: 1rem;">How It Works</h2>
+      <p style="color: var(--color-text-secondary); font-size: 1.1rem; line-height: 1.8;">
+        We use modern web technologies like WebAssembly, Canvas API, and PDF.js to perform complex tasks (like editing PDFs and compressing images) directly on your device. When you use an AI tool, only the text you provide is sent securely to our backend—your personal files always remain with you.
+      </p>
+      <a href="/all-tools.html" class="btn btn-primary" style="margin-top: 2rem;">Explore All Tools</a>
+    </div>
+  </section>
 </main>
-<footer class="site-footer"><div class="container"><div class="footer-bottom" style="border:none;"><span>© <span id="year"></span> ToolNova.</span></div></div></footer>
+
+<footer class="site-footer">
+  <div class="container"><div class="footer-bottom" style="border:none;"><span>© <span id="year"></span> ToolNova. All rights reserved.</span></div></div>
+</footer>
 <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>
