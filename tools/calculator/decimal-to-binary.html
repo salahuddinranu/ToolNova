@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decimal to Binary — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:600px;padding:3rem 1rem;">
+  <h1>Decimal to Binary Converter</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Convert decimal numbers (base 10) to binary (base 2).</p>
+
+  <div style="background:var(--color-bg-secondary); padding:2rem; border-radius:12px; border:1px solid var(--color-border);">
+    <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Enter Decimal Number</label>
+    <input type="number" id="dec-input" placeholder="e.g. 25" style="width:100%; padding:1rem; border-radius:8px; border:1px solid var(--color-border); background:var(--color-bg); color:var(--color-text); font-size:1.1rem; margin-bottom:1.5rem;" oninput="convert()">
+    
+    <div style="text-align:center;">
+      <p style="font-size:1rem; color:var(--color-text-muted); margin-bottom:0.5rem;">Binary Result</p>
+      <div id="bin-output" style="font-size:2rem; font-weight:bold; font-family:monospace; color:var(--color-primary); word-break:break-all;">0</div>
+      <button class="btn btn-secondary" style="margin-top:1rem;" onclick="copyResult()">Copy Result</button>
+    </div>
+  </div>
+</main>
+<script>
+  function convert() {
+    const val = document.getElementById('dec-input').value;
+    const output = document.getElementById('bin-output');
+
+    if(val === '' || isNaN(val)) {
+      output.textContent = '0';
+      return;
+    }
+
+    // Number to binary
+    const binary = parseInt(val).toString(2);
+    output.textContent = binary;
+  }
+
+  function copyResult() {
+    const text = document.getElementById('bin-output').textContent;
+    if(text === '0') return;
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Binary copied!');
+    });
+  }
+</script>
+</body></html>
