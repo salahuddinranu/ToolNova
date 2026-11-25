@@ -166,3 +166,11 @@ input, textarea, select { font-family: inherit; font-size: 1rem; }
   background-size: 100% 100%;
   vertical-align: middle;
 }
+/* Purana Gemini/Star Logo Forcefully Hide Karein */
+.logo svg {
+    display: none !important;
+}
+/* Agar purana logo image ya text ki shakal mein hai */
+.logo .logo-mark {
+    display: none !important;
+}
