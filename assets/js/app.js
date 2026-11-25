@@ -147,3 +147,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
+// ================= TRACK RECENT TOOLS =================
+document.addEventListener('DOMContentLoaded', function() {
+  const path = window.location.pathname;
+  if (path.includes('/tools/')) {
+    const parts = path.split('/');
+    const toolId = parts[parts.length - 1].replace('.html', '');
+    
+    if (toolId) {
+      let recent = JSON.parse(localStorage.getItem('toolnova_recent') || '[]');
+      // Remove if already exists
+      recent = recent.filter(id => id !== toolId);
+      // Add to front
+      recent.unshift(toolId);
+      // Keep only top 4
+      recent = recent.slice(0, 4);
+      
+      localStorage.setItem('toolnova_recent', JSON.stringify(recent));
+    }
+  }
+});
