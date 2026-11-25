@@ -42,6 +42,8 @@ const TOOLS = [
   { id: 'url-encoder', name: 'URL Encoder', category: 'developer', description: 'Encode URLs safely.', icon: '🔗', tags: ['url'], type: 'client', status: 'ready' },
   { id: 'uuid-generator', name: 'UUID Generator', category: 'developer', description: 'Generate random UUIDs.', icon: '🆔', tags: ['guid'], type: 'client', status: 'ready' },
   { id: 'gradient-generator', name: 'Gradient Generator', category: 'developer', description: 'Create CSS gradients.', icon: '🎨', tags: ['css'], type: 'client', status: 'ready' },
+ { id: 'color-converter', name: 'Color Converter', category: 'developer', description: 'Convert HEX, RGB, HSL colors.', icon: '🎨', tags: ['color'], type: 'client', status: 'ready' },
+{ id: 'random-color-generator', name: 'Random Color Generator', category: 'security', description: 'Generate random colors.', icon: '🌈', tags: ['random', 'color'], type: 'client', status: 'ready' },
   { id: 'html-formatter', name: 'HTML Formatter', category: 'developer', description: 'Beautify HTML code.', icon: '🌐', tags: ['html'], type: 'client', status: 'ready' },
   { id: 'data-uri-generator', name: 'Data URI Generator', category: 'developer', description: 'Convert files to Base64 links.', icon: '🔗', tags: ['base64', 'uri'], type: 'client', status: 'ready' },
   { id: 'csv-to-json', name: 'CSV to JSON', category: 'developer', description: 'Convert CSV to JSON.', icon: '{ }', tags: ['csv', 'json'], type: 'client', status: 'ready' },
