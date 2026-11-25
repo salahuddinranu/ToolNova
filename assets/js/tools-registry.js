@@ -43,7 +43,9 @@ const TOOLS = [
   { id: 'uuid-generator', name: 'UUID Generator', category: 'developer', description: 'Generate random UUIDs.', icon: '🆔', tags: ['guid'], type: 'client', status: 'ready' },
   { id: 'gradient-generator', name: 'Gradient Generator', category: 'developer', description: 'Create CSS gradients.', icon: '🎨', tags: ['css'], type: 'client', status: 'ready' },
   { id: 'html-formatter', name: 'HTML Formatter', category: 'developer', description: 'Beautify HTML code.', icon: '🌐', tags: ['html'], type: 'client', status: 'ready' },
-
+  { id: 'data-uri-generator', name: 'Data URI Generator', category: 'developer', description: 'Convert files to Base64 links.', icon: '🔗', tags: ['base64', 'uri'], type: 'client', status: 'ready' },
+  { id: 'csv-to-json', name: 'CSV to JSON', category: 'developer', description: 'Convert CSV to JSON.', icon: '{ }', tags: ['csv', 'json'], type: 'client', status: 'ready' },
+  { id: 'json-to-csv', name: 'JSON to CSV', category: 'developer', description: 'Convert JSON to CSV.', icon: '📊', tags: ['csv', 'json'], type: 'client', status: 'ready' },
   // ================= CALCULATORS =================
   { id: 'percentage-calculator', name: 'Percentage Calculator', category: 'calculator', description: 'Calculate percentages.', icon: '%', tags: ['percent'], type: 'client', status: 'ready' },
   { id: 'age-calculator', name: 'Age Calculator', category: 'calculator', description: 'Calculate exact age.', icon: '🎂', tags: ['birthday'], type: 'client', status: 'ready' },
