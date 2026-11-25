@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Text Repeater — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:700px;padding:3rem 1rem;">
+  <h1>Text Repeater</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Repeat any text multiple times instantly.</p>
+
+  <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Enter your text</label>
+  <input type="text" id="input-text" placeholder="e.g. Hello World " style="width:100%;padding:1rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);margin-bottom:1rem;">
+  
+  <div style="display:flex;gap:1rem;margin-bottom:1rem;">
+    <div style="flex:1;">
+      <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Number of times</label>
+      <input type="number" id="repeat-count" value="3" min="1" max="1000" style="width:100%;padding:1rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
+    </div>
+    <div style="flex:1;">
+      <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Separator</label>
+      <select id="separator" style="width:100%;padding:1rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);">
+        <option value="newline">New Line (Enter)</option>
+        <option value="space">Space</option>
+        <option value="comma">Comma (,)</option>
+        <option value="none">None</option>
+      </select>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" style="width:100%;margin-bottom:1.5rem;" onclick="repeatText()">Generate Repeated Text</button>
+
+  <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Output</label>
+  <textarea id="output" style="width:100%;height:200px;padding:1rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg-secondary);color:var(--color-text);" readonly></textarea>
+  <button class="btn btn-secondary" style="width:100%;margin-top:0.5rem;" onclick="copyText()">Copy to Clipboard</button>
+</main>
+<script>
+  function repeatText() {
+    const text = document.getElementById('input-text').value;
+    const count = parseInt(document.getElementById('repeat-count').value);
+    const sepType = document.getElementById('separator').value;
+
+    if(!text) return alert("Please enter some text.");
+    if(isNaN(count) || count < 1 || count > 1000) return alert("Please enter a count between 1 and 1000.");
+
+    let sep = '\n';
+    if(sepType === 'space') sep = ' ';
+    if(sepType === 'comma') sep = ', ';
+    if(sepType === 'none') sep = '';
+
+    const result = Array(count).fill(text).join(sep);
+    document.getElementById('output').value = result;
+  }
+
+  function copyText() {
+    const el = document.getElementById('output');
+    if(!el.value) return;
+    el.select(); document.execCommand('copy');
+    alert('Copied to clipboard!');
+  }
+</script>
+</body></html>
