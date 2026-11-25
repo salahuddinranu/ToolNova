@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Text Diff Checker — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <script src="/assets/js/theme.js"></script>
+  <script src="/assets/js/app.js" defer></script>
+  <script src="/assets/js/icons.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:900px;padding:3rem 1rem;">
+  <h1 style="font-size:2rem;margin-bottom:0.5rem;">Text Diff Checker</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Compare two texts and highlight the differences.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+    <div>
+      <label style="font-weight:bold;font-size:0.9rem;display:block;margin-bottom:0.5rem;">Original Text</label>
+      <textarea id="text1" style="width:100%;height:200px;padding:1rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);" placeholder="Paste original text here..."></textarea>
+    </div>
+    <div>
+      <label style="font-weight:bold;font-size:0.9rem;display:block;margin-bottom:0.5rem;">Changed Text</label>
+      <textarea id="text2" style="width:100%;height:200px;padding:1rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);" placeholder="Paste changed text here..."></textarea>
+    </div>
+  </div>
+  
+  <button class="btn btn-primary" style="width:100%;" onclick="checkDiff()">Compare Texts</button>
+
+  <div id="result-area" style="display:none;margin-top:2rem;background:var(--color-card);padding:1.5rem;border-radius:12px;border:1px solid var(--color-border);">
+    <h3 style="margin-bottom:1rem;">Differences:</h3>
+    <div id="output" style="font-family:monospace;font-size:0.9rem;line-height:1.6;white-space:pre-wrap;word-break:break-all;"></div>
+  </div>
+</main>
+<script>
+  function checkDiff() {
+    const t1 = document.getElementById('text1').value;
+    const t2 = document.getElementById('text2').value;
+    
+    if(!t1 && !t2) return alert("Please enter text in both boxes.");
+    
+    const words1 = t1.split(/(\s+)/);
+    const words2 = t2.split(/(\s+)/);
+    
+    let outputHtml = '';
+    
+    // A simple word-by-word comparison
+    const maxLen = Math.max(words1.length, words2.length);
+    for(let i=0; i<maxLen; i++) {
+      const w1 = words1[i] || '';
+      const w2 = words2[i] || '';
+      
+      if(w1 !== w2) {
+        if(w1) outputHtml += `<span style="background:#fee2e2;color:#991b1b;text-decoration:line-through;padding:0 2px;">${w1}</span> `;
+        if(w2) outputHtml += `<span style="background:#d1fae5;color:#065f46;padding:0 2px;">${w2}</span> `;
+      } else {
+        outputHtml += w1;
+      }
+    }
+    
+    document.getElementById('output').innerHTML = outputHtml;
+    document.getElementById('result-area').style.display = 'block';
+  }
+</script>
+</body></html>
