@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PDF Page Counter — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <style>
+    .drop-zone { border: 2px dashed var(--color-border); border-radius: var(--radius-lg); padding: 4rem 1rem; text-align: center; background: var(--color-bg-secondary); cursor: pointer; }
+    .drop-zone:hover { border-color: var(--color-primary); }
+    .drop-zone input { display: none; }
+    .result-box { text-align:center; margin-top:2rem; display:none; padding:2rem; background:var(--color-card); border:1px solid var(--color-border); border-radius:12px; }
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:600px;padding:3rem 1rem;">
+  <h1>PDF Page Counter</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Instantly find out how many pages are in any PDF file.</p>
+
+  <div class="drop-zone" onclick="document.getElementById('pdf-input').click()">
+    <input type="file" id="pdf-input" accept="application/pdf">
+    <div style="font-size:3rem;margin-bottom:1rem;">📄</div>
+    <h3>Click to select a PDF</h3>
+  </div>
+
+  <div class="result-box" id="result-box">
+    <h3 style="color:var(--color-text-muted);">Total Pages</h3>
+    <div style="font-size:4rem;font-weight:800;color:var(--color-primary);" id="page-count">0</div>
+    <button class="btn btn-secondary" style="margin-top:1rem;" onclick="window.location.reload()">Check Another PDF</button>
+  </div>
+</main>
+<script>
+  document.getElementById('pdf-input').addEventListener('change', async function(e) {
+    const file = e.target.files[0];
+    if(!file) return;
+
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const { PDFDocument } = PDFLib;
+      const pdf = await PDFDocument.load(arrayBuffer);
+      
+      document.getElementById('page-count').textContent = pdf.getPageCount();
+      document.getElementById('result-box').style.display = 'block';
+    } catch (error) {
+      alert("Error reading PDF. It might be encrypted or corrupted.");
+    }
+  });
+</script>
+</body></html>
