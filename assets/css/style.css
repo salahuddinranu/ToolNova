@@ -232,3 +232,17 @@ main { animation: pageFadeIn 0.4s ease-out forwards; }
   #help-btn { width: 48px !important; height: 48px !important; bottom: 16px !important; right: 16px !important; }
   #back-to-top-btn { width: 40px !important; height: 40px !important; bottom: 80px !important; right: 16px !important; }
 }
+/* Search Dropdown Fix */
+#global-search-form {
+  position: relative;
+  z-index: 50; /* Search box ko sab se upar lane ke liye */
+}
+
+/* Dropdown ka background aur shadow fix */
+#global-search-form > div {
+  background: var(--color-card) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3) !important;
+  border-radius: var(--radius-md) !important;
+  margin-top: 8px !important;
+}
