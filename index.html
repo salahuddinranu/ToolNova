@@ -16,7 +16,8 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect width='48' height='48' rx='12' fill='%236366f1'/><text x='50%' y='65%' font-size='28' font-weight='bold' fill='white' text-anchor='middle' font-family='sans-serif'>TN</text></svg>" />
   
   <script src="/assets/js/theme.js"></script>
-    <!-- PWA Setup -->
+  
+  <!-- PWA Setup -->
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#6366f1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -46,11 +47,12 @@
         <button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode">
           <span id="theme-icon">🌙</span>
         </button>
-               <button onclick="document.getElementById('global-search').focus(); window.scrollTo({top: 0, behavior: 'smooth'});" class="icon-btn" aria-label="Search tools">
+        
+        <!-- Fixed Search Button -->
+        <button onclick="document.getElementById('global-search').focus(); window.scrollTo({top: 0, behavior: 'smooth'});" class="icon-btn" aria-label="Search tools">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         </button>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        </a>
+        
         <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" aria-label="Open menu">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
@@ -146,6 +148,7 @@
       </div>
     </div>
   </section>
+  
   <!-- TRUST BADGES -->
   <section class="section" style="padding: 3rem 0; background: var(--color-bg-tertiary);">
     <div class="container">
@@ -178,6 +181,7 @@
       </div>
     </div>
   </section>
+  
   <!-- HOW IT WORKS -->
   <section class="section" style="background:var(--color-bg-secondary);">
     <div class="container">
@@ -311,7 +315,7 @@
 <!-- Scripts -->
 <script src="/assets/js/tools-registry.js"></script>
 <script src="/assets/js/app.js"></script>
-  <script>
+<script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js').then(registration => {
