@@ -62,12 +62,9 @@
 
   <div class="filter-bar" id="filter-bar">
     <button class="filter-btn active" data-category="all">All</button>
-    <!-- Categories will load here -->
   </div>
   
-  <!-- Ad Slot: All Tools -->
   <div class="ad-container" style="min-height: 90px; background: var(--color-bg-tertiary); border: 1px dashed var(--color-border); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: var(--color-text-muted); font-size: 0.8rem; margin-bottom: 1.5rem;">
-    <!-- Yahan Google AdSense ka code baad mein aayega -->
     Advertisement Space
   </div>
 
@@ -99,12 +96,10 @@
     let activeCategory = 'all';
     let searchQuery = '';
 
-    // URL se category check karein (e.g. ?category=pdf)
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('category')) activeCategory = urlParams.get('category');
     if (urlParams.get('q')) { searchQuery = urlParams.get('q'); searchInput.value = searchQuery; }
 
-    // Categories load karein
     window.ToolNova.CATEGORIES.forEach(cat => {
       const btn = document.createElement('button');
       btn.className = 'filter-btn' + (activeCategory === cat.id ? ' active' : '');
@@ -113,17 +108,14 @@
       filterBar.appendChild(btn);
     });
 
-    // Tools render karne ka function
     function renderTools() {
       grid.innerHTML = '';
       let filtered = window.ToolNova.TOOLS;
 
-      // Category filter
       if (activeCategory !== 'all') {
         filtered = filtered.filter(t => t.category === activeCategory);
       }
 
-      // Smart Search Filter
       if (searchQuery) {
         const q = searchQuery.toLowerCase().trim();
         filtered = filtered.filter(t => 
@@ -135,7 +127,6 @@
         );
       }
 
-      // Update count
       toolCount.textContent = filtered.length + ' tool(s) found';
 
       if (filtered.length === 0) {
@@ -143,16 +134,12 @@
           <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--color-text-muted);">
             <div style="font-size:3rem;margin-bottom:1rem;">🔍</div>
             <h3>No tools found for "${searchQuery}"</h3>
-            <p style="margin-top:0.5rem;font-size:0.9rem;">Try searching for "image", "pdf", "compress", or "calculator".</p>
           </div>`;
         return;
       }
 
-      // Cards banayein
       filtered.forEach(t => {
-        // ✅ SEEDHA ASLI LINK BANAYEIN (Master engine hata diya)
         let href = '/all-tools.html';
-        
         if (t.status === 'ready') {
             href = '/tools/' + t.category + '/' + t.id + '.html';
         }
@@ -181,7 +168,6 @@
       });
     }
 
-    // Filter button clicks
     filterBar.addEventListener('click', function(e) {
       if (e.target.classList.contains('filter-btn')) {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -191,13 +177,11 @@
       }
     });
 
-    // Search input
     searchInput.addEventListener('input', function(e) {
       searchQuery = e.target.value.toLowerCase();
       renderTools();
     });
 
-    // Initial render
     renderTools();
   });
 </script>
