@@ -2,7 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ToolNova Tool</title>
+  <title>Tool — ToolNova</title>
   <link rel="stylesheet" href="/assets/css/style.css" />
   <script src="/assets/js/theme.js"></script>
   <script src="/assets/js/app.js" defer></script>
@@ -20,137 +20,34 @@
 <main class="tool-wrapper" id="app-container">
   <!-- Content loads via JS -->
 </main>
+<script src="/assets/js/tools-registry.js"></script>
 <script>
-  // ================= ALL IN ONE TOOL ENGINE =================
   window.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('app-container');
-    const path = window.location.pathname;
-    const toolId = path.split('/').pop().replace('.html', '');
+    const urlParams = new URLSearchParams(window.location.search);
+    const toolId = urlParams.get('id');
     
-    // Tool Database
-    const tools = {
-      'file-size-converter': {
-        title: 'File Size Converter',
-        desc: 'Convert between Bytes, KB, MB, GB, and TB instantly.',
-        html: `
-          <div style="display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap;">
-            <input type="number" id="fs-input" placeholder="Enter size" style="flex:2; min-width:150px; padding:1rem; border-radius:8px; border:1px solid var(--color-border); background:var(--color-bg); color:var(--color-text);" oninput="window.convertSize()">
-            <select id="fs-unit" style="flex:1; min-width:120px; padding:1rem; border-radius:8px; border:1px solid var(--color-border); background:var(--color-bg); color:var(--color-text);" onchange="window.convertSize()">
-              <option value="B">Bytes</option>
-              <option value="KB" selected>KB</option>
-              <option value="MB">MB</option>
-              <option value="GB">GB</option>
-            </select>
-          </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; text-align:center;">
-            <div style="background:var(--color-bg); padding:1rem; border-radius:8px; border:1px solid var(--color-border);"><div style="font-size:0.8rem; color:var(--color-text-muted);">Bytes</div><div style="font-weight:bold; font-family:monospace;" id="fs-bytes">0</div></div>
-            <div style="background:var(--color-bg); padding:1rem; border-radius:8px; border:1px solid var(--color-border);"><div style="font-size:0.8rem; color:var(--color-text-muted);">Kilobytes</div><div style="font-weight:bold; font-family:monospace;" id="fs-kb">0</div></div>
-            <div style="background:var(--color-bg); padding:1rem; border-radius:8px; border:1px solid var(--color-border);"><div style="font-size:0.8rem; color:var(--color-text-muted);">Megabytes</div><div style="font-weight:bold; font-family:monospace;" id="fs-mb">0</div></div>
-            <div style="background:var(--color-bg); padding:1rem; border-radius:8px; border:1px solid var(--color-border);"><div style="font-size:0.8rem; color:var(--color-text-muted);">Gigabytes</div><div style="font-weight:bold; font-family:monospace;" id="fs-gb">0</div></div>
-          </div>
-        `
-      },
-      'box-shadow-generator': {
-        title: 'Box Shadow Generator',
-        desc: 'Create CSS box shadows visually.',
-        html: `
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:2rem;">
-            <div>
-              <div style="margin-bottom:1rem;"><label style="font-weight:bold;">X Offset</label><input type="range" id="bs-x" min="-50" max="50" value="0" style="width:100%;" oninput="window.updateShadow()"></div>
-              <div style="margin-bottom:1rem;"><label style="font-weight:bold;">Y Offset</label><input type="range" id="bs-y" min="-50" max="50" value="10" style="width:100%;" oninput="window.updateShadow()"></div>
-              <div style="margin-bottom:1rem;"><label style="font-weight:bold;">Blur</label><input type="range" id="bs-blur" min="0" max="100" value="20" style="width:100%;" oninput="window.updateShadow()"></div>
-              <div style="margin-bottom:1rem;"><label style="font-weight:bold;">Color</label><input type="color" id="bs-color" value="#000000" style="width:100%; height:40px;" oninput="window.updateShadow()"></div>
-            </div>
-            <div>
-              <div id="bs-preview" style="width:100%; height:200px; background:var(--color-card); border-radius:12px; margin-bottom:1rem; display:flex; align-items:center; justify-content:center;">Preview</div>
-              <textarea id="bs-css" readonly style="width:100%;height:80px;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg-secondary);color:var(--color-text);font-family:monospace;margin-bottom:0.5rem;"></textarea>
-              <button class="btn btn-primary" style="width:100%;" onclick="navigator.clipboard.writeText(document.getElementById('bs-css').value); alert('Copied!');">Copy CSS</button>
-            </div>
-          </div>
-        `
-      },
-      'word-density-analyzer': {
-        title: 'Word Density Analyzer',
-        desc: 'Check keyword density for SEO.',
-        html: `
-          <textarea id="wd-text" style="width:100%;height:200px;padding:1rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);margin-bottom:1rem;" placeholder="Paste text here..."></textarea>
-          <button class="btn btn-primary" style="width:100%;" onclick="window.analyzeDensity()">Analyze Text</button>
-          <div id="wd-results" style="display:none; margin-top:2rem;">
-            <div style="background:var(--color-bg-secondary); padding:1rem; border-radius:8px; text-align:center; margin-bottom:1rem;"><strong id="wd-total">0</strong> Total Words</div>
-            <div id="wd-list" style="display:flex; flex-direction:column; gap:0.5rem;"></div>
-          </div>
-        `
-      },
-      'meta-tag-generator': {
-        title: 'Meta Tag Generator',
-        desc: 'Generate SEO-friendly meta tags.',
-        html: `
-          <input type="text" id="mt-title" placeholder="Page Title" style="width:100%;padding:0.8rem;margin-bottom:0.5rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);" oninput="window.genMeta()">
-          <textarea id="mt-desc" placeholder="Description" style="width:100%;padding:0.8rem;margin-bottom:0.5rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);" oninput="window.genMeta()"></textarea>
-          <textarea id="mt-out" readonly style="width:100%;height:150px;padding:1rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg-secondary);color:var(--color-text);font-family:monospace;margin-bottom:1rem;"></textarea>
-          <button class="btn btn-primary" style="width:100%;" onclick="navigator.clipboard.writeText(document.getElementById('mt-out').value); alert('Copied!');">Copy Code</button>
-        `
-      }
-    };
-
-    // Load Tool
-    if (tools[toolId]) {
-      const t = tools[toolId];
-      document.title = t.title + ' — ToolNova';
-      container.innerHTML = `<h1>${t.title}</h1><p style="color:var(--color-text-secondary);margin-bottom:2rem;">${t.desc}</p><div style="background:var(--color-bg-secondary);padding:2rem;border-radius:12px;border:1px solid var(--color-border);">${t.html}</div>`;
-      
-      // Load specific scripts
-      if (toolId === 'file-size-converter') {
-        window.convertSize = function() {
-          const val = parseFloat(document.getElementById('fs-input').value);
-          const unit = document.getElementById('fs-unit').value;
-          if(isNaN(val)) return;
-          let b = val;
-          if(unit === 'KB') b *= 1024;
-          if(unit === 'MB') b *= 1024*1024;
-          if(unit === 'GB') b *= 1024*1024*1024;
-          document.getElementById('fs-bytes').textContent = b.toLocaleString();
-          document.getElementById('fs-kb').textContent = (b/1024).toFixed(2);
-          document.getElementById('fs-mb').textContent = (b/(1024*1024)).toFixed(4);
-          document.getElementById('fs-gb').textContent = (b/(1024*1024*1024)).toFixed(6);
-        };
-      }
-      if (toolId === 'box-shadow-generator') {
-        window.updateShadow = function() {
-          const x = document.getElementById('bs-x').value;
-          const y = document.getElementById('bs-y').value;
-          const blur = document.getElementById('bs-blur').value;
-          const color = document.getElementById('bs-color').value;
-          const css = `box-shadow: ${x}px ${y}px ${blur}px ${color};`;
-          document.getElementById('bs-preview').style.boxShadow = css;
-          document.getElementById('bs-css').value = css;
-        };
-        window.updateShadow();
-      }
-      if (toolId === 'word-density-analyzer') {
-        window.analyzeDensity = function() {
-          const text = document.getElementById('wd-text').value.toLowerCase();
-          if(!text) return;
-          const words = text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").split(/\s+/).filter(w => w.length > 0);
-          const freq = {};
-          words.forEach(w => freq[w] = (freq[w] || 0) + 1);
-          const sorted = Object.keys(freq).map(w => ({word: w, count: freq[w]})).sort((a,b) => b.count - a.count).slice(0, 10);
-          document.getElementById('wd-total').textContent = words.length;
-          document.getElementById('wd-list').innerHTML = sorted.map(item => `<div style="display:flex; justify-content:space-between; background:var(--color-card); padding:0.8rem; border-radius:8px; border:1px solid var(--color-border);"><span>${item.word}</span><span>${item.count} (${((item.count/words.length)*100).toFixed(1)}%)</span></div>`).join('');
-          document.getElementById('wd-results').style.display = 'block';
-        };
-      }
-      if (toolId === 'meta-tag-generator') {
-        window.genMeta = function() {
-          const title = document.getElementById('mt-title').value || 'My Website';
-          const desc = document.getElementById('mt-desc').value || 'Description';
-          document.getElementById('mt-out').value = `<!-- Meta Tags -->\n<title>${title}</title>\n<meta name="description" content="${desc}">\n<meta property="og:title" content="${title}">\n<meta property="og:description" content="${desc}">`;
-        };
-        window.genMeta();
-      }
-    } else {
-      container.innerHTML = `<h1>Tool Not Found</h1><p>This tool is not yet available in the master engine.</p>`;
+    if (!toolId) {
+      container.innerHTML = `<h1>Tool Not Found</h1><p>No tool ID provided.</p>`;
+      return;
     }
+
+    // Agar registry mein tool mojood hai, to uski file load karein
+    if (window.ToolNova) {
+      const tool = window.ToolNova.getToolById(toolId);
+      if (tool) {
+        document.title = tool.name + ' — ToolNova';
+        
+        // Tool ki asli file ka path banayein (e.g., /tools/developer/box-shadow-generator.html)
+        const filePath = `/tools/${tool.category}/${tool.id}.html`;
+        
+        // Page ko wahan redirect kar dein (Yeh sab se aasan aur safest tareeqa hai)
+        window.location.replace(filePath);
+        return;
+      }
+    }
+
+    container.innerHTML = `<h1>Tool Not Found</h1><p>This tool is not yet available.</p>`;
   });
 </script>
 </body></html>
