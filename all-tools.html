@@ -64,11 +64,13 @@
     <button class="filter-btn active" data-category="all">All</button>
     <!-- Categories will load here -->
   </div>
+  
   <!-- Ad Slot: All Tools -->
   <div class="ad-container" style="min-height: 90px; background: var(--color-bg-tertiary); border: 1px dashed var(--color-border); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: var(--color-text-muted); font-size: 0.8rem; margin-bottom: 1.5rem;">
     <!-- Yahan Google AdSense ka code baad mein aayega -->
     Advertisement Space
   </div>
+
   <div class="tool-grid" id="tools-grid" style="margin-bottom:4rem;">
     <!-- Tools will load here -->
   </div>
@@ -84,7 +86,7 @@
 
 <script src="/assets/js/tools-registry.js"></script>
 <script src="/assets/js/app.js"></script>
-  <script src="/assets/js/icons.js"></script>
+<script src="/assets/js/icons.js"></script>
 <script>
   window.addEventListener('DOMContentLoaded', function () {
     const grid = document.getElementById('tools-grid');
@@ -112,7 +114,7 @@
     });
 
     // Tools render karne ka function
-        function renderTools() {
+    function renderTools() {
       grid.innerHTML = '';
       let filtered = window.ToolNova.TOOLS;
 
@@ -121,7 +123,7 @@
         filtered = filtered.filter(t => t.category === activeCategory);
       }
 
-      // Smart Search Filter (Search by name, description, tags, category)
+      // Smart Search Filter
       if (searchQuery) {
         const q = searchQuery.toLowerCase().trim();
         filtered = filtered.filter(t => 
@@ -149,16 +151,19 @@
       // Cards banayein
       filtered.forEach(t => {
         let href = '#';
-if (t.status === 'ready') {
-    // Check if tool is in the master engine
-    if (['file-size-converter', 'box-shadow-generator', 'word-density-analyzer', 'meta-tag-generator'].includes(t.id)) {
-        href = '/tools/master.html?id=' + t.id;
-    } else {
-        href = '/tools/' + t.category + '/' + t.id + '.html';
-    }
-} else {
-    href = '/all-tools.html';
-} '#';
+        
+        if (t.status === 'ready') {
+            // Check if tool is in the master engine
+            const masterTools = ['file-size-converter', 'box-shadow-generator', 'word-density-analyzer', 'meta-tag-generator'];
+            if (masterTools.includes(t.id)) {
+                href = '/tools/master.html?id=' + t.id;
+            } else {
+                href = '/tools/' + t.category + '/' + t.id + '.html';
+            }
+        } else {
+            href = '/all-tools.html';
+        }
+
         const badge = t.status === 'ready' 
           ? '<span class="badge badge-free">Ready</span>' 
           : '<span class="badge badge-pro">Coming Soon</span>';
@@ -167,6 +172,7 @@ if (t.status === 'ready') {
         const card = document.createElement('a');
         card.className = 'tool-card';
         card.href = href;
+        
         if (t.status === 'coming-soon') {
           card.style.opacity = '0.75';
           card.addEventListener('click', (e) => { e.preventDefault(); alert('Yeh tool jald aa raha hai!'); });
