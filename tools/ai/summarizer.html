@@ -3,28 +3,28 @@
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Text Summarizer — ToolNova</title>
-  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
 </head>
 <body>
 <header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
 <main class="container" style="max-width:800px;padding:3rem 1rem;">
   <h1 style="font-size:2rem;margin-bottom:0.5rem;">AI Text Summarizer</h1>
-  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Paste a long article or text, and our AI will summarize it into key bullet points.</p>
-
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Paste a long article or text, and our AI will summarize it.</p>
   <textarea id="input-text" style="width:100%;height:200px;padding:1rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);margin-bottom:1rem;" placeholder="Paste your long text here (minimum 50 characters)..."></textarea>
-  
   <button id="summarize-btn" class="btn btn-primary" style="font-size:1.1rem;padding:0.8rem 2rem;">✨ Summarize with AI</button>
-
-  <div id="result-area" style="display:none;margin-top:2rem;background:var(--color-bg-secondary);padding:1.5rem;border-radius:12px;border:1px solid var(--color-primary);">
-    <h3 style="color:var(--color-primary);margin-bottom:1rem;">AI Summary:</h3>
-    <div id="output-text" style="white-space:pre-wrap;line-height:1.7;"></div>
+  <div id="result-area" style="display:none;margin-top:2rem;background:var(--color-bg-secondary);padding:2rem;border-radius:12px;border:1px solid var(--color-border);">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--color-border); padding-bottom:1rem; margin-bottom:1rem;">
+      <h3 style="color:var(--color-primary); font-size:1.2rem; margin:0;">AI Summary</h3>
+      <button class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="copySummary()">Copy</button>
+    </div>
+    <div id="output-text" style="white-space:pre-wrap;line-height:1.8;color:var(--color-text);"></div>
   </div>
 </main>
-
 <script>
-  // ⚠️ YAHAN APNI VALUES DAALEIN ⚠️
-  const SUPABASE_URL = "https://vstehjndnusosehzjmab.supabase.co/functions/v1/summarize"; // e.g., https://xyz.supabase.co/functions/v1/summarize
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzdGVoam5kbnVzb3NlaHpqbWFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1MTQwMDksImV4cCI6MjExMTA5MDAwOX0.YN5KhlO1ORps2w8R3EHc-EY6V1bUTf1YFxqQYJmQXpA"; // e.g., eyJhbGciOiJIUzI1NiIsInR5cCI6...
+  // ⚠️ YAHAN APNI SUPABASE VALUES DAALEIN (Quotes ke sath)
+  const SUPABASE_URL = "https://xxxx.supabase.co/functions/v1/summarize"; 
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6..."; 
 
   const btn = document.getElementById('summarize-btn');
   const input = document.getElementById('input-text');
@@ -33,11 +33,7 @@
 
   btn.addEventListener('click', async () => {
     const text = input.value.trim();
-    if (text.length < 50) {
-      alert("Please enter at least 50 characters to summarize.");
-      return;
-    }
-
+    if (text.length < 50) return alert("Please enter at least 50 characters.");
     btn.textContent = "Generating Summary...";
     btn.disabled = true;
     resultArea.style.display = 'none';
@@ -45,30 +41,25 @@
     try {
       const response = await fetch(SUPABASE_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-        },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
         body: JSON.stringify({ text: text })
       });
-
       const data = await response.json();
-
       if (data.error) throw new Error(data.error);
-
-      output.textContent = data.summary;
+      output.textContent = data.summary.replace(/^- /gm, '• ');
       resultArea.style.display = 'block';
     } catch (error) {
-  // Alert ki jagah result area mein error dikhayein
-  output.textContent = "❌ " + error.message;
-  output.style.color = "var(--color-error)";
-  resultArea.style.display = 'block';
-  // Result ka heading change karein
-  resultArea.querySelector('h3').textContent = "Error";
-} finally {
-  btn.textContent = "✨ Summarize with AI";
-  btn.disabled = false;
-}
+      output.textContent = "❌ " + error.message;
+      output.style.color = "var(--color-error)";
+      resultArea.style.display = 'block';
+    } finally {
+      btn.textContent = "✨ Summarize with AI";
+      btn.disabled = false;
+    }
   });
+
+  function copySummary() {
+    navigator.clipboard.writeText(output.textContent).then(() => alert("Copied!"));
+  }
 </script>
 </body></html>
