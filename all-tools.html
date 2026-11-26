@@ -150,18 +150,11 @@
 
       // Cards banayein
       filtered.forEach(t => {
-        let href = '#';
+        // ✅ SEEDHA ASLI LINK BANAYEIN (Master engine hata diya)
+        let href = '/all-tools.html';
         
         if (t.status === 'ready') {
-            // Check if tool is in the master engine
-            const masterTools = ['file-size-converter', 'box-shadow-generator', 'word-density-analyzer', 'meta-tag-generator'];
-            if (masterTools.includes(t.id)) {
-                href = '/tools/master.html?id=' + t.id;
-            } else {
-                href = '/tools/' + t.category + '/' + t.id + '.html';
-            }
-        } else {
-            href = '/all-tools.html';
+            href = '/tools/' + t.category + '/' + t.id + '.html';
         }
 
         const badge = t.status === 'ready' 
