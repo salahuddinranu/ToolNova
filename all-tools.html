@@ -100,7 +100,6 @@
     if (urlParams.get('category')) activeCategory = urlParams.get('category');
     if (urlParams.get('q')) { searchQuery = urlParams.get('q'); searchInput.value = searchQuery; }
 
-    // Categories banayein
     window.ToolNova.CATEGORIES.forEach(cat => {
       const btn = document.createElement('button');
       btn.className = 'filter-btn' + (activeCategory === cat.id ? ' active' : '');
@@ -111,9 +110,7 @@
 
     function renderTools() {
       grid.innerHTML = '';
-      
-      // THE FIX: Yahan humne aapki registry ka function use kiya hai
-      let filtered = window.ToolNova.getTools(); 
+      let filtered = window.ToolNova.TOOLS;
 
       if (activeCategory !== 'all') {
         filtered = filtered.filter(t => t.category === activeCategory);
