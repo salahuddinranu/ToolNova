@@ -10,11 +10,10 @@
 <main class="container" style="max-width:700px;padding:3rem 1rem;">
   <h1>File Size Converter</h1>
   <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Convert between Bytes, KB, MB, GB, and TB instantly.</p>
-
   <div style="background:var(--color-bg-secondary); padding:2rem; border-radius:12px; border:1px solid var(--color-border);">
-    <div style="display:flex; gap:1rem; margin-bottom:1.5rem;">
-      <input type="number" id="size-input" placeholder="Enter size" style="flex:2; padding:1rem; border-radius:8px; border:1px solid var(--color-border); background:var(--color-bg); color:var(--color-text); font-size:1.1rem;" oninput="convertSize()">
-      <select id="size-unit" style="flex:1; padding:1rem; border-radius:8px; border:1px solid var(--color-border); background:var(--color-bg); color:var(--color-text); font-size:1rem;" onchange="convertSize()">
+    <div style="display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap;">
+      <input type="number" id="size-input" placeholder="Enter size" style="flex:2; min-width:150px; padding:1rem; border-radius:8px; border:1px solid var(--color-border); background:var(--color-bg); color:var(--color-text); font-size:1.1rem;" oninput="convertSize()">
+      <select id="size-unit" style="flex:1; min-width:120px; padding:1rem; border-radius:8px; border:1px solid var(--color-border); background:var(--color-bg); color:var(--color-text); font-size:1rem;" onchange="convertSize()">
         <option value="B">Bytes (B)</option>
         <option value="KB" selected>Kilobytes (KB)</option>
         <option value="MB">Megabytes (MB)</option>
@@ -22,8 +21,7 @@
         <option value="TB">Terabytes (TB)</option>
       </select>
     </div>
-
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:1rem;">
       <div style="background:var(--color-bg); padding:1rem; border-radius:8px; border:1px solid var(--color-border); text-align:center;">
         <div style="font-size:0.8rem; color:var(--color-text-muted); margin-bottom:0.5rem;">Bytes</div>
         <div style="font-weight:bold; font-family:monospace;" id="out-bytes">0</div>
@@ -47,7 +45,6 @@
   function convertSize() {
     const val = parseFloat(document.getElementById('size-input').value);
     const unit = document.getElementById('size-unit').value;
-    
     if(isNaN(val)) {
       document.getElementById('out-bytes').textContent = '0';
       document.getElementById('out-kb').textContent = '0';
@@ -55,15 +52,11 @@
       document.getElementById('out-gb').textContent = '0';
       return;
     }
-
-    // Convert to Bytes first
     let bytes = val;
     if(unit === 'KB') bytes = val * 1024;
     if(unit === 'MB') bytes = val * 1024 * 1024;
     if(unit === 'GB') bytes = val * 1024 * 1024 * 1024;
     if(unit === 'TB') bytes = val * 1024 * 1024 * 1024 * 1024;
-
-    // Display conversions
     document.getElementById('out-bytes').textContent = bytes.toLocaleString();
     document.getElementById('out-kb').textContent = (bytes / 1024).toLocaleString(undefined, {maximumFractionDigits: 2});
     document.getElementById('out-mb').textContent = (bytes / (1024 * 1024)).toLocaleString(undefined, {maximumFractionDigits: 4});
