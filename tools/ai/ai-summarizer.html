@@ -5,24 +5,60 @@
   <title>AI Text Summarizer — ToolNova</title>
   <link rel="stylesheet" href="/assets/css/style.css" />
   <script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+  <style>
+    .stats-box {
+      display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;
+      padding: 1rem; background: var(--color-bg-secondary); border-radius: 8px; border: 1px solid var(--color-border);
+      font-size: 0.9rem; color: var(--color-text-secondary);
+    }
+    .stats-box span { font-weight: bold; color: var(--color-primary); }
+    .ratio-badge {
+      display: inline-block; background: var(--color-success); color: white; 
+      padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.8rem; margin-top: 0.5rem;
+    }
+  </style>
 </head>
 <body>
 <header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+
 <main class="container" style="max-width:800px;padding:3rem 1rem;">
   <h1 style="font-size:2rem;margin-bottom:0.5rem;">AI Text Summarizer</h1>
   <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Paste a long article or text, and our AI will summarize it.</p>
+  
   <textarea id="input-text" style="width:100%;height:200px;padding:1rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);margin-bottom:1rem;" placeholder="Paste your long text here (minimum 50 characters)..."></textarea>
-  <button id="summarize-btn" class="btn btn-primary" style="font-size:1.1rem;padding:0.8rem 2rem;">✨ Summarize with AI</button>
+  
+  <!-- Stats Box -->
+  <div id="input-stats" class="stats-box" style="display: none;">
+    <div>Characters: <span id="in-chars">0</span></div>
+    <div>Words: <span id="in-words">0</span></div>
+    <div>Sentences: <span id="in-sentences">0</span></div>
+    <div>Lines: <span id="in-lines">0</span></div>
+  </div>
+
+  <button id="summarize-btn" class="btn btn-primary" style="font-size:1.1rem;padding:0.8rem 2rem; width: 100%;">✨ Summarize with AI</button>
+  
+  <!-- Result Area -->
   <div id="result-area" style="display:none;margin-top:2rem;background:var(--color-bg-secondary);padding:2rem;border-radius:12px;border:1px solid var(--color-border);">
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--color-border); padding-bottom:1rem; margin-bottom:1rem;">
       <h3 style="color:var(--color-primary); font-size:1.2rem; margin:0;">AI Summary</h3>
       <button class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="copySummary()">Copy</button>
     </div>
-    <div id="output-text" style="white-space:pre-wrap;line-height:1.8;color:var(--color-text);"></div>
+    
+    <div id="output-text" style="white-space:pre-wrap;line-height:1.8;color:var(--color-text);margin-bottom: 1rem;"></div>
+    
+    <!-- Output Stats Box -->
+    <div id="output-stats" style="display: none; border-top: 1px solid var(--color-border); padding-top: 1rem;">
+      <div class="stats-box" style="margin-bottom: 0; background: transparent; border: none; padding: 0;">
+        <div>Summary Words: <span id="out-words">0</span></div>
+        <div>Summary Lines: <span id="out-lines">0</span></div>
+      </div>
+      <div class="ratio-badge" id="ratio-badge">Reduced by 0%</div>
+    </div>
   </div>
 </main>
+
 <script>
-  // ✅ ASLI SUPABASE VALUES YAHAN DAAL DI GAYI HAIN
+  // ✅ AAPKI SUPABASE VALUES
   const SUPABASE_URL = "https://vstehjndnusosehzjmab.supabase.co/functions/v1/summarize"; 
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzdGVoam5kbnVzb3NlaHpqbWFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1MTQwMDksImV4cCI6MjExMTA5MDAwOX0.YN5KhlO1ORps2w8R3EHc-EY6V1bUTf1YFxqQYJmQXpA"; 
 
@@ -30,10 +66,38 @@
   const input = document.getElementById('input-text');
   const resultArea = document.getElementById('result-area');
   const output = document.getElementById('output-text');
+  
+  // Stats Elements
+  const inputStats = document.getElementById('input-stats');
+  const inChars = document.getElementById('in-chars');
+  const inWords = document.getElementById('in-words');
+  const inSentences = document.getElementById('in-sentences');
+  const inLines = document.getElementById('in-lines');
+  
+  const outputStats = document.getElementById('output-stats');
+  const outWords = document.getElementById('out-words');
+  const outLines = document.getElementById('out-lines');
+  const ratioBadge = document.getElementById('ratio-badge');
+
+  // Live stats calculation while typing
+  input.addEventListener('input', () => {
+    const text = input.value;
+    if (text.trim().length === 0) {
+      inputStats.style.display = 'none';
+      return;
+    }
+    inputStats.style.display = 'flex';
+    
+    inChars.textContent = text.length;
+    inWords.textContent = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+    inSentences.textContent = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+    inLines.textContent = text.split(/\r\n|\r|\n/).filter(l => l.trim().length > 0).length;
+  });
 
   btn.addEventListener('click', async () => {
     const text = input.value.trim();
     if (text.length < 50) return alert("Please enter at least 50 characters.");
+    
     btn.textContent = "Generating Summary...";
     btn.disabled = true;
     resultArea.style.display = 'none';
@@ -45,13 +109,36 @@
         body: JSON.stringify({ text: text })
       });
       const data = await response.json();
+      
       if (data.error) throw new Error(data.error);
-      output.textContent = data.summary.replace(/^- /gm, '• ');
+      
+      // Show Summary
+      const summaryText = data.summary ? data.summary.replace(/^- /gm, '• ') : "No summary generated.";
+      output.textContent = summaryText;
+      
+      // Calculate Output Stats
+      const originalWordCount = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+      const summaryWordCount = summaryText.trim().split(/\s+/).filter(w => w.length > 0).length;
+      const summaryLines = summaryText.split(/\r\n|\r|\n/).filter(l => l.trim().length > 0).length;
+      
+      outWords.textContent = summaryWordCount;
+      outLines.textContent = summaryLines;
+      
+      // Calculate Reduction Ratio
+      if(originalWordCount > 0) {
+        const reduction = Math.round(((originalWordCount - summaryWordCount) / originalWordCount) * 100);
+        ratioBadge.textContent = reduction > 0 ? `Reduced by ${reduction}%` : `Expanded by ${Math.abs(reduction)}%`;
+      }
+
       resultArea.style.display = 'block';
+      outputStats.style.display = 'block';
+      output.style.color = "var(--color-text)";
+      
     } catch (error) {
-      output.textContent = "❌ " + error.message;
+      output.textContent = "❌ Error: " + error.message;
       output.style.color = "var(--color-error)";
       resultArea.style.display = 'block';
+      outputStats.style.display = 'none';
     } finally {
       btn.textContent = "✨ Summarize with AI";
       btn.disabled = false;
@@ -59,7 +146,12 @@
   });
 
   function copySummary() {
-    navigator.clipboard.writeText(output.textContent).then(() => alert("Copied!"));
+    navigator.clipboard.writeText(output.textContent).then(() => {
+      const originalText = btn.innerHTML;
+      btn.innerHTML = "✅ Copied!";
+      setTimeout(() => btn.innerHTML = originalText, 2000);
+    });
   }
 </script>
-</body></html>
+</body>
+</html>
