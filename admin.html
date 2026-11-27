@@ -94,30 +94,21 @@
 </main>
 
 <script>
-  // ⚠️ Supabase Credentials
   const SUPABASE_URL = "https://vstehjndnusosehzjmab.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzdGVoam5kbnVzb3NlaHpqbWFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1MTQwMDksImV4cCI6MjExMTA5MDAwOX0.YN5KhlO1ORps2w8R3EHc-EY6V1bUTf1YFxqQYJmQXpA";
   
-  // Admin Email
   const ADMIN_EMAIL = "salahuddinranu@gmail.com";
-
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   async function checkAdmin() {
     const { data: { session } } = await supabaseClient.auth.getSession();
     document.getElementById('loading').style.display = 'none';
 
-    if (!session) {
+    if (!session || session.user.email !== ADMIN_EMAIL) {
       document.getElementById('access-denied').style.display = 'block';
       return;
     }
 
-    if (session.user.email !== ADMIN_EMAIL) {
-      document.getElementById('access-denied').style.display = 'block';
-      return;
-    }
-
-    // Admin verified! Data load karein
     document.getElementById('admin-content').style.display = 'block';
     loadUsers();
   }
@@ -167,10 +158,9 @@
       const isCreator = user.email === ADMIN_EMAIL;
       const creatorTag = isCreator ? '<span class="badge-creator">👑 Creator</span>' : '';
       
+      // CREATOR KA BUTTON BHI ENABLE KAR DIYA HAI
       let actionBtn = '';
-      if (isCreator) {
-        actionBtn = `<button class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem;" disabled>Cannot Edit</button>`;
-      } else if (user.is_pro) {
+      if (user.is_pro) {
         actionBtn = `<button onclick="togglePro('${user.id}', false)" class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem; border-color:var(--color-error); color:var(--color-error);">Remove Pro</button>`;
       } else {
         actionBtn = `<button onclick="togglePro('${user.id}', true)" class="btn btn-primary" style="padding:0.4rem 0.8rem; font-size:0.8rem;">Make Pro</button>`;
@@ -187,32 +177,36 @@
       tbody.appendChild(tr);
     });
 
-    // Update Stats
     document.getElementById('total-users').textContent = profiles.length;
     document.getElementById('pro-users').textContent = proCount;
     document.getElementById('active-today').textContent = activeToday;
   }
 
+  // BUTTON KA KAAM FIX KAR DIYA HAI
   window.togglePro = async function(userId, makePro) {
     const btn = event.target;
-    btn.textContent = "...";
+    const originalText = btn.textContent;
+    btn.textContent = "Wait...";
     btn.disabled = true;
 
-    const { error } = await supabaseClient
-      .from('profiles')
-      .update({ is_pro: makePro })
-      .eq('id', userId);
+    try {
+      const { error } = await supabaseClient
+        .from('profiles')
+        .update({ is_pro: makePro })
+        .eq('id', userId);
 
-    if (error) {
-      alert("Error updating user: " + error.message);
-      btn.textContent = makePro ? "Make Pro" : "Remove Pro";
+      if (error) throw error;
+      
+      // Kaam hone ke baad data dobara load karein
+      await loadUsers();
+      
+    } catch (error) {
+      alert("Update failed: " + error.message);
+      btn.textContent = originalText;
       btn.disabled = false;
-    } else {
-      loadUsers(); // Reload data
     }
   };
 
-  // Search Filter
   document.getElementById('search-user').addEventListener('input', function(e) {
     const query = e.target.value.toLowerCase();
     const rows = document.querySelectorAll('#user-list tr');
