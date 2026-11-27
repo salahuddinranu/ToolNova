@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Portal — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    .admin-table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; background: var(--color-card); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .admin-table th, .admin-table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    .admin-table th { background: var(--color-bg-tertiary); font-weight: 700; font-size: 0.9rem; color: var(--color-text-secondary); text-transform: uppercase; }
+    .admin-table tr:last-child td { border-bottom: none; }
+    .badge-pro-admin { background: #fef3c7; color: #d97706; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+    .badge-free-admin { background: var(--color-bg-tertiary); color: var(--color-text-muted); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+
+<main class="container" style="max-width:1000px;padding:3rem 1rem;">
+  <h1 style="font-size:2rem; margin-bottom:0.5rem;">Admin Control Panel</h1>
+  <p style="color:var(--color-text-secondary); margin-bottom:2rem;">Manage users and Pro subscriptions.</p>
+
+  <div id="loading" style="font-weight:bold; color:var(--color-primary);">Checking Admin Access...</div>
+  
+  <div id="admin-content" style="display:none;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:1rem;">
+      <h2 style="font-size:1.5rem;">All Registered Users</h2>
+      <input type="text" id="search-user" placeholder="Search by email..." style="padding:0.6rem; border-radius:8px; border:1px solid var(--color-border); background:var(--color-bg); color:var(--color-text);">
+    </div>
+    
+    <div style="overflow-x:auto;">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Joined</th>
+            <th>Plan</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="user-list">
+          <!-- Users will load here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="access-denied" style="display:none; text-align:center; padding:3rem;">
+    <h2 style="color:var(--color-error);">Access Denied</h2>
+    <p style="margin-top:1rem; color:var(--color-text-secondary);">You do not have administrator privileges.</p>
+    <a href="/" class="btn btn-primary" style="margin-top:1rem;">Go Home</a>
+  </div>
+</main>
+
+<script>
+  // ⚠️ YAHAN APNI SUPABASE KEYS DAALEIN ⚠️
+  const SUPABASE_URL = "https://vstehjndnusosehzjmab.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzdGVoam5kbnVzb3NlaHpqbWFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1MTQwMDksImV4cCI6MjExMTA5MDAwOX0.YN5KhlO1ORps2w8R3EHc-EY6V1bUTf1YFxqQYJmQXpA";
+  
+  // Admin Email
+  const ADMIN_EMAIL = "salahuddinranu@gmail.com";
+
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  async function checkAdmin() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    document.getElementById('loading').style.display = 'none';
+
+    if (!session) {
+      // Login nahi hai
+      document.getElementById('access-denied').style.display = 'block';
+      return;
+    }
+
+    if (session.user.email !== ADMIN_EMAIL) {
+      // Login hai lekin Admin nahi hai
+      document.getElementById('access-denied').style.display = 'block';
+      return;
+    }
+
+    // Admin verified! Data load karein
+    document.getElementById('admin-content').style.display = 'block';
+    loadUsers();
+  }
+
+  async function loadUsers() {
+    const { data: profiles, error } = await supabaseClient
+      .from('profiles')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      alert("Error loading users: " + error.message);
+      return;
+    }
+
+    renderUsers(profiles);
+  }
+
+  function renderUsers(profiles) {
+    const tbody = document.getElementById('user-list');
+    tbody.innerHTML = '';
+
+    if (profiles.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No users found.</td></tr>';
+      return;
+    }
+
+    profiles.forEach(user => {
+      const date = new Date(user.created_at).toLocaleDateString();
+      const planBadge = user.is_pro 
+        ? '<span class="badge-pro-admin">⭐ PRO</span>' 
+        : '<span class="badge-free-admin">FREE</span>';
+      
+      const actionBtn = user.is_pro 
+        ? `<button onclick="togglePro('${user.id}', false)" class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem; border-color:var(--color-error); color:var(--color-error);">Remove Pro</button>`
+        : `<button onclick="togglePro('${user.id}', true)" class="btn btn-primary" style="padding:0.4rem 0.8rem; font-size:0.8rem;">Make Pro</button>`;
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="font-weight:600;">${user.email}</td>
+        <td style="color:var(--color-text-muted); font-size:0.9rem;">${date}</td>
+        <td>${planBadge}</td>
+        <td>${actionBtn}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  window.togglePro = async function(userId, makePro) {
+    const btn = event.target;
+    btn.textContent = "...";
+    btn.disabled = true;
+
+    const { error } = await supabaseClient
+      .from('profiles')
+      .update({ is_pro: makePro })
+      .eq('id', userId);
+
+    if (error) {
+      alert("Error updating user: " + error.message);
+      btn.textContent = makePro ? "Make Pro" : "Remove Pro";
+      btn.disabled = false;
+    } else {
+      // Reload data
+      loadUsers();
+    }
+  };
+
+  // Search Filter
+  document.getElementById('search-user').addEventListener('input', function(e) {
+    const query = e.target.value.toLowerCase();
+    const rows = document.querySelectorAll('#user-list tr');
+    rows.forEach(row => {
+      const email = row.cells[0]?.textContent.toLowerCase() || '';
+      row.style.display = email.includes(query) ? '' : 'none';
+    });
+  });
+
+  checkAdmin();
+</script>
+</body></html>
