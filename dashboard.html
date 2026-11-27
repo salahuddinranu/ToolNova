@@ -44,7 +44,7 @@
         <div id="user-avatar" style="width:80px; height:80px; background:var(--color-primary-light); color:var(--color-primary); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; font-weight:bold; margin:0 auto 1rem auto;"></div>
         <h2 style="font-size:1.2rem; margin-bottom:0.25rem;" id="user-email"></h2>
         
-        <!-- Creator Tag -->
+        <!-- Creator Tag (Sirf Admin ke liye) -->
         <div id="creator-tag" style="display:none; background:var(--color-primary); color:white; padding:0.25rem 0.75rem; border-radius:999px; font-size:0.75rem; font-weight:bold; display:inline-block; margin-bottom:1rem;">👑 Creator of ToolNova</div>
         
         <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--color-border);">
@@ -52,7 +52,7 @@
           <h3 id="plan-status" style="font-size:1.1rem; color:var(--color-success);">Free</h3>
         </div>
 
-        <!-- Admin Button -->
+        <!-- Admin Button (Sirf Admin ke liye) -->
         <a href="/admin.html" id="admin-btn" class="btn btn-primary" style="display:none; width:100%; margin-top:1rem;">Go to Admin Portal</a>
         
         <button onclick="logout()" class="btn btn-secondary" style="width:100%; margin-top:1rem;">Log Out</button>
@@ -100,14 +100,15 @@
     document.getElementById('user-email').textContent = email;
     document.getElementById('user-avatar').textContent = email.charAt(0).toUpperCase();
 
-    // Admin Checks
+    // --- YAHAN FIX HAI ---
+    // Admin Checks (Sirf aur sirf Admin ke liye)
     if (email === ADMIN_EMAIL) {
       document.getElementById('creator-tag').style.display = 'inline-block';
       document.getElementById('admin-btn').style.display = 'inline-block';
     }
 
     // Fetch User Profile (Pro status)
-    const { data: profile, error } = await supabaseClient
+    const { data: profile } = await supabaseClient
       .from('profiles')
       .select('is_pro')
       .eq('id', session.user.id)
@@ -119,6 +120,8 @@
     } else {
       document.getElementById('plan-status').textContent = "Free Plan";
       document.getElementById('plan-status').style.color = "var(--color-text-muted)";
+      
+      // Pro upsell sirf normal users ko dikhao, admin ko nahi
       if (email !== ADMIN_EMAIL) {
         document.getElementById('pro-upsell').style.display = 'block';
       }
