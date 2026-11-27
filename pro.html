@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="/assets/css/style.css" />
   <script src="/assets/js/theme.js"></script>
   <script src="/assets/js/app.js" defer></script>
+  <!-- Supabase JS Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -68,7 +70,8 @@
             <li>✅ Advanced AI models (GPT-4)</li>
             <li>✅ Priority support</li>
           </ul>
-          <button class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;" onclick="alert('Payment gateway is coming soon!')">Upgrade to Pro</button>
+          <!-- ID add ki hai taake JS isay aasani se dhoond sake -->
+          <button id="upgrade-btn" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;" onclick="alert('Payment gateway is coming soon!')">Upgrade to Pro</button>
         </div>
 
       </div>
@@ -100,18 +103,23 @@
     </div>
   </div>
 </footer>
-<script>document.getElementById('year').textContent = new Date().getFullYear();
-  <!-- Supabase Auth Check -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    // ⚠️ YAHAN BHI APNI SUPABASE KEYS DAALEIN ⚠️
-    const SUPABASE_URL = "YAHAN_APNA_SUPABASE_URL_DAALEIN";
-    const SUPABASE_ANON_KEY = "YAHAN_APNI_SUPABASE_ANON_KEY_DAALEIN";
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    document.addEventListener('DOMContentLoaded', async () => {
+<!-- Scripts -->
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+<script>
+  // ⚠️ YAHAN APNI SUPABASE KEYS DAALEIN ⚠️ (Quotes ke sath)
+  const SUPABASE_URL = "YAHAN_APNA_SUPABASE_URL_DAALEIN";
+  const SUPABASE_ANON_KEY = "YAHAN_APNI_SUPABASE_ANON_KEY_DAALEIN";
+  
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    try {
       const { data: { session } } = await supabaseClient.auth.getSession();
-      const upgradeBtn = document.querySelector('button[onclick="alert(\'Payment gateway is coming soon!\')"]');
+      const upgradeBtn = document.getElementById('upgrade-btn');
       
       if (session) {
         // User logged in
@@ -122,8 +130,10 @@
         upgradeBtn.textContent = "Log In to Upgrade";
         upgradeBtn.onclick = () => window.location.href = "/login.html";
       }
-    });
-  </script>
+    } catch (error) {
+      console.error("Supabase Error:", error);
+    }
+  });
 </script>
 </body>
 </html>
