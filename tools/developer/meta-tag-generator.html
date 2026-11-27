@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meta Tag Generator — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<main class="container" style="max-width:800px;padding:3rem 1rem;">
+  <h1>Meta Tag Generator</h1>
+  <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Generate SEO-friendly meta tags for your website.</p>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+    <div><label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Page Title</label><input type="text" id="title" placeholder="My Website" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);" oninput="generate()"></div>
+    <div><label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Author</label><input type="text" id="author" placeholder="John Doe" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);" oninput="generate()"></div>
+  </div>
+  <div style="margin-bottom:1rem;"><label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Description</label><textarea id="desc" placeholder="Website description..." style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);" oninput="generate()"></textarea></div>
+  <label style="font-weight:bold;display:block;margin-bottom:0.5rem;">Generated Code</label>
+  <textarea id="output" readonly style="width:100%;height:200px;padding:1rem;border-radius:8px;border:1px solid var(--color-border);background:var(--color-bg-secondary);color:var(--color-text);font-family:monospace;margin-bottom:1rem;"></textarea>
+  <button class="btn btn-primary" style="width:100%;" onclick="copyCode()">Copy Code</button>
+</main>
+<script>
+  function generate() {
+    const title = document.getElementById('title').value || 'My Website';
+    const desc = document.getElementById('desc').value || 'Description';
+    const author = document.getElementById('author').value || '';
+    let code = `<!-- Meta Tags -->\n<title>${title}</title>\n<meta name="description" content="${desc}">\n`;
+    if(author) code += `<meta name="author" content="${author}">\n`;
+    code += `\n<meta property="og:title" content="${title}">\n<meta property="og:description" content="${desc}">\n`;
+    document.getElementById('output').value = code;
+  }
+  function copyCode() { document.getElementById('output').select(); document.execCommand('copy'); alert('Copied!'); }
+  generate();
+</script>
+</body></html>
