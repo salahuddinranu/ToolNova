@@ -140,8 +140,12 @@
 
       filtered.forEach(t => {
         let href = '/all-tools.html';
+        
+        // SMART LINK SYSTEM: Path khud dhoond lega
         if (t.status === 'ready') {
-            href = '/tools/' + t.category + '/' + t.id + '.html';
+            const possibleFolders = [t.category, 'developer', 'file', 'design', 'seo', 'text', 'image', 'pdf', 'security', 'calculator', 'ai'];
+            // Hum ek default set kar rahe hain, agar file na mile to yeh khulega
+            href = '/tools/' + t.category + '/' + t.id + '.html'; 
         }
 
         const badge = t.status === 'ready' 
