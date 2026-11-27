@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Dashboard — ToolNova</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%234f46e5'/><text x='50' y='68' font-size='58' font-weight='bold' fill='white' text-anchor='middle' font-family='sans-serif'>T</text></svg>" />
   <link rel="stylesheet" href="/assets/css/style.css" />
-  <script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+  <script src="/assets/js/theme.js"></script>
+  <script src="/assets/js/app.js" defer></script>
+  <script src="/assets/js/icons.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     .dash-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; margin-top: 2rem; }
@@ -13,7 +17,20 @@
   </style>
 </head>
 <body>
-<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<header class="site-header">
+  <div class="container">
+    <nav class="nav">
+      <a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/all-tools.html">All Tools</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button>
+      </div>
+    </nav>
+  </div>
+</header>
 
 <main class="container" style="padding:4rem 1rem;">
   <div id="loading" style="text-align:center; font-weight:bold; color:var(--color-primary);">Loading profile...</div>
@@ -62,8 +79,10 @@
 </main>
 
 <script>
-  const SUPABASE_URL = "YAHAN_APNA_SUPABASE_URL_DAALEIN";
-  const SUPABASE_ANON_KEY = "YAHAN_APNI_SUPABASE_ANON_KEY_DAALEIN";
+  // --- ASLI SUPABASE CREDENTIALS YAHAN HAIN ---
+  const SUPABASE_URL = "https://vstehjndnusosehzjmab.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzdGVoam5kbnVzb3NlaHpqbWFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1MTQwMDksImV4cCI6MjExMTA5MDAwOX0.YN5KhlO1ORps2w8R3EHc-EY6V1bUTf1YFxqQYJmQXpA";
+  
   const ADMIN_EMAIL = "salahuddinranu@gmail.com";
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -88,7 +107,7 @@
     }
 
     // Fetch User Profile (Pro status)
-    const { data: profile } = await supabaseClient
+    const { data: profile, error } = await supabaseClient
       .from('profiles')
       .select('is_pro')
       .eq('id', session.user.id)
