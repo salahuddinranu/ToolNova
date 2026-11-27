@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
 Sitemap: https://toolnova.axislabs.workers.dev/sitemap.xml
