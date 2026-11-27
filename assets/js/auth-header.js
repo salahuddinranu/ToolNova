@@ -17,26 +17,24 @@
     const { data: { session } } = await supabaseClient.auth.getSession();
     
     if (session) {
+      // 1. Agar user logged in hai, toh Login/Signup button ko chhupa do
+      const loginBtn = document.getElementById('header-login-btn');
+      if (loginBtn) loginBtn.style.display = 'none';
+
+      // 2. Header mein naya Dashboard button lagao
       const navActions = document.querySelector('.nav-actions');
       if (navActions) {
-        // Login/Signup buttons ko dhoond kar chhupayein (agar hain toh)
-        const loginBtns = navActions.querySelectorAll('a[href="/login.html"], a[href*="login"]');
-        loginBtns.forEach(btn => btn.style.display = 'none');
-
-        // Dashboard button banayein
-        const dashBtn = document.createElement('a');
-        dashBtn.href = "/dashboard.html";
-        dashBtn.className = "btn btn-primary";
-        dashBtn.style.padding = "0.4rem 0.8rem";
-        dashBtn.style.fontSize = "0.85rem";
-        dashBtn.textContent = "Dashboard";
-        
-        // Search icon se pehle lagayein (ya shuru mein)
-        const searchBtn = navActions.querySelector('a[aria-label="Search tools"]') || navActions.querySelector('button');
-        if (searchBtn) {
-          navActions.insertBefore(dashBtn, searchBtn);
-        } else {
-          navActions.prepend(dashBtn);
+        // Check karein ke Dashboard button pehle se toh nahi laga hua
+        if (!document.getElementById('header-dash-btn')) {
+          const dashBtn = document.createElement('a');
+          dashBtn.id = 'header-dash-btn';
+          dashBtn.href = "/dashboard.html";
+          dashBtn.className = "btn btn-primary";
+          dashBtn.style.padding = "0.4rem 0.8rem";
+          dashBtn.style.fontSize = "0.85rem";
+          dashBtn.textContent = "Dashboard";
+          
+          navActions.prepend(dashBtn); // Sab se pehle dikhao
         }
       }
     }
