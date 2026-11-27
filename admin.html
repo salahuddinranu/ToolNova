@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Portal — ToolNova</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%234f46e5'/><text x='50' y='68' font-size='58' font-weight='bold' fill='white' text-anchor='middle' font-family='sans-serif'>T</text></svg>" />
   <link rel="stylesheet" href="/assets/css/style.css" />
-  <script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+  <script src="/assets/js/theme.js"></script>
+  <script src="/assets/js/app.js" defer></script>
+  <script src="/assets/js/icons.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     .admin-table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; background: var(--color-card); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
@@ -13,10 +17,27 @@
     .admin-table tr:last-child td { border-bottom: none; }
     .badge-pro-admin { background: #fef3c7; color: #d97706; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
     .badge-free-admin { background: var(--color-bg-tertiary); color: var(--color-text-muted); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+    .badge-creator { background: var(--color-primary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold; margin-left: 0.5rem; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card { background: var(--color-card); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border); }
+    .stat-number { font-size: 2rem; font-weight: bold; color: var(--color-primary); }
   </style>
 </head>
 <body>
-<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<header class="site-header">
+  <div class="container">
+    <nav class="nav">
+      <a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/all-tools.html">All Tools</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button>
+      </div>
+    </nav>
+  </div>
+</header>
 
 <main class="container" style="max-width:1000px;padding:3rem 1rem;">
   <h1 style="font-size:2rem; margin-bottom:0.5rem;">Admin Control Panel</h1>
@@ -25,6 +46,23 @@
   <div id="loading" style="font-weight:bold; color:var(--color-primary);">Checking Admin Access...</div>
   
   <div id="admin-content" style="display:none;">
+    
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <p style="color:var(--color-text-muted); font-size:0.9rem;">Total Users</p>
+        <div class="stat-number" id="total-users">0</div>
+      </div>
+      <div class="stat-card">
+        <p style="color:var(--color-text-muted); font-size:0.9rem;">Pro Users</p>
+        <div class="stat-number" id="pro-users" style="color: #10b981;">0</div>
+      </div>
+      <div class="stat-card">
+        <p style="color:var(--color-text-muted); font-size:0.9rem;">Active Today</p>
+        <div class="stat-number" id="active-today" style="color: #f59e0b;">0</div>
+      </div>
+    </div>
+
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:1rem;">
       <h2 style="font-size:1.5rem;">All Registered Users</h2>
       <input type="text" id="search-user" placeholder="Search by email..." style="padding:0.6rem; border-radius:8px; border:1px solid var(--color-border); background:var(--color-bg); color:var(--color-text);">
@@ -36,6 +74,7 @@
           <tr>
             <th>Email</th>
             <th>Joined</th>
+            <th>Last Login</th>
             <th>Plan</th>
             <th>Action</th>
           </tr>
@@ -55,7 +94,7 @@
 </main>
 
 <script>
-  // ⚠️ YAHAN APNI SUPABASE KEYS DAALEIN ⚠️
+  // ⚠️ Supabase Credentials
   const SUPABASE_URL = "https://vstehjndnusosehzjmab.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzdGVoam5kbnVzb3NlaHpqbWFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1MTQwMDksImV4cCI6MjExMTA5MDAwOX0.YN5KhlO1ORps2w8R3EHc-EY6V1bUTf1YFxqQYJmQXpA";
   
@@ -69,13 +108,11 @@
     document.getElementById('loading').style.display = 'none';
 
     if (!session) {
-      // Login nahi hai
       document.getElementById('access-denied').style.display = 'block';
       return;
     }
 
     if (session.user.email !== ADMIN_EMAIL) {
-      // Login hai lekin Admin nahi hai
       document.getElementById('access-denied').style.display = 'block';
       return;
     }
@@ -89,7 +126,7 @@
     const { data: profiles, error } = await supabaseClient
       .from('profiles')
       .select('*')
-      .order('created_at', { ascending: false });
+      .order('last_login', { ascending: false });
 
     if (error) {
       alert("Error loading users: " + error.message);
@@ -104,29 +141,56 @@
     tbody.innerHTML = '';
 
     if (profiles.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No users found.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No users found.</td></tr>';
       return;
     }
 
+    let proCount = 0;
+    let activeToday = 0;
+    const todayStr = new Date().toISOString().split('T')[0];
+
     profiles.forEach(user => {
-      const date = new Date(user.created_at).toLocaleDateString();
+      if (user.is_pro) proCount++;
+      
+      const lastLoginDate = user.last_login ? new Date(user.last_login) : null;
+      const lastLoginStr = lastLoginDate ? lastLoginDate.toLocaleString() : 'Never';
+      
+      if (lastLoginDate && lastLoginDate.toISOString().startsWith(todayStr)) {
+        activeToday++;
+      }
+
+      const date = user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A';
       const planBadge = user.is_pro 
         ? '<span class="badge-pro-admin">⭐ PRO</span>' 
         : '<span class="badge-free-admin">FREE</span>';
       
-      const actionBtn = user.is_pro 
-        ? `<button onclick="togglePro('${user.id}', false)" class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem; border-color:var(--color-error); color:var(--color-error);">Remove Pro</button>`
-        : `<button onclick="togglePro('${user.id}', true)" class="btn btn-primary" style="padding:0.4rem 0.8rem; font-size:0.8rem;">Make Pro</button>`;
+      const isCreator = user.email === ADMIN_EMAIL;
+      const creatorTag = isCreator ? '<span class="badge-creator">👑 Creator</span>' : '';
+      
+      let actionBtn = '';
+      if (isCreator) {
+        actionBtn = `<button class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem;" disabled>Cannot Edit</button>`;
+      } else if (user.is_pro) {
+        actionBtn = `<button onclick="togglePro('${user.id}', false)" class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem; border-color:var(--color-error); color:var(--color-error);">Remove Pro</button>`;
+      } else {
+        actionBtn = `<button onclick="togglePro('${user.id}', true)" class="btn btn-primary" style="padding:0.4rem 0.8rem; font-size:0.8rem;">Make Pro</button>`;
+      }
 
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td style="font-weight:600;">${user.email}</td>
+        <td style="font-weight:600;">${user.email || 'No Email'} ${creatorTag}</td>
         <td style="color:var(--color-text-muted); font-size:0.9rem;">${date}</td>
+        <td style="color:var(--color-text-muted); font-size:0.9rem;">${lastLoginStr}</td>
         <td>${planBadge}</td>
         <td>${actionBtn}</td>
       `;
       tbody.appendChild(tr);
     });
+
+    // Update Stats
+    document.getElementById('total-users').textContent = profiles.length;
+    document.getElementById('pro-users').textContent = proCount;
+    document.getElementById('active-today').textContent = activeToday;
   }
 
   window.togglePro = async function(userId, makePro) {
@@ -144,8 +208,7 @@
       btn.textContent = makePro ? "Make Pro" : "Remove Pro";
       btn.disabled = false;
     } else {
-      // Reload data
-      loadUsers();
+      loadUsers(); // Reload data
     }
   };
 
@@ -161,4 +224,5 @@
 
   checkAdmin();
 </script>
-</body></html>
+</body>
+</html>
