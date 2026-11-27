@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Dashboard — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+
+<main class="container" style="max-width:800px;padding:4rem 1rem;text-align:center;">
+  <div id="loading" style="font-weight:bold;color:var(--color-primary);">Checking authentication...</div>
+  
+  <div id="dashboard-content" style="display:none; background:var(--color-card); padding:3rem; border-radius:var(--radius-lg); border:1px solid var(--color-border);">
+    <div style="width:80px; height:80px; background:var(--color-primary-light); color:var(--color-primary); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; font-weight:bold; margin:0 auto 1.5rem auto;" id="user-initial">U</div>
+    <h1 style="font-size:2rem; margin-bottom:0.5rem;">Welcome Back!</h1>
+    <p style="color:var(--color-text-secondary); margin-bottom:2rem;">Logged in as: <strong id="user-email" style="color:var(--color-text);"></strong></p>
+    
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:2rem;">
+      <div style="background:var(--color-bg-secondary); padding:1.5rem; border-radius:var(--radius-md); border:1px solid var(--color-border);">
+        <h3 style="font-size:1.1rem; margin-bottom:0.5rem;">Plan Status</h3>
+        <p style="font-weight:bold; color:var(--color-success);">Free Plan</p>
+      </div>
+      <div style="background:var(--color-bg-secondary); padding:1.5rem; border-radius:var(--radius-md); border:1px solid var(--color-border);">
+        <h3 style="font-size:1.1rem; margin-bottom:0.5rem;">Tools Used</h3>
+        <p style="font-weight:bold; color:var(--color-primary);">0 Times</p>
+      </div>
+    </div>
+
+    <button onclick="logout()" class="btn btn-secondary" style="width:100%; max-width:300px;">Log Out</button>
+  </div>
+
+  <div id="not-logged-in" style="display:none;">
+    <h2>You are not logged in.</h2>
+    <a href="/login.html" class="btn btn-primary" style="margin-top:1rem;">Go to Login</a>
+  </div>
+</main>
+
+<script>
+  // ⚠️ YAHAN APNI SUPABASE KEYS DAALEIN ⚠️
+  const SUPABASE_URL = "YAHAN_APNA_SUPABASE_URL_DAALEIN";
+  const SUPABASE_ANON_KEY = "YAHAN_APNI_SUPABASE_ANON_KEY_DAALEIN";
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  async function checkUser() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    document.getElementById('loading').style.display = 'none';
+
+    if (session) {
+      document.getElementById('dashboard-content').style.display = 'block';
+      document.getElementById('user-email').textContent = session.user.email;
+      document.getElementById('user-initial').textContent = session.user.email.charAt(0).toUpperCase();
+    } else {
+      document.getElementById('not-logged-in').style.display = 'block';
+    }
+  }
+
+  async function logout() {
+    await supabaseClient.auth.signOut();
+    window.location.href = "/";
+  }
+
+  checkUser();
+</script>
+</body></html>
