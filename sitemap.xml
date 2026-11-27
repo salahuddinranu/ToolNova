@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Main Pages -->
-  <url><loc>https://toolnova.salahuddinranu.workers.dev/</loc><priority>1.0</priority></url>
-  <url><loc>https://toolnova.salahuddinranu.workers.dev/all-tools.html</loc><priority>0.9</priority></url>
-  <url><loc>https://toolnova.salahuddinranu.workers.dev/pro.html</loc><priority>0.9</priority></url>
-  <url><loc>https://toolnova.salahuddinranu.workers.dev/login.html</loc><priority>0.7</priority></url>
-  <url><loc>https://toolnova.salahuddinranu.workers.dev/about.html</loc><priority>0.5</priority></url>
-  <url><loc>https://toolnova.salahuddinranu.workers.dev/contact.html</loc><priority>0.5</priority></url>
-  <url><loc>https://toolnova.salahuddinranu.workers.dev/privacy.html</loc><priority>0.3</priority></url>
-  <url><loc>https://toolnova.salahuddinranu.workers.dev/terms.html</loc><priority>0.3</priority></url>
+  <url><loc>https://toolnova.axislabs.workers.dev/</loc><priority>1.0</priority></url>
+  <url><loc>https://toolnova.axislabs.workers.dev/all-tools.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolnova.axislabs.workers.dev/pro.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolnova.axislabs.workers.dev/login.html</loc><priority>0.7</priority></url>
+  <url><loc>https://toolnova.axislabs.workers.dev/about.html</loc><priority>0.5</priority></url>
+  <url><loc>https://toolnova.axislabs.workers.dev/contact.html</loc><priority>0.5</priority></url>
+  <url><loc>https://toolnova.axislabs.workers.dev/privacy.html</loc><priority>0.3</priority></url>
+  <url><loc>https://toolnova.axislabs.workers.dev/terms.html</loc><priority>0.3</priority></url>
   
   <!-- Tools -->
-  <url><loc>https://toolnova.salahuddinranu.workers.dev/tools/pdf/merge-pdf.html</loc><priority>0.8</priority></url>
-  <url><loc>https://toolnova.salahuddinranu.workers.dev/tools/pdf/split-pdf.html</loc><priority>0.8</priority></url>
-  <url><loc>https://toolnova.salahuddinranu.workers.dev/tools/pdf/images-to-pdf.html</loc><priority>0.8</priority></url>
-  <url><loc>https://toolnova.salahuddinranu.workers.dev/tools/image/image-compressor.html</loc><priority>0.8</priority></url>
-  <url><loc>https://toolnova.salahuddinranu.workers.dev/tools/image/image-resizer.html</loc><priority>0.8</priority></url>
-  <url><loc>https://toolnova.salahuddinranu.workers.dev/tools/image/bg-remover.html</loc><priority>0.8</priority></url>
-  <url><loc>https://toolnova.salahuddinranu.workers.dev/tools/ai/ai-summarizer.html</loc><priority>0.8</priority></url>
-  <url><loc>https://toolnova.salahuddinranu.workers.dev/tools/text/word-counter.html</loc><priority>0.8</priority></url>
-  <url><loc>https://toolnova.salahuddinranu.workers.dev/tools/developer/json-formatter.html</loc><priority>0.8</priority></url>
-  <url><loc>https://toolnova.salahuddinranu.workers.dev/tools/security/password-generator.html</loc><priority>0.8</priority></url>
-  <url><loc>https://toolnova.salahuddinranu.workers.dev/tools/security/qr-code-generator.html</loc><priority>0.8</priority></url>
+  <url><loc>https://toolnova.axislabs.workers.dev/tools/pdf/merge-pdf.html</loc><priority>0.8</priority></url>
+  <url><loc>https://toolnova.axislabs.workers.dev/tools/pdf/split-pdf.html</loc><priority>0.8</priority></url>
+  <url><loc>https://toolnova.axislabs.workers.dev/tools/pdf/images-to-pdf.html</loc><priority>0.8</priority></url>
+  <url><loc>https://toolnova.axislabs.workers.dev/tools/image/image-compressor.html</loc><priority>0.8</priority></url>
+  <url><loc>https://toolnova.axislabs.workers.dev/tools/image/image-resizer.html</loc><priority>0.8</priority></url>
+  <url><loc>https://toolnova.axislabs.workers.dev/tools/image/bg-remover.html</loc><priority>0.8</priority></url>
+  <url><loc>https://toolnova.axislabs.workers.dev/tools/ai/ai-summarizer.html</loc><priority>0.8</priority></url>
+  <url><loc>https://toolnova.axislabs.workers.dev/tools/text/word-counter.html</loc><priority>0.8</priority></url>
+  <url><loc>https://toolnova.axislabs.workers.dev/tools/developer/json-formatter.html</loc><priority>0.8</priority></url>
+  <url><loc>https://toolnova.axislabs.workers.dev/tools/security/password-generator.html</loc><priority>0.8</priority></url>
+  <url><loc>https://toolnova.axislabs.workers.dev/tools/security/qr-code-generator.html</loc><priority>0.8</priority></url>
 </urlset>
