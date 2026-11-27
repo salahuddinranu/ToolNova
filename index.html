@@ -409,7 +409,12 @@
     supabaseClient.auth.getSession().then(({ data: { session } }) => {
       const authLink = document.getElementById('nav-auth-link');
       if (session && authLink) {
-        authLink.innerHTML = `<a href="/dashboard.html" style="color:var(--color-primary);font-weight:bold;">👤 Dashboard</a>`;
+              const initial = session.user.email.charAt(0).toUpperCase();
+        authLink.innerHTML = `
+          <a href="/dashboard.html" style="display:flex; align-items:center; justify-content:center; width:36px; height:36px; background:var(--color-primary); color:white; border-radius:50%; font-weight:bold; text-decoration:none; font-size:1rem;" title="Go to Dashboard">
+            ${initial}
+          </a>
+        `;
       }
     });
   }
