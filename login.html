@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login / Signup — ToolNova</title>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <script src="/assets/js/theme.js"></script>
+  <script src="/assets/js/app.js" defer></script>
+  <script src="/assets/js/icons.js" defer></script>
+  <!-- Supabase JS Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    .auth-container { max-width: 400px; margin: 4rem auto; padding: 2rem; background: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); }
+    .auth-container h1 { text-align: center; margin-bottom: 1.5rem; font-size: 1.8rem; }
+    .auth-input { width: 100%; padding: 0.8rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--color-border); background: var(--color-bg); color: var(--color-text); font-size: 1rem; }
+    .auth-toggle { text-align: center; margin-top: 1rem; font-size: 0.9rem; color: var(--color-text-secondary); }
+    .auth-toggle a { color: var(--color-primary); cursor: pointer; font-weight: bold; }
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+
+<main class="container">
+  <div class="auth-container">
+    <h1 id="auth-title">Create an Account</h1>
+    
+    <form id="auth-form">
+      <input type="email" id="email" class="auth-input" placeholder="Email Address" required>
+      <input type="password" id="password" class="auth-input" placeholder="Password" required>
+      <button type="submit" class="btn btn-primary" style="width: 100%;" id="submit-btn">Sign Up</button>
+    </form>
+
+    <div class="auth-toggle">
+      <span id="toggle-text">Already have an account?</span> 
+      <a id="toggle-link" onclick="toggleAuthMode()">Log In</a>
+    </div>
+    <div id="message" style="margin-top: 1rem; text-align: center; font-weight: bold;"></div>
+  </div>
+</main>
+
+<script>
+  // ⚠️ YAHAN APNI SUPABASE KEYS DAALEIN ⚠️
+  const SUPABASE_URL = "YAHAN_APNA_SUPABASE_URL_DAALEIN";
+  const SUPABASE_ANON_KEY = "YAHAN_APNI_SUPABASE_ANON_KEY_DAALEIN";
+
+  // Initialize Supabase
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  let isLoginMode = false;
+
+  function toggleAuthMode() {
+    isLoginMode = !isLoginMode;
+    document.getElementById('auth-title').textContent = isLoginMode ? "Welcome Back" : "Create an Account";
+    document.getElementById('submit-btn').textContent = isLoginMode ? "Log In" : "Sign Up";
+    document.getElementById('toggle-text').textContent = isLoginMode ? "Don't have an account?" : "Already have an account?";
+    document.getElementById('toggle-link').textContent = isLoginMode ? "Sign Up" : "Log In";
+    document.getElementById('message').textContent = "";
+  }
+
+  document.getElementById('auth-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const msg = document.getElementById('message');
+    const btn = document.getElementById('submit-btn');
+
+    msg.style.color = "var(--color-primary)";
+    msg.textContent = "Please wait...";
+    btn.disabled = true;
+
+    try {
+      let { data, error } = isLoginMode 
+        ? await supabaseClient.auth.signInWithPassword({ email, password })
+        : await supabaseClient.auth.signUp({ email, password });
+
+      if (error) throw error;
+
+      if (isLoginMode) {
+        msg.style.color = "var(--color-success)";
+        msg.textContent = "Login successful! Redirecting...";
+        setTimeout(() => window.location.href = "/pro.html", 1000);
+      } else {
+        msg.style.color = "var(--color-success)";
+        msg.textContent = "Account created! You are now logged in.";
+        setTimeout(() => window.location.href = "/pro.html", 1000);
+      }
+    } catch (error) {
+      msg.style.color = "var(--color-error)";
+      msg.textContent = error.message;
+    } finally {
+      btn.disabled = false;
+    }
+  });
+</script>
+</body></html>
