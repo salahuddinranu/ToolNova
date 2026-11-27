@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login / Signup — ToolNova</title>
   <link rel="stylesheet" href="/assets/css/style.css" />
-  <script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+  <script src="/assets/js/theme.js"></script>
+  <script src="/assets/js/app.js" defer></script>
+  <script src="/assets/js/icons.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     .auth-container { max-width: 400px; margin: 4rem auto; padding: 2.5rem; background: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); }
@@ -23,7 +26,20 @@
   </style>
 </head>
 <body>
-<header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+<header class="site-header">
+  <div class="container">
+    <nav class="nav">
+      <a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/all-tools.html">All Tools</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button>
+      </div>
+    </nav>
+  </div>
+</header>
 
 <main class="container">
   <div class="auth-container">
@@ -55,9 +71,12 @@
 </main>
 
 <script>
+  // 1. Supabase Credentials
   const SUPABASE_URL = "https://vstehjndnusosehzjmab.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzdGVoam5kbnVzb3NlaHpqbWFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1MTQwMDksImV4cCI6MjExMTA5MDAwOX0.YN5KhlO1ORps2w8R3EHc-EY6V1bUTf1YFxqQYJmQXpA";
-  const supabaseClient = supabase.createClient(https://vstehjndnusosehzjmab.supabase.co, eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzdGVoam5kbnVzb3NlaHpqbWFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1MTQwMDksImV4cCI6MjExMTA5MDAwOX0.YN5KhlO1ORps2w8R3EHc-EY6V1bUTf1YFxqQYJmQXpA);
+  
+  // 2. Initialize Supabase Client correctly (Variables use kar ke)
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   let isLoginMode = true;
 
@@ -83,7 +102,6 @@
     document.getElementById('toggle-text').textContent = isLoginMode ? "Don't have an account?" : "Already have an account?";
     document.getElementById('toggle-link').textContent = isLoginMode ? "Sign Up" : "Log In";
     
-    // Forgot password link ko sirf login mode mein dikhayein
     document.getElementById('forgot-pass-link').style.display = isLoginMode ? 'block' : 'none';
   }
 
@@ -131,7 +149,6 @@
         const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
         
         if (error) {
-          // Error Check: Agar email registered nahi hai
           if (error.message.includes("Invalid login credentials")) {
             throw new Error("Account not found or incorrect password. Please Sign Up first.");
           }
@@ -147,7 +164,6 @@
         
         if (error) throw error;
         
-        // Agar email confirmation on hai
         if (data.user && data.session === null) {
           showMessage("Account created! Please check your email to verify.", "success");
         } else {
@@ -163,4 +179,5 @@
     }
   });
 </script>
-</body></html>
+</body>
+</html>
