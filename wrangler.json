@@ -1,0 +1,8 @@
+{
+  "name": "toolnova",
+  "compatibility_date": "2026-11-27",
+  "assets": {
+    "directory": "./",
+    "html_handling": "none"
+  }
+}
