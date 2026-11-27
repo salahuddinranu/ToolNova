@@ -424,3 +424,62 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 });
+// ================= COOKIE CONSENT BANNER =================
+document.addEventListener('DOMContentLoaded', function() {
+  // Agar user pehle accept kar chuka hai to banner na dikhayein
+  if (localStorage.getItem('cookie_consent') === 'true') return;
+
+  const banner = document.createElement('div');
+  banner.style.cssText = `
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--color-card);
+    border-top: 1px solid var(--color-border);
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    z-index: 10000;
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+  `;
+
+  banner.innerHTML = `
+    <div style="font-size: 0.9rem; color: var(--color-text-secondary); flex: 1; min-width: 250px;">
+      🍪 We use cookies to improve your experience and show relevant ads. By using ToolNova, you agree to our 
+      <a href="/cookies.html" style="color: var(--color-primary); text-decoration: underline;">Cookie Policy</a>.
+    </div>
+    <div style="display: flex; gap: 0.5rem;">
+      <button onclick="acceptCookies()" class="btn btn-primary" style="padding: 0.5rem 1.5rem; font-size: 0.9rem;">Accept</button>
+    </div>
+  `;
+  document.body.appendChild(banner);
+});
+
+window.acceptCookies = function() {
+  localStorage.setItem('cookie_consent', 'true');
+  const banner = document.querySelector('div[style*="position: fixed; bottom: 0"]');
+  if (banner) banner.remove();
+};
+// ================= AUTO AD SLOT ON TOOL PAGES =================
+document.addEventListener('DOMContentLoaded', function() {
+  const path = window.location.pathname;
+  
+  // Agar user tool page par hai
+  if (path.includes('/tools/') && !path.includes('master.html')) {
+    const main = document.querySelector('main');
+    
+    // Check karein ke ad slot pehle se na ho
+    if (main && !document.getElementById('auto-ad-slot')) {
+      const adContainer = document.createElement('div');
+      adContainer.id = 'auto-ad-slot';
+      adContainer.style.cssText = 'margin: 3rem auto; max-width: 800px; min-height: 100px; background: var(--color-bg-tertiary); border: 1px dashed var(--color-border); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: var(--color-text-muted); font-size: 0.8rem;';
+      adContainer.textContent = 'Advertisement Space (Google AdSense)';
+      
+      main.appendChild(adContainer);
+    }
+  }
+});
