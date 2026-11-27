@@ -100,6 +100,30 @@
     </div>
   </div>
 </footer>
-<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<script>document.getElementById('year').textContent = new Date().getFullYear();
+  <!-- Supabase Auth Check -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // ⚠️ YAHAN BHI APNI SUPABASE KEYS DAALEIN ⚠️
+    const SUPABASE_URL = "YAHAN_APNA_SUPABASE_URL_DAALEIN";
+    const SUPABASE_ANON_KEY = "YAHAN_APNI_SUPABASE_ANON_KEY_DAALEIN";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      const upgradeBtn = document.querySelector('button[onclick="alert(\'Payment gateway is coming soon!\')"]');
+      
+      if (session) {
+        // User logged in
+        upgradeBtn.textContent = "Proceed to Payment";
+        upgradeBtn.onclick = () => alert("Payment gateway integration coming soon!");
+      } else {
+        // User not logged in
+        upgradeBtn.textContent = "Log In to Upgrade";
+        upgradeBtn.onclick = () => window.location.href = "/login.html";
+      }
+    });
+  </script>
+</script>
 </body>
 </html>
