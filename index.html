@@ -398,5 +398,21 @@
     .footer-grid { grid-template-columns: 1fr !important; }
   }
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // ⚠️ YAHAN BHI APNI SUPABASE KEYS DAALEIN ⚠️
+  const SUPABASE_URL = "YAHAN_APNA_SUPABASE_URL_DAALEIN";
+  const SUPABASE_ANON_KEY = "YAHAN_APNI_SUPABASE_ANON_KEY_DAALEIN";
+  
+  if(window.supabase) {
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    supabaseClient.auth.getSession().then(({ data: { session } }) => {
+      const authLink = document.getElementById('nav-auth-link');
+      if (session && authLink) {
+        authLink.innerHTML = `<a href="/dashboard.html" style="color:var(--color-primary);font-weight:bold;">👤 Dashboard</a>`;
+      }
+    });
+  }
+</script>
 </body>
 </html>
