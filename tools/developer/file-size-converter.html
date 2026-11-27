@@ -3,13 +3,18 @@
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>File Size Converter — ToolNova</title>
-  <link rel="stylesheet" href="/assets/css/style.css" /><script src="/assets/js/theme.js"></script><script src="/assets/js/app.js" defer></script><script src="/assets/js/icons.js" defer></script>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <script src="/assets/js/theme.js"></script>
+  <script src="/assets/js/app.js" defer></script>
+  <script src="/assets/js/icons.js" defer></script>
 </head>
 <body>
 <header class="site-header"><div class="container"><nav class="nav"><a href="/" class="logo"><span class="logo-mark">T</span><span>ToolNova</span></a><ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/all-tools.html">All Tools</a></li></ul><div class="nav-actions"><button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button></div></nav></div></header>
+
 <main class="container" style="max-width:700px;padding:3rem 1rem;">
   <h1>File Size Converter</h1>
   <p style="color:var(--color-text-secondary);margin-bottom:2rem;">Convert between Bytes, KB, MB, GB, and TB instantly.</p>
+  
   <div style="background:var(--color-bg-secondary); padding:2rem; border-radius:12px; border:1px solid var(--color-border);">
     <div style="display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap;">
       <input type="number" id="size-input" placeholder="Enter size" style="flex:2; min-width:150px; padding:1rem; border-radius:8px; border:1px solid var(--color-border); background:var(--color-bg); color:var(--color-text); font-size:1.1rem;" oninput="convertSize()">
@@ -21,6 +26,7 @@
         <option value="TB">Terabytes (TB)</option>
       </select>
     </div>
+    
     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:1rem;">
       <div style="background:var(--color-bg); padding:1rem; border-radius:8px; border:1px solid var(--color-border); text-align:center;">
         <div style="font-size:0.8rem; color:var(--color-text-muted); margin-bottom:0.5rem;">Bytes</div>
@@ -41,10 +47,12 @@
     </div>
   </div>
 </main>
+
 <script>
   function convertSize() {
     const val = parseFloat(document.getElementById('size-input').value);
     const unit = document.getElementById('size-unit').value;
+    
     if(isNaN(val)) {
       document.getElementById('out-bytes').textContent = '0';
       document.getElementById('out-kb').textContent = '0';
@@ -52,11 +60,13 @@
       document.getElementById('out-gb').textContent = '0';
       return;
     }
+    
     let bytes = val;
     if(unit === 'KB') bytes = val * 1024;
     if(unit === 'MB') bytes = val * 1024 * 1024;
     if(unit === 'GB') bytes = val * 1024 * 1024 * 1024;
     if(unit === 'TB') bytes = val * 1024 * 1024 * 1024 * 1024;
+    
     document.getElementById('out-bytes').textContent = bytes.toLocaleString();
     document.getElementById('out-kb').textContent = (bytes / 1024).toLocaleString(undefined, {maximumFractionDigits: 2});
     document.getElementById('out-mb').textContent = (bytes / (1024 * 1024)).toLocaleString(undefined, {maximumFractionDigits: 4});
