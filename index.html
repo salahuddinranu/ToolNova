@@ -23,9 +23,6 @@
   <meta name="theme-color" content="#6366f1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  
-  <!-- Header Auth Script -->
-  
 </head>
 <body>
 
@@ -379,5 +376,38 @@
   }
 </style>
   <script src="/assets/js/links.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // Supabase Setup
+  const supabaseClient = supabase.createClient(
+    "https://vstehjndnusosehzjmab.supabase.co", 
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzdGVoam5kbnVzb3NlaHpqbWFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1MTQwMDksImV4cCI6MjExMTA5MDAwOX0.YN5KhlO1ORps2w8R3EHc-EY6V1bUTf1YFxqQYJmQXpA"
+  );
+
+  // Check Login
+  supabaseClient.auth.getSession().then(({ data: { session } }) => {
+    if (session) {
+      // 1. Login button chhupa do
+      const loginBtn = document.getElementById('nav-auth-link');
+      if (loginBtn) loginBtn.style.display = 'none';
+      
+      const mobileLoginBtn = document.getElementById('mobile-login-link');
+      if (mobileLoginBtn) mobileLoginBtn.style.display = 'none';
+
+      // 2. Dashboard button laga do
+      const navActions = document.querySelector('.nav-actions');
+      if (navActions && !document.getElementById('header-dash-btn')) {
+        const dashBtn = document.createElement('a');
+        dashBtn.id = 'header-dash-btn';
+        dashBtn.href = "/dashboard.html";
+        dashBtn.className = "btn btn-primary";
+        dashBtn.style.padding = "0.4rem 0.8rem";
+        dashBtn.style.fontSize = "0.85rem";
+        dashBtn.textContent = "Dashboard";
+        navActions.prepend(dashBtn);
+      }
+    }
+  });
+</script>
 </body>
 </html>
