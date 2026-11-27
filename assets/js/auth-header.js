@@ -17,25 +17,29 @@
     const { data: { session } } = await supabaseClient.auth.getSession();
     
     if (session) {
-      // 1. Agar user logged in hai, toh Login/Signup button ko chhupa do
-      const loginBtn = document.getElementById('header-login-btn');
-      if (loginBtn) loginBtn.style.display = 'none';
+      // 1. Desktop ke Login button ko chhupa do
+      const authLink = document.getElementById('nav-auth-link');
+      if (authLink) {
+        authLink.style.display = 'none';
+      }
 
-      // 2. Header mein naya Dashboard button lagao
+      // 2. Mobile menu ke Login button ko chhupa do
+      const mobileLoginLink = document.getElementById('mobile-login-link');
+      if (mobileLoginLink) {
+        mobileLoginLink.style.display = 'none';
+      }
+
+      // 3. Header mein naya Dashboard button lagao
       const navActions = document.querySelector('.nav-actions');
-      if (navActions) {
-        // Check karein ke Dashboard button pehle se toh nahi laga hua
-        if (!document.getElementById('header-dash-btn')) {
-          const dashBtn = document.createElement('a');
-          dashBtn.id = 'header-dash-btn';
-          dashBtn.href = "/dashboard.html";
-          dashBtn.className = "btn btn-primary";
-          dashBtn.style.padding = "0.4rem 0.8rem";
-          dashBtn.style.fontSize = "0.85rem";
-          dashBtn.textContent = "Dashboard";
-          
-          navActions.prepend(dashBtn); // Sab se pehle dikhao
-        }
+      if (navActions && !document.getElementById('header-dash-btn')) {
+        const dashBtn = document.createElement('a');
+        dashBtn.id = 'header-dash-btn';
+        dashBtn.href = "/dashboard.html";
+        dashBtn.className = "btn btn-primary";
+        dashBtn.style.padding = "0.4rem 0.8rem";
+        dashBtn.style.fontSize = "0.85rem";
+        dashBtn.textContent = "Dashboard";
+        navActions.prepend(dashBtn); // Sab se pehle dikhao
       }
     }
   }
