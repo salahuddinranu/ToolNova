@@ -44,16 +44,17 @@
         <div id="user-avatar" style="width:80px; height:80px; background:var(--color-primary-light); color:var(--color-primary); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; font-weight:bold; margin:0 auto 1rem auto;"></div>
         <h2 style="font-size:1.2rem; margin-bottom:0.25rem;" id="user-email"></h2>
         
-        <!-- Creator Tag (Sirf Admin ke liye) -->
-        <div id="creator-tag" style="display:none; background:var(--color-primary); color:white; padding:0.25rem 0.75rem; border-radius:999px; font-size:0.75rem; font-weight:bold; display:inline-block; margin-bottom:1rem;">👑 Creator of ToolNova</div>
-        
+        <!-- Yahan se tag hata diya hai, ye JS se aayega -->
+        <div id="admin-controls" style="display:none;">
+          <div style="background:var(--color-primary); color:white; padding:0.25rem 0.75rem; border-radius:999px; font-size:0.75rem; font-weight:bold; display:inline-block; margin-bottom:1rem;">👑 Creator of ToolNova</div>
+          <br>
+          <a href="/admin.html" class="btn btn-primary" style="width:100%; margin-bottom:1rem;">Go to Admin Portal</a>
+        </div>
+
         <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--color-border);">
           <p style="font-size:0.9rem; color:var(--color-text-muted);">Account Plan</p>
           <h3 id="plan-status" style="font-size:1.1rem; color:var(--color-success);">Free</h3>
         </div>
-
-        <!-- Admin Button (Sirf Admin ke liye) -->
-        <a href="/admin.html" id="admin-btn" class="btn btn-primary" style="display:none; width:100%; margin-top:1rem;">Go to Admin Portal</a>
         
         <button onclick="logout()" class="btn btn-secondary" style="width:100%; margin-top:1rem;">Log Out</button>
       </div>
@@ -79,7 +80,6 @@
 </main>
 
 <script>
-  // --- ASLI SUPABASE CREDENTIALS YAHAN HAIN ---
   const SUPABASE_URL = "https://vstehjndnusosehzjmab.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzdGVoam5kbnVzb3NlaHpqbWFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1MTQwMDksImV4cCI6MjExMTA5MDAwOX0.YN5KhlO1ORps2w8R3EHc-EY6V1bUTf1YFxqQYJmQXpA";
   
@@ -100,11 +100,9 @@
     document.getElementById('user-email').textContent = email;
     document.getElementById('user-avatar').textContent = email.charAt(0).toUpperCase();
 
-    // --- YAHAN FIX HAI ---
-    // Admin Checks (Sirf aur sirf Admin ke liye)
+    // CHECK: Agar email admin wali hai, tabhi tag aur button dikhao
     if (email === ADMIN_EMAIL) {
-      document.getElementById('creator-tag').style.display = 'inline-block';
-      document.getElementById('admin-btn').style.display = 'inline-block';
+      document.getElementById('admin-controls').style.display = 'block';
     }
 
     // Fetch User Profile (Pro status)
@@ -121,7 +119,7 @@
       document.getElementById('plan-status').textContent = "Free Plan";
       document.getElementById('plan-status').style.color = "var(--color-text-muted)";
       
-      // Pro upsell sirf normal users ko dikhao, admin ko nahi
+      // Upsell sirf normal users ko dikhao
       if (email !== ADMIN_EMAIL) {
         document.getElementById('pro-upsell').style.display = 'block';
       }
