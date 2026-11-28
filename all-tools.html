@@ -16,6 +16,7 @@
     .filter-btn:hover { background: var(--color-primary-light); color: var(--color-primary); }
     .filter-btn.active { background: var(--color-primary); color: #fff; }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -30,6 +31,7 @@
         <li><a href="/all-tools.html" class="active">All Tools</a></li>
         <li><a href="/about.html">About</a></li>
         <li><a href="/contact.html">Contact</a></li>
+        <li id="nav-auth-link"><a href="/login.html" style="color:var(--color-primary);">Log In</a></li>
       </ul>
       <div class="nav-actions">
         <button id="theme-toggle" class="icon-btn"><span id="theme-icon">🌙</span></button>
@@ -43,6 +45,7 @@
       <a href="/all-tools.html">All Tools</a>
       <a href="/about.html">About</a>
       <a href="/contact.html">Contact</a>
+      <a href="/login.html" id="mobile-login-link" style="color:var(--color-primary);">Log In</a>
     </div>
   </div>
 </header>
@@ -184,6 +187,34 @@
     });
 
     renderTools();
+  });
+</script>
+
+<!-- Auth Check -->
+<script>
+  const SUPABASE_URL = "https://vstehjndnusosehzjmab.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzdGVoam5kbnVzb3NlaHpqbWFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1MTQwMDksImV4cCI6MjExMTA5MDAwOX0.YN5KhlO1ORps2w8R3EHc-EY6V1bUTf1YFxqQYJmQXpA";
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  supabaseClient.auth.getSession().then(({ data: { session } }) => {
+    if (session) {
+      const loginBtn = document.getElementById('nav-auth-link');
+      if (loginBtn) loginBtn.style.display = 'none';
+      const mobileLoginBtn = document.getElementById('mobile-login-link');
+      if (mobileLoginBtn) mobileLoginBtn.style.display = 'none';
+
+      const navActions = document.querySelector('.nav-actions');
+      if (navActions && !document.getElementById('header-dash-btn')) {
+        const dashBtn = document.createElement('a');
+        dashBtn.id = 'header-dash-btn';
+        dashBtn.href = "/dashboard.html";
+        dashBtn.className = "btn btn-primary";
+        dashBtn.style.padding = "0.4rem 0.8rem";
+        dashBtn.style.fontSize = "0.85rem";
+        dashBtn.textContent = "Dashboard";
+        navActions.prepend(dashBtn);
+      }
+    }
   });
 </script>
 </body>
