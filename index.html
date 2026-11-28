@@ -384,16 +384,23 @@
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzdGVoam5kbnVzb3NlaHpqbWFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1MTQwMDksImV4cCI6MjExMTA5MDAwOX0.YN5KhlO1ORps2w8R3EHc-EY6V1bUTf1YFxqQYJmQXpA";
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+<!-- Supabase Auth Check & Header Update -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://vstehjndnusosehzjmab.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzdGVoam5kbnVzb3NlaHpqbWFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1MTQwMDksImV4cCI6MjExMTA5MDAwOX0.YN5KhlO1ORps2w8R3EHc-EY6V1bUTf1YFxqQYJmQXpA";
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
   supabaseClient.auth.getSession().then(({ data: { session } }) => {
     if (session) {
-      // 1. Hide Login Buttons
+      // 1. Login button chhupa do
       const loginBtn = document.getElementById('nav-auth-link');
       if (loginBtn) loginBtn.style.display = 'none';
       
       const mobileLoginBtn = document.getElementById('mobile-login-link');
       if (mobileLoginBtn) mobileLoginBtn.style.display = 'none';
 
-      // 2. Add Dashboard Button to Desktop Header
+      // 2. Dashboard button laga do (Desktop)
       const navActions = document.querySelector('.nav-actions');
       if (navActions && !document.getElementById('header-dash-btn')) {
         const dashBtn = document.createElement('a');
@@ -405,8 +412,8 @@
         dashBtn.textContent = "Dashboard";
         navActions.prepend(dashBtn);
       }
-
-      // 3. Add Dashboard Link to Mobile Menu
+      
+      // 3. Dashboard button laga do (Mobile Menu)
       const mobileMenu = document.getElementById('mobile-menu');
       if (mobileMenu && !document.getElementById('mobile-dash-link')) {
         const dashLink = document.createElement('a');
