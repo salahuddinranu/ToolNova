@@ -8,7 +8,6 @@
   <meta name="description" content="ToolNova is a free all-in-one platform with PDF, image, text, developer, calculator, security and AI tools. Fast, private and easy to use." />
   <link rel="canonical" href="https://toolnova.axislabs.workers.dev/" />
 
-  <!-- Open Graph -->
   <meta property="og:title" content="ToolNova — Every Tool You Need." />
   <meta property="og:description" content="Free all-in-one platform with PDF, image, text, developer, calculator, security and AI tools." />
   <meta property="og:url" content="https://toolnova.axislabs.workers.dev/" />
@@ -23,6 +22,9 @@
   <meta name="theme-color" content="#6366f1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  
+  <!-- Supabase Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -42,7 +44,6 @@
         <li><a href="/all-tools.html?category=ai">AI Tools</a></li>
         <li><a href="/all-tools.html?category=developer">Developer Tools</a></li>
         <li><a href="/pro.html" style="color:var(--color-primary);font-weight:bold;">⭐ Pro</a></li>
-        <!-- Yahan ID add kar di hai taake login ke baad chhup jaye -->
         <li id="nav-auth-link"><a href="/login.html" style="color:var(--color-primary);">Log In</a></li>
       </ul>
 
@@ -375,26 +376,24 @@
     .footer-grid { grid-template-columns: 1fr !important; }
   }
 </style>
-  <script src="/assets/js/links.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  // Supabase Setup
-  const supabaseClient = supabase.createClient(
-    "https://vstehjndnusosehzjmab.supabase.co", 
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzdGVoam5kbnVzb3NlaHpqbWFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1MTQwMDksImV4cCI6MjExMTA5MDAwOX0.YN5KhlO1ORps2w8R3EHc-EY6V1bUTf1YFxqQYJmQXpA"
-  );
+<script src="/assets/js/links.js"></script>
 
-  // Check Login
+<!-- Ek hi dafa Supabase initialize karein -->
+<script>
+  const SUPABASE_URL = "https://vstehjndnusosehzjmab.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzdGVoam5kbnVzb3NlaHpqbWFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1MTQwMDksImV4cCI6MjExMTA5MDAwOX0.YN5KhlO1ORps2w8R3EHc-EY6V1bUTf1YFxqQYJmQXpA";
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
   supabaseClient.auth.getSession().then(({ data: { session } }) => {
     if (session) {
-      // 1. Login button chhupa do
+      // 1. Hide Login Buttons
       const loginBtn = document.getElementById('nav-auth-link');
       if (loginBtn) loginBtn.style.display = 'none';
       
       const mobileLoginBtn = document.getElementById('mobile-login-link');
       if (mobileLoginBtn) mobileLoginBtn.style.display = 'none';
 
-      // 2. Dashboard button laga do
+      // 2. Add Dashboard Button to Desktop Header
       const navActions = document.querySelector('.nav-actions');
       if (navActions && !document.getElementById('header-dash-btn')) {
         const dashBtn = document.createElement('a');
@@ -405,6 +404,18 @@
         dashBtn.style.fontSize = "0.85rem";
         dashBtn.textContent = "Dashboard";
         navActions.prepend(dashBtn);
+      }
+
+      // 3. Add Dashboard Link to Mobile Menu
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (mobileMenu && !document.getElementById('mobile-dash-link')) {
+        const dashLink = document.createElement('a');
+        dashLink.id = 'mobile-dash-link';
+        dashLink.href = "/dashboard.html";
+        dashLink.style.color = "var(--color-primary)";
+        dashLink.style.fontWeight = "bold";
+        dashLink.textContent = "Dashboard";
+        mobileMenu.appendChild(dashLink);
       }
     }
   });
