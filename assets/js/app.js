@@ -483,3 +483,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 });
+// ================= AUTO LINK UPDATER =================
+(function() {
+  const OLD_URL = "https://toolnova.axislabs.workers.dev";
+  const NEW_URL = "https://toolnova-app.pages.dev";
+
+  // Saare links ko update karein
+  document.querySelectorAll('a').forEach(link => {
+    if (link.href && link.href.includes(OLD_URL)) {
+      link.href = link.href.replace(OLD_URL, NEW_URL);
+    }
+  });
+
+  // Canonical URL update karein
+  const canonical = document.querySelector('link[rel="canonical"]');
+  if (canonical && canonical.href.includes(OLD_URL)) {
+    canonical.href = canonical.href.replace(OLD_URL, NEW_URL);
+  }
+})();
