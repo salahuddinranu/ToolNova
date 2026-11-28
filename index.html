@@ -376,16 +376,11 @@
     .footer-grid { grid-template-columns: 1fr !important; }
   }
 </style>
-<script src="/assets/js/links.js"></script>
 
-<!-- Ek hi dafa Supabase initialize karein -->
-<script>
-  const SUPABASE_URL = "https://vstehjndnusosehzjmab.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzdGVoam5kbnVzb3NlaHpqbWFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1MTQwMDksImV4cCI6MjExMTA5MDAwOX0.YN5KhlO1ORps2w8R3EHc-EY6V1bUTf1YFxqQYJmQXpA";
-  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+<!-- Auto Link Updater (Purana link naye se badalne ke liye) -->
+<script src="/assets/js/auto-links.js"></script>
 
-<!-- Supabase Auth Check & Header Update -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Supabase Auth Check -->
 <script>
   const SUPABASE_URL = "https://vstehjndnusosehzjmab.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzdGVoam5kbnVzb3NlaHpqbWFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1MTQwMDksImV4cCI6MjExMTA5MDAwOX0.YN5KhlO1ORps2w8R3EHc-EY6V1bUTf1YFxqQYJmQXpA";
@@ -393,14 +388,12 @@
 
   supabaseClient.auth.getSession().then(({ data: { session } }) => {
     if (session) {
-      // 1. Login button chhupa do
       const loginBtn = document.getElementById('nav-auth-link');
       if (loginBtn) loginBtn.style.display = 'none';
       
       const mobileLoginBtn = document.getElementById('mobile-login-link');
       if (mobileLoginBtn) mobileLoginBtn.style.display = 'none';
 
-      // 2. Dashboard button laga do (Desktop)
       const navActions = document.querySelector('.nav-actions');
       if (navActions && !document.getElementById('header-dash-btn')) {
         const dashBtn = document.createElement('a');
@@ -413,7 +406,6 @@
         navActions.prepend(dashBtn);
       }
       
-      // 3. Dashboard button laga do (Mobile Menu)
       const mobileMenu = document.getElementById('mobile-menu');
       if (mobileMenu && !document.getElementById('mobile-dash-link')) {
         const dashLink = document.createElement('a');
@@ -427,6 +419,5 @@
     }
   });
 </script>
-  <script src="/assets/js/auto-links.js"></script>
 </body>
 </html>
